@@ -2,8 +2,7 @@
 import { getCollection } from 'astro:content';
 import ToolLayout from '@components/ToolLayout.astro';
 import EmiFlagshipLayout from '@components/content/EmiFlagshipLayout.astro';
-import EmiCalculatorWidget from '@components/calculators/EmiCalculatorWidget';
-import SipCalculatorWidget from '@components/calculators/SipCalculatorWidget';
+import SipFlagshipLayout from '@components/content/SipFlagshipLayout.astro';
 import HomeLoanCalculatorWidget from '@components/calculators/HomeLoanCalculatorWidget';
 import PersonalLoanCalculatorWidget from '@components/calculators/PersonalLoanCalculatorWidget';
 import LoanAmortizationCalculatorWidget from '@components/calculators/LoanAmortizationCalculatorWidget';
@@ -52,6 +51,8 @@ const data = entry.data;
 
 {slug === 'emi-calculator' ? (
   <EmiFlagshipLayout data={data} slug={slug} />
+) : slug === 'sip-calculator' ? (
+  <SipFlagshipLayout data={data} slug={slug} />
 ) : (
   <ToolLayout
     title={data.title}
@@ -70,7 +71,6 @@ const data = entry.data;
     advancedContent={data.advancedContent}
   >
     <div slot="calculator">
-      {slug === 'sip-calculator' && <SipCalculatorWidget client:visible />}
       {slug === 'home-loan-calculator' && <HomeLoanCalculatorWidget client:visible />}
       {slug === 'personal-loan-calculator' && <PersonalLoanCalculatorWidget client:visible />}
       {slug === 'loan-amortization-calculator' && <LoanAmortizationCalculatorWidget client:visible />}

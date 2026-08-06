@@ -1,0 +1,310 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import SipCalculatorWidget from '../calculators/SipCalculatorWidget';
+import RelatedTools from '../RelatedTools.astro';
+import AdSlot from '../AdSlot.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+// Modular UI Design System Primitives
+import HeroSection from '../ui/HeroSection.astro';
+import TimelineSection from '../ui/TimelineSection.astro';
+import PersonaGrid from '../ui/PersonaGrid.astro';
+import FormulaCard from '../ui/FormulaCard.astro';
+import FAQAccordion from '../ui/FAQAccordion.jsx';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const currentCanonical = Astro.url.href;
+const reviewerName = data.eeat?.reviewedBy || 'FinTool Quant & Investment Team';
+const formattedDate = data.updatedDate
+  ? new Date(data.updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : 'August 2026';
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://fintool.org/' },
+  { name: data.categoryName, url: `https://fintool.org/tools/${data.category}/` },
+  { name: data.title, url: currentCanonical },
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title: data.title,
+  description: data.metaDescription,
+  url: currentCanonical,
+  categoryName: data.categoryName,
+  breadcrumbs: breadcrumbItems,
+  faqs: data.faqs || [],
+});
+
+const faqsList = data.faqs || [];
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Monthly Installment',
+    description: 'A fixed amount ($P$) is automatically debited from your bank account every month into selected mutual funds.',
+    colorClass: 'bg-primary/10 text-primary',
+  },
+  {
+    stepNumber: '02',
+    title: 'Rupee Cost Averaging',
+    description: 'You buy more fund units when market prices drop and fewer units when prices rise, averaging unit cost.',
+    colorClass: 'bg-primary/10 text-primary',
+  },
+  {
+    stepNumber: '03',
+    title: 'Compound Growth',
+    description: 'Monthly returns generate additional gains, creating an exponential compounding snow-ball effect over time.',
+    colorClass: 'bg-semantic-success/10 text-semantic-success',
+  },
+  {
+    stepNumber: '04',
+    title: 'Maturity Corpus',
+    description: 'At the end of tenure ($n$), your cumulative invested capital plus total returns form your wealth corpus.',
+    colorClass: 'bg-semantic-success/10 text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Beginner Investors',
+    description: 'Start wealth creation with disciplined monthly contributions as low as ₹500/month.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Long-Term Wealth Builders',
+    description: 'Target 10–20 year financial goals like buying a house, retirement, or child education.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Salaried Employees',
+    description: 'Automate systematic investments directly on monthly salary payday for effortless savings discipline.',
+    bgClass: 'bg-sky-50',
+    textClass: 'text-accent-sky',
+  },
+  {
+    title: 'Goal Planners',
+    description: 'Calculate exactly how much monthly SIP is required to reach a specific target target corpus.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaParameters = [
+  { symbol: 'P', title: 'Monthly Contribution', description: 'The fixed amount invested every month.', colorClass: 'text-primary' },
+  { symbol: 'i', title: 'Monthly Rate of Return', description: 'Annual expected return divided by 12 (Annual Rate / 12 / 100).', colorClass: 'text-accent-amber' },
+  { symbol: 'n', title: 'Total Investment Months', description: 'Duration of investment in months (Years × 12).', colorClass: 'text-semantic-success' },
+];
+---
+
+<BaseLayout title={data.title} description={data.metaDescription} schema={combinedSchemas}>
+  <div class="bg-background min-h-screen pb-20">
+    <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+      {/* Breadcrumbs */}
+      <Breadcrumbs categorySlug={data.category} categoryName={data.categoryName} toolTitle={data.title} />
+
+      {/* Hero Header */}
+      <HeroSection
+        title="SIP Calculator: Systematic Investment Plan Return Engine"
+        description={data.metaDescription}
+        reviewerName={reviewerName}
+        updatedDate={formattedDate}
+      />
+
+      {/* Calculator Workspace Above The Fold */}
+      <section class="mb-16">
+        <SipCalculatorWidget client:visible />
+      </section>
+
+      <AdSlot slotId="sip-below-widget" />
+
+      {/* Main SaaS Content Sections */}
+      <div class="space-y-16 mt-16">
+        
+        {/* Timeline Section */}
+        <TimelineSection
+          title="How SIP Compounding Works"
+          description="Understanding the 4-stage lifecycle of systematic mutual fund investing"
+          steps={timelineSteps}
+        />
+
+        {/* Target Investor Personas */}
+        <PersonaGrid
+          title="Who Should Start a SIP?"
+          personas={targetPersonas}
+        />
+
+        {/* Benefits & Features Grid */}
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
+            <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-semantic-success"></span>
+              Key Benefits of SIP Investing
+            </h3>
+            <ul class="space-y-4 text-sm text-body">
+              {data.benefits && data.benefits.map((benefit: string) => (
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-semantic-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span class="leading-relaxed">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
+            <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-primary"></span>
+              SIP Engine Features
+            </h3>
+            <ul class="space-y-4 text-sm text-body">
+              {data.features && data.features.map((feature: string) => (
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                  <span class="leading-relaxed">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Math Formula Card */}
+        <FormulaCard
+          title="The SIP Compounding Formula"
+          subBadge="Future Value Annuity"
+          formula="FV = P × [ ((1 + i)ⁿ - 1) / i ] × (1 + i)"
+          parameters={formulaParameters}
+        />
+
+        {/* Worked Case Studies */}
+        <section class="space-y-6">
+          <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Case Studies</span>
+            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Practical SIP Calculation Examples</h2>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6 hover:border-primary transition-all">
+              <div class="flex items-center justify-between border-b border-hairline pb-4">
+                <div>
+                  <span class="text-xs font-mono font-bold text-primary block">Example 1</span>
+                  <h3 class="font-heading font-bold text-lg text-ink">Wealth Builder (₹5,000/mo @ 12% for 10 Yrs)</h3>
+                </div>
+                <span class="text-xs font-mono bg-blue-50 text-primary font-bold px-3 py-1 rounded-pill">120 Months</span>
+              </div>
+
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
+                  <span class="text-body">Total Invested Capital</span>
+                  <span class="font-mono font-semibold text-ink">₹6,00,000</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
+                  <span class="text-body">Estimated Wealth Returns</span>
+                  <span class="font-mono font-bold text-semantic-success text-base">₹5,61,695</span>
+                </div>
+                <div class="flex justify-between items-center py-1">
+                  <span class="text-body">Total Future Value</span>
+                  <span class="font-mono font-extrabold text-primary text-lg">₹11,61,695</span>
+                </div>
+              </div>
+
+              <div class="p-4 bg-emerald-50 border border-emerald-200/60 rounded-2xl text-xs text-emerald-900 leading-relaxed font-medium">
+                <strong>Key Takeaway:</strong> Your investment nearly doubles in 10 years, with returns accounting for 48.3% of total wealth.
+              </div>
+            </div>
+
+            <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6 hover:border-primary transition-all">
+              <div class="flex items-center justify-between border-b border-hairline pb-4">
+                <div>
+                  <span class="text-xs font-mono font-bold text-semantic-success block">Example 2</span>
+                  <h3 class="font-heading font-bold text-lg text-ink">Long-Term Compounding (₹10,000/mo @ 12% for 20 Yrs)</h3>
+                </div>
+                <span class="text-xs font-mono bg-emerald-50 text-semantic-success font-bold px-3 py-1 rounded-pill">240 Months</span>
+              </div>
+
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
+                  <span class="text-body">Total Invested Capital</span>
+                  <span class="font-mono font-semibold text-ink">₹24,00,000</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
+                  <span class="text-body">Estimated Wealth Returns</span>
+                  <span class="font-mono font-bold text-semantic-success text-base">₹75,91,479</span>
+                </div>
+                <div class="flex justify-between items-center py-1">
+                  <span class="text-body">Total Future Value</span>
+                  <span class="font-mono font-extrabold text-semantic-success text-lg">₹99,91,479</span>
+                </div>
+              </div>
+
+              <div class="p-4 bg-blue-50 border border-blue-200/60 rounded-2xl text-xs text-blue-900 leading-relaxed font-medium">
+                <strong>Key Takeaway:</strong> Over 20 years, compounding returns represent 76% of your final ₹1 Crore wealth corpus!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Common Mistakes Warning Cards */}
+        {data.advancedContent?.commonMistakes && (
+          <section class="bg-amber-500/5 border border-amber-500/20 rounded-3xl p-8 shadow-soft space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-semantic-warning/20 text-semantic-warning flex items-center justify-center font-bold text-lg">
+                ⚠️
+              </div>
+              <div>
+                <h3 class="font-heading font-bold text-xl text-ink">Common SIP Mistakes to Avoid</h3>
+                <p class="text-xs text-muted">Critical investing oversights that hurt long-term wealth creation</p>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              {data.advancedContent.commonMistakes.map((mistake: string) => (
+                <div class="p-5 bg-canvas border border-amber-200/80 rounded-2xl flex items-start gap-3 shadow-soft">
+                  <span class="text-semantic-warning font-bold text-base mt-0.5">✕</span>
+                  <p class="text-xs text-body leading-relaxed">{mistake}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Interactive FAQ Accordion */}
+        <section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-8">
+          <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Frequently Asked Questions</span>
+            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">SIP Calculation FAQs</h2>
+            <p class="text-body text-sm">Answers to common investor questions about systematic mutual fund investments</p>
+          </div>
+
+          <FAQAccordion faqs={faqsList} client:visible />
+        </section>
+
+        {/* Related Calculators */}
+        <section class="space-y-6">
+          <div class="flex items-center justify-between border-b border-hairline pb-4">
+            <div>
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Tool Hub</span>
+              <h2 class="font-heading font-bold text-2xl text-ink">Related Investment Calculators</h2>
+            </div>
+            <a href="/tools/investment/" class="text-xs font-semibold text-primary hover:underline">
+              View All Investment Tools &rarr;
+            </a>
+          </div>
+
+          <RelatedTools currentCategory={data.category} currentSlug={slug} manualRelatedTools={data.relatedTools || []} />
+        </section>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
