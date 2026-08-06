@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+
+export interface Props {
+  currentCategory: string;
+  currentSlug: string;
+  manualRelatedTools?: string[];
+}
+
+const { currentCategory, currentSlug, manualRelatedTools = [] } = Astro.props;
+
+const allTools = await getCollection('tools');
+
+const getToolSlug = (tool: any) => tool.slug || tool.data.slug || tool.id;
+
+let relatedList: any[] = [];
+
+if (manualRelatedTools.length > 0) {
+  relatedList = allTools.filter((tool) => manualRelatedTools.includes(getToolSlug(tool)));
+}
+
+// Fallback: fill up to 4 related tools from the same category dynamically
+if (relatedList.length < 4) {
+  const categoryFallback = allTools.filter(
+    (tool) => tool.data.category === currentCategory && getToolSlug(tool) !== currentSlug && !relatedList.some((r) => getToolSlug(r) === getToolSlug(tool))
+  );
+  relatedList = [...relatedList, ...categoryFallback].slice(0, 6);
+}
+---
+
+{relatedList.length > 0 && (
+  <section class="my-16 pt-8 border-t border-hairline">
+    <h3 class="text-xl font-semibold text-ink mb-6">Related Calculators</h3>
+    <div class="flex flex-wrap gap-3">
+      {relatedList.map((tool) => {
+        const toolSlug = getToolSlug(tool);
+        return (
+          <a
+            href={`/tools/${tool.data.category}/${toolSlug}/`}
+            class="bg-surface-strong text-primary hover:bg-hairline text-sm font-medium px-4 py-2 rounded-pill transition-colors inline-flex items-center gap-1.5"
+          >
+            <span>{tool.data.title}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+)}

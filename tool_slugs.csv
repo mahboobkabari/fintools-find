@@ -1,0 +1,195 @@
+Category,Tool Name,URL Slug
+Loan & EMI Calculators,EMI Calculator,/tools/emi-calculator
+Loan & EMI Calculators,Home Loan / Mortgage Calculator,/tools/home-loan-mortgage-calculator
+Loan & EMI Calculators,Car Loan Calculator,/tools/car-loan-calculator
+Loan & EMI Calculators,Personal Loan Calculator,/tools/personal-loan-calculator
+Loan & EMI Calculators,Education Loan Calculator,/tools/education-loan-calculator
+Loan & EMI Calculators,Business Loan Calculator,/tools/business-loan-calculator
+Loan & EMI Calculators,Loan Amortization Calculator,/tools/loan-amortization-calculator
+Loan & EMI Calculators,Loan Eligibility Calculator,/tools/loan-eligibility-calculator
+Loan & EMI Calculators,Loan Prepayment Calculator,/tools/loan-prepayment-calculator
+Loan & EMI Calculators,Balance Transfer Calculator,/tools/balance-transfer-calculator
+Loan & EMI Calculators,Refinance Calculator,/tools/refinance-calculator
+Loan & EMI Calculators,Debt Consolidation Calculator,/tools/debt-consolidation-calculator
+Loan & EMI Calculators,Line of Credit Calculator,/tools/line-of-credit-calculator
+Loan & EMI Calculators,Loan-to-Value (LTV) Calculator,/tools/loan-to-value-calculator
+Loan & EMI Calculators,Auto Lease Calculator,/tools/auto-lease-calculator
+Loan & EMI Calculators,Bridge Loan Calculator,/tools/bridge-loan-calculator
+Loan & EMI Calculators,Hard Money Loan Calculator,/tools/hard-money-loan-calculator
+Loan & EMI Calculators,Peer-to-Peer Lending Calculator,/tools/peer-to-peer-lending-calculator
+Loan & EMI Calculators,ARM (Adjustable Rate Mortgage) Calculator,/tools/arm-calculator
+Loan & EMI Calculators,Reverse Mortgage Calculator,/tools/reverse-mortgage-calculator
+Loan & EMI Calculators,Construction Loan Calculator,/tools/construction-loan-calculator
+Loan & EMI Calculators,Mortgage Points Calculator,/tools/mortgage-points-calculator
+Loan & EMI Calculators,PMI Calculator,/tools/pmi-calculator
+Investment Calculators,SIP Calculator,/tools/sip-calculator
+Investment Calculators,Lumpsum Investment Calculator,/tools/lumpsum-investment-calculator
+Investment Calculators,SWP Calculator (Systematic Withdrawal Plan),/tools/swp-calculator
+Investment Calculators,Step-up SIP Calculator,/tools/step-up-sip-calculator
+Investment Calculators,Mutual Fund Return Calculator,/tools/mutual-fund-return-calculator
+Investment Calculators,CAGR Calculator,/tools/cagr-calculator
+Investment Calculators,XIRR Calculator,/tools/xirr-calculator
+Investment Calculators,Compound Interest Calculator,/tools/compound-interest-calculator
+Investment Calculators,Simple Interest Calculator,/tools/simple-interest-calculator
+Investment Calculators,ROI Calculator,/tools/roi-calculator
+Investment Calculators,Rule of 72 Calculator,/tools/rule-of-72-calculator
+Investment Calculators,Goal-based SIP Calculator,/tools/goal-based-sip-calculator
+Investment Calculators,Stock Average Calculator,/tools/stock-average-calculator
+Investment Calculators,Dividend Yield Calculator,/tools/dividend-yield-calculator
+Investment Calculators,Bond Yield Calculator,/tools/bond-yield-calculator
+Investment Calculators,Annuity Calculator,/tools/annuity-calculator
+Investment Calculators,Options Profit/Loss Calculator,/tools/options-profit-loss-calculator
+Investment Calculators,Margin Trading Calculator,/tools/margin-trading-calculator
+Investment Calculators,Portfolio Rebalancing Calculator,/tools/portfolio-rebalancing-calculator
+Investment Calculators,Sharpe Ratio Calculator,/tools/sharpe-ratio-calculator
+Investment Calculators,Asset Allocation Calculator,/tools/asset-allocation-calculator
+Investment Calculators,Dividend Reinvestment (DRIP) Calculator,/tools/dividend-reinvestment-calculator
+Investment Calculators,Beta Calculator,/tools/beta-calculator
+Investment Calculators,Value at Risk (VaR) Calculator,/tools/value-at-risk-calculator
+Investment Calculators,Stock Split Calculator,/tools/stock-split-calculator
+Investment Calculators,ESPP Calculator,/tools/espp-calculator
+Investment Calculators,RSU Tax Calculator,/tools/rsu-tax-calculator
+Investment Calculators,Stock Option (ISO/NSO) Calculator,/tools/stock-option-calculator
+Investment Calculators,Discounted Cash Flow (DCF) Calculator,/tools/discounted-cash-flow-calculator
+Investment Calculators,Weighted Average Cost of Capital (WACC) Calculator,/tools/weighted-average-cost-of-capital-calculator
+Deposit & Savings Calculators,FD Calculator (Fixed Deposit),/tools/fd-calculator
+Deposit & Savings Calculators,RD Calculator (Recurring Deposit),/tools/rd-calculator
+Deposit & Savings Calculators,PPF Calculator,/tools/ppf-calculator
+Deposit & Savings Calculators,NSC Calculator,/tools/nsc-calculator
+Deposit & Savings Calculators,Savings Goal Calculator,/tools/savings-goal-calculator
+Deposit & Savings Calculators,Emergency Fund Calculator,/tools/emergency-fund-calculator
+Deposit & Savings Calculators,High-Yield Savings Calculator,/tools/high-yield-savings-calculator
+Retirement Calculators,Retirement Corpus Calculator,/tools/retirement-corpus-calculator
+Retirement Calculators,NPS Calculator,/tools/nps-calculator
+Retirement Calculators,401(k) Calculator,/tools/401k-calculator
+Retirement Calculators,IRA Calculator,/tools/ira-calculator
+Retirement Calculators,Pension Calculator,/tools/pension-calculator
+Retirement Calculators,Social Security Calculator,/tools/social-security-calculator
+Retirement Calculators,Gratuity Calculator,/tools/gratuity-calculator
+Retirement Calculators,Provident Fund (EPF) Calculator,/tools/provident-fund-calculator
+Retirement Calculators,FIRE Calculator,/tools/fire-calculator
+Retirement Calculators,Roth Conversion Calculator,/tools/roth-conversion-calculator
+Retirement Calculators,Required Minimum Distribution (RMD) Calculator,/tools/required-minimum-distribution-calculator
+Retirement Calculators,Retirement Withdrawal Rate Calculator,/tools/retirement-withdrawal-rate-calculator
+Retirement Calculators,Social Security Break-even Calculator,/tools/social-security-break-even-calculator
+Retirement Calculators,Pension Lump Sum vs Annuity Calculator,/tools/pension-lump-sum-vs-annuity-calculator
+Retirement Calculators,Coast FIRE Calculator,/tools/coast-fire-calculator
+Retirement Calculators,Superannuation Calculator,/tools/superannuation-calculator
+Retirement Calculators,Atal Pension Yojana Calculator,/tools/atal-pension-yojana-calculator
+Retirement Calculators,VPF Calculator,/tools/vpf-calculator
+Tax Calculators,Income Tax Calculator,/tools/income-tax-calculator
+Tax Calculators,GST Calculator,/tools/gst-calculator
+Tax Calculators,VAT Calculator,/tools/vat-calculator
+Tax Calculators,Capital Gains Tax Calculator,/tools/capital-gains-tax-calculator
+Tax Calculators,HRA Calculator,/tools/hra-calculator
+Tax Calculators,TDS Calculator,/tools/tds-calculator
+Tax Calculators,Take-home Salary Calculator,/tools/take-home-salary-calculator
+Tax Calculators,Payroll Tax Calculator,/tools/payroll-tax-calculator
+Tax Calculators,Property Tax Calculator,/tools/property-tax-calculator
+Tax Calculators,Sales Tax Calculator,/tools/sales-tax-calculator
+Tax Calculators,Tax Refund Calculator,/tools/tax-refund-calculator
+Tax Calculators,Estimated Quarterly Tax Calculator,/tools/estimated-quarterly-tax-calculator
+Tax Calculators,Self-Employment Tax Calculator,/tools/self-employment-tax-calculator
+Tax Calculators,Alternative Minimum Tax (AMT) Calculator,/tools/alternative-minimum-tax-calculator
+Tax Calculators,Estate Tax Calculator,/tools/estate-tax-calculator
+Tax Calculators,Gift Tax Calculator,/tools/gift-tax-calculator
+Tax Calculators,W-4 Withholding Calculator,/tools/w-4-withholding-calculator
+Tax Calculators,FICA Tax Calculator,/tools/fica-tax-calculator
+Tax Calculators,Tax Bracket Calculator,/tools/tax-bracket-calculator
+Tax Calculators,Marginal vs Effective Tax Rate Calculator,/tools/marginal-vs-effective-tax-rate-calculator
+Real Estate Calculators,Home Affordability Calculator,/tools/home-affordability-calculator
+Real Estate Calculators,Rent vs Buy Calculator,/tools/rent-vs-buy-calculator
+Real Estate Calculators,Property Valuation Calculator,/tools/property-valuation-calculator
+Real Estate Calculators,Stamp Duty Calculator,/tools/stamp-duty-calculator
+Real Estate Calculators,Rental Yield Calculator,/tools/rental-yield-calculator
+Real Estate Calculators,Home Equity Calculator,/tools/home-equity-calculator
+Real Estate Calculators,Closing Cost Calculator,/tools/closing-cost-calculator
+Real Estate Calculators,Cap Rate Calculator,/tools/cap-rate-calculator
+Real Estate Calculators,Cash-on-Cash Return Calculator,/tools/cash-on-cash-return-calculator
+Real Estate Calculators,Gross Rent Multiplier Calculator,/tools/gross-rent-multiplier-calculator
+Real Estate Calculators,1% Rule Calculator,/tools/1-percent-rule-calculator
+Real Estate Calculators,Escrow Calculator,/tools/escrow-calculator
+Real Estate Calculators,Property Tax Proration Calculator,/tools/property-tax-proration-calculator
+Insurance Calculators,Term Life Insurance Calculator,/tools/term-life-insurance-calculator
+Insurance Calculators,Life Insurance Needs Calculator,/tools/life-insurance-needs-calculator
+Insurance Calculators,Health Insurance Premium Calculator,/tools/health-insurance-premium-calculator
+Insurance Calculators,Car Insurance Calculator,/tools/car-insurance-calculator
+Insurance Calculators,Annuity/Pension Calculator,/tools/annuity-pension-calculator
+Insurance Calculators,Disability Insurance Calculator,/tools/disability-insurance-calculator
+Insurance Calculators,Long-term Care Insurance Calculator,/tools/long-term-care-insurance-calculator
+Insurance Calculators,Umbrella Insurance Calculator,/tools/umbrella-insurance-calculator
+Insurance Calculators,Renters Insurance Calculator,/tools/renters-insurance-calculator
+Insurance Calculators,Home Insurance Calculator,/tools/home-insurance-calculator
+Insurance Calculators,Whole Life Insurance Calculator,/tools/whole-life-insurance-calculator
+Insurance Calculators,Critical Illness Cover Calculator,/tools/critical-illness-cover-calculator
+Credit & Debt Calculators,Credit Card Payoff Calculator,/tools/credit-card-payoff-calculator
+Credit & Debt Calculators,Debt Snowball Calculator,/tools/debt-snowball-calculator
+Credit & Debt Calculators,Debt Avalanche Calculator,/tools/debt-avalanche-calculator
+Credit & Debt Calculators,Debt-to-Income Ratio Calculator,/tools/debt-to-income-ratio-calculator
+Credit & Debt Calculators,Credit Utilization Calculator,/tools/credit-utilization-calculator
+Credit & Debt Calculators,Balance Transfer Savings Calculator,/tools/balance-transfer-savings-calculator
+Business & Corporate Finance Calculators,Break-even Calculator,/tools/break-even-calculator
+Business & Corporate Finance Calculators,Profit Margin Calculator,/tools/profit-margin-calculator
+Business & Corporate Finance Calculators,Cash Flow Calculator,/tools/cash-flow-calculator
+Business & Corporate Finance Calculators,Working Capital Calculator,/tools/working-capital-calculator
+Business & Corporate Finance Calculators,Payback Period Calculator,/tools/payback-period-calculator
+Business & Corporate Finance Calculators,NPV Calculator,/tools/npv-calculator
+Business & Corporate Finance Calculators,IRR Calculator,/tools/irr-calculator
+Business & Corporate Finance Calculators,Depreciation Calculator,/tools/depreciation-calculator
+Business & Corporate Finance Calculators,Inventory Turnover Calculator,/tools/inventory-turnover-calculator
+Business & Corporate Finance Calculators,Burn Rate / Runway Calculator,/tools/burn-rate-runway-calculator
+Business & Corporate Finance Calculators,Valuation Calculator,/tools/valuation-calculator
+Business & Corporate Finance Calculators,EBITDA Calculator,/tools/ebitda-calculator
+Business & Corporate Finance Calculators,Gross Margin Calculator,/tools/gross-margin-calculator
+Business & Corporate Finance Calculators,Customer Lifetime Value (CLV) Calculator,/tools/customer-lifetime-value-calculator
+Business & Corporate Finance Calculators,Customer Acquisition Cost (CAC) Calculator,/tools/customer-acquisition-cost-calculator
+Business & Corporate Finance Calculators,MRR/ARR Calculator,/tools/mrr-arr-calculator
+Business & Corporate Finance Calculators,Equity Dilution Calculator,/tools/equity-dilution-calculator
+Business & Corporate Finance Calculators,Startup Valuation Calculator,/tools/startup-valuation-calculator
+Business & Corporate Finance Calculators,Debt Service Coverage Ratio (DSCR) Calculator,/tools/debt-service-coverage-ratio-calculator
+Business & Corporate Finance Calculators,Quick Ratio Calculator,/tools/quick-ratio-calculator
+Business & Corporate Finance Calculators,Current Ratio Calculator,/tools/current-ratio-calculator
+Business & Corporate Finance Calculators,Return on Equity (ROE) Calculator,/tools/return-on-equity-calculator
+Business & Corporate Finance Calculators,Return on Assets (ROA) Calculator,/tools/return-on-assets-calculator
+Currency & Cost Calculators,Currency Converter,/tools/currency-converter
+Currency & Cost Calculators,Inflation Calculator,/tools/inflation-calculator
+Currency & Cost Calculators,Purchasing Power Calculator,/tools/purchasing-power-calculator
+Currency & Cost Calculators,Cost of Living Calculator,/tools/cost-of-living-calculator
+Currency & Cost Calculators,Import Duty Calculator,/tools/import-duty-calculator
+Currency & Cost Calculators,Remittance Fee Calculator,/tools/remittance-fee-calculator
+Crypto Calculators,Crypto Profit/Loss Calculator,/tools/crypto-profit-loss-calculator
+Crypto Calculators,Mining Profitability Calculator,/tools/mining-profitability-calculator
+Crypto Calculators,Staking Rewards Calculator,/tools/staking-rewards-calculator
+Crypto Calculators,DCA Calculator,/tools/dca-calculator
+Crypto Calculators,Crypto Tax Calculator,/tools/crypto-tax-calculator
+Crypto Calculators,Impermanent Loss Calculator,/tools/impermanent-loss-calculator
+Crypto Calculators,Yield Farming APY Calculator,/tools/yield-farming-apy-calculator
+Crypto Calculators,Gas Fee Calculator,/tools/gas-fee-calculator
+Crypto Calculators,Token Vesting Calculator,/tools/token-vesting-calculator
+Crypto Calculators,NFT Royalty Calculator,/tools/nft-royalty-calculator
+Personal/Salary Calculators,Salary Calculator,/tools/salary-calculator
+Personal/Salary Calculators,Net Worth Calculator,/tools/net-worth-calculator
+Personal/Salary Calculators,Budget Calculator,/tools/budget-calculator
+Personal/Salary Calculators,50/30/20 Budget Calculator,/tools/50-30-20-budget-calculator
+Personal/Salary Calculators,Student Loan Calculator,/tools/student-loan-calculator
+Personal/Salary Calculators,College Savings Calculator,/tools/college-savings-calculator
+Health & Benefits Calculators,HSA Calculator,/tools/hsa-calculator
+Health & Benefits Calculators,FSA Calculator,/tools/fsa-calculator
+Health & Benefits Calculators,COBRA Cost Calculator,/tools/cobra-cost-calculator
+Health & Benefits Calculators,Medicare Calculator,/tools/medicare-calculator
+Life Event Calculators,Wedding Budget Calculator,/tools/wedding-budget-calculator
+Life Event Calculators,Baby Cost Calculator,/tools/baby-cost-calculator
+Life Event Calculators,Child Support Calculator,/tools/child-support-calculator
+Life Event Calculators,Alimony Calculator,/tools/alimony-calculator
+Life Event Calculators,Divorce Settlement Calculator,/tools/divorce-settlement-calculator
+Education Calculators,529 Plan Calculator,/tools/529-plan-calculator
+Education Calculators,Financial Aid (FAFSA) Calculator,/tools/financial-aid-calculator
+Education Calculators,Student Loan Refinance Calculator,/tools/student-loan-refinance-calculator
+Education Calculators,Student Loan Forgiveness Calculator,/tools/student-loan-forgiveness-calculator
+Education Calculators,Cost of College Calculator,/tools/cost-of-college-calculator
+Everyday & Freelance Calculators,Freelancer Hourly Rate Calculator,/tools/freelancer-hourly-rate-calculator
+Everyday & Freelance Calculators,Overtime Pay Calculator,/tools/overtime-pay-calculator
+Everyday & Freelance Calculators,Tip Calculator,/tools/tip-calculator
+Everyday & Freelance Calculators,Bill Split Calculator,/tools/bill-split-calculator
+Everyday & Freelance Calculators,Zakat Calculator,/tools/zakat-calculator
+Everyday & Freelance Calculators,Tithe Calculator,/tools/tithe-calculator

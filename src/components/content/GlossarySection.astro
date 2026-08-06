@@ -1,0 +1,20 @@
+---
+export interface Props {
+  terms: Array<{ term: string; definition: string }>;
+}
+
+const { terms = [] } = Astro.props;
+if (!terms || terms.length === 0) return null;
+---
+
+<div class="my-12 max-w-3xl">
+  <h2 class="text-2xl font-display text-ink mb-6">Key Financial Terms & Glossary</h2>
+  <div class="space-y-4">
+    {terms.map((item) => (
+      <div class="p-4 bg-canvas border border-hairline rounded-lg shadow-soft">
+        <dt class="font-semibold text-ink text-base mb-1">{item.term}</dt>
+        <dd class="text-sm text-body leading-relaxed">{item.definition}</dd>
+      </div>
+    ))}
+  </div>
+</div>

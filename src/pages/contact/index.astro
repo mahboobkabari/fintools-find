@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const pageTitle = "Contact FinTool: Support, Inquiries & Feedback";
+const pageDescription = "Get in touch with the FinTool engineering and quant team for feedback, calculation questions, security reporting, or media inquiries.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/contact/`;
+
+const contactPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'FinTool',
+    url: siteOrigin,
+    email: 'support@fintool.org',
+  },
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl} schema={contactPageSchema}>
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+    <Breadcrumbs items={[{ name: 'Contact Us' }]} />
+
+    <header class="mb-12 border-b border-hairline pb-8">
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">Contact FinTool</h1>
+      <p class="text-lg md:text-xl text-body max-w-3xl leading-relaxed">
+        Have questions about a calculation formula, feature request, or security observation? Our quant and engineering teams are here to help.
+      </p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="p-8 bg-surface-soft border border-hairline rounded-2xl">
+        <h2 class="text-xl font-bold text-ink mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          User Support & Feedback
+        </h2>
+        <p class="text-body text-sm mb-4 leading-relaxed">
+          For general feedback, calculator questions, or assistance understanding computational outputs:
+        </p>
+        <p class="text-ink font-semibold font-mono text-sm mb-2">support@fintool.org</p>
+        <p class="text-xs text-muted">Response SLA: Within 24–48 business hours.</p>
+      </div>
+
+      <div class="p-8 bg-surface-soft border border-hairline rounded-2xl">
+        <h2 class="text-xl font-bold text-ink mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Formula Audits & Security
+        </h2>
+        <p class="text-body text-sm mb-4 leading-relaxed">
+          For reporting mathematical edge-case discrepancies, regulatory code updates, or vulnerability reports:
+        </p>
+        <p class="text-ink font-semibold font-mono text-sm mb-2">security@fintool.org</p>
+        <p class="text-xs text-muted">Priority Review: Within 12–24 business hours.</p>
+      </div>
+    </div>
+
+    <div class="space-y-8 text-body leading-relaxed border-t border-hairline pt-8">
+      <section>
+        <h2 class="text-2xl font-bold text-ink mb-4">Frequently Asked Inquiries</h2>
+        <div class="space-y-4">
+          <div class="p-6 bg-canvas border border-hairline rounded-xl">
+            <h3 class="font-bold text-ink mb-2">Do I need to create an account to use FinTool?</h3>
+            <p class="text-sm">
+              No. All 194 planned financial calculators on FinTool are 100% free with no registration, login, or personal information required. Learn more in our <a href="/privacy-policy/" class="text-primary hover:underline font-semibold">Privacy Policy</a>.
+            </p>
+          </div>
+
+          <div class="p-6 bg-canvas border border-hairline rounded-xl">
+            <h3 class="font-bold text-ink mb-2">How are formulas verified?</h3>
+            <p class="text-sm">
+              Our engines execute verified statutory rules and academic formulations (IRS codes, EPFO, RBI, Trinity Study). Read our full <a href="/editorial-policy/" class="text-primary hover:underline font-semibold">Editorial Policy</a> and <a href="/methodology/" class="text-primary hover:underline font-semibold">Methodology</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">Corporate & Press Inquiries</h2>
+        <p class="mb-4 text-sm">
+          For media quotes, institutional partnerships, or licensing inquiries, please reach out to <span class="font-mono font-semibold text-ink">press@fintool.org</span>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

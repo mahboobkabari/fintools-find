@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const pageTitle = "Calculation Methodology: Formulas & Mathematical Foundations";
+const pageDescription = "Explore FinTool's calculation methodology: Mathematical formulas, compounding logic, TVM equations, tax slab algorithms, and floating-point precision standards.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/methodology/`;
+
+const techArticleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  author: {
+    '@type': 'Organization',
+    name: 'FinTool Engineering & Quant Team',
+    url: siteOrigin,
+  },
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl} schema={techArticleSchema}>
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+    <Breadcrumbs items={[{ name: 'Methodology' }]} />
+
+    <header class="mb-12 border-b border-hairline pb-8">
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">Calculation Methodology</h1>
+      <p class="text-lg md:text-xl text-body max-w-3xl leading-relaxed">
+        The computational framework, mathematical equations, and precision standards powering all 194 FinTool financial calculators.
+      </p>
+    </header>
+
+    <div class="space-y-12 text-body leading-relaxed text-base md:text-lg">
+      <section>
+        <h2 class="text-2xl font-bold text-ink mb-4">1. Loan & Amortization Mechanics</h2>
+        <p class="mb-4">
+          All loan calculators (Home Loan, Personal Loan, Car Loan, Education Loan) utilize standard Time Value of Money (TVM) reducing balance formulas:
+        </p>
+        <div class="p-6 bg-canvas border border-hairline rounded-xl font-mono text-sm mb-4">
+          <p class="text-ink font-bold mb-2">Equated Monthly Installment (EMI) Formula:</p>
+          <p class="text-primary">EMI = [P × r × (1 + r)^n] / [(1 + r)^n - 1]</p>
+          <p class="text-muted text-xs mt-2">Where P = Principal, r = Monthly Interest Rate (Annual Rate / 12 / 100), n = Total Months.</p>
+        </div>
+        <p>
+          Amortization schedules iteratively allocate monthly payments between principal reduction and accrued interest based on closing principal balances.
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">2. Compound Wealth & Investment Engines</h2>
+        <p class="mb-4">
+          Investment engines execute exact compounding mathematics depending on contribution frequency:
+        </p>
+        <div class="space-y-4">
+          <div class="p-6 bg-canvas border border-hairline rounded-xl font-mono text-sm">
+            <p class="text-ink font-bold mb-1">Compound Annual Growth Rate (CAGR):</p>
+            <p class="text-primary">CAGR = (Final Value / Initial Value)^(1 / Years) - 1</p>
+          </div>
+
+          <div class="p-6 bg-canvas border border-hairline rounded-xl font-mono text-sm">
+            <p class="text-ink font-bold mb-1">Systematic Investment Plan (SIP) Future Value:</p>
+            <p class="text-primary">FV = P × [((1 + i)^n - 1) / i] × (1 + i)</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">3. Statutory Tax Algorithms</h2>
+        <p class="mb-4">
+          Tax tools apply exact statutory provisions published by tax authorities:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li><strong>HRA Exemption (Sec 10(13A)):</strong> Evaluates the minimum of (1) Actual HRA, (2) Rent paid minus 10% of basic, (3) 50% basic (metro) / 40% (non-metro).</li>
+          <li><strong>Gratuity (15/26 Rule):</strong> Computes statutory gratuity using 15 working days out of 26 per year of service, capped at the Section 10(10) ₹20 Lakh tax-free limit.</li>
+          <li><strong>EPF Compounding:</strong> Calculates monthly interest on closing balances and credits total interest annually under EPFO rules.</li>
+        </ul>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">4. Retirement & Portfolio Longevity</h2>
+        <p class="mb-4">
+          Retirement engines incorporate the Fisher equation for real inflation-adjusted rates of return:
+        </p>
+        <div class="p-6 bg-canvas border border-hairline rounded-xl font-mono text-sm mb-4">
+          <p class="text-ink font-bold mb-1">Fisher Equation (Real Interest Rate):</p>
+          <p class="text-primary">r_real = [(1 + Nominal Rate) / (1 + Inflation Rate)] - 1</p>
+        </div>
+        <p>
+          The FIRE Calculator executes the 1998 Trinity Study 4% Safe Withdrawal Rate (SWR) multiplier (FI Number = Annual Expenses × 25).
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">5. Numerical Precision & Rounding</h2>
+        <p class="mb-4">
+          All client-side calculations implement IEEE 754 floating-point guardrails to eliminate binary rounding errors. Monetary outputs are rounded to whole currency units or standard two-decimal precision.
+        </p>
+        <p>
+          Explore our <a href="/sources/" class="text-primary hover:underline font-semibold">Institutional Data Sources</a> for statutory references.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const pageTitle = "Privacy Policy: 100% Client-Side Privacy Guarantee";
+const pageDescription = "FinTool's Privacy Policy: 100% client-side calculation guarantee. We do not store, log, transmit, or share your financial numbers or personal data.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/privacy-policy/`;
+
+const privacySchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl} schema={privacySchema}>
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+    <Breadcrumbs items={[{ name: 'Privacy Policy' }]} />
+
+    <header class="mb-12 border-b border-hairline pb-8">
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">Privacy Policy</h1>
+      <p class="text-lg md:text-xl text-body max-w-3xl leading-relaxed">
+        Effective Date: August 6, 2026. Your financial privacy is absolute. FinTool is engineered with a 100% client-side architecture so your numbers never leave your device.
+      </p>
+    </header>
+
+    <div class="space-y-10 text-body leading-relaxed text-base md:text-lg">
+      <section class="p-8 bg-semantic-up/5 border border-semantic-up/20 rounded-2xl">
+        <h2 class="text-2xl font-bold text-ink mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6 text-semantic-up" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          100% Client-Side Privacy Guarantee
+        </h2>
+        <p class="mb-2">
+          Every loan input, salary figure, tax exemption detail, or investment amount you type into any FinTool calculator is processed <strong>entirely within your web browser's local JavaScript engine</strong>.
+        </p>
+        <p>
+          FinTool does <strong>NOT transmit, receive, capture, or store</strong> any of your financial input values to remote servers or third-party databases. When you refresh or close the page, your calculation state vanishes instantly.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-ink mb-4">1. Information We Do Not Collect</h2>
+        <p class="mb-4">
+          Because we prioritize privacy by design, FinTool does not collect:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Financial data (loan amounts, salaries, income tax figures, interest rates, investment balances).</li>
+          <li>Personally Identifiable Information (names, email addresses, phone numbers, Social Security Numbers, or Tax IDs).</li>
+          <li>User account credentials (no sign-up or login required).</li>
+        </ul>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">2. Cookies & Local Storage</h2>
+        <p class="mb-4">
+          We use browser Local Storage solely for client-side user experience enhancements, such as preserving your preferred theme mode or calculator slider states locally.
+        </p>
+        <p>
+          We do not use persistent tracking cookies to profile user financial behavior.
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">3. Advertising & Analytics</h2>
+        <p class="mb-4">
+          FinTool is a free, ad-supported platform. We may partner with privacy-compliant advertising networks (such as Google AdSense) to display non-intrusive advertisements.
+        </p>
+        <p>
+          These advertising partners may use standard web beacons or anonymized cookies to serve relevant ads based on general site visitation. You can manage or disable personalized ad preferences through your browser settings or <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-semibold">Google Ad Settings</a>.
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">4. Compliance with GDPR, CCPA & Global Regulations</h2>
+        <p class="mb-4">
+          Under the General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA), and California Privacy Rights Act (CPRA), users have rights regarding personal data processing. Because FinTool collects zero personal data or financial records, your data is inherently protected from unauthorized storage or processing.
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">5. Contact Our Data Protection Officer</h2>
+        <p class="mb-4">
+          If you have questions regarding this Privacy Policy or web privacy compliance, please reach out via our <a href="/contact/" class="text-primary hover:underline font-semibold">Contact Page</a> or email <span class="font-mono text-ink font-semibold">privacy@fintool.org</span>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

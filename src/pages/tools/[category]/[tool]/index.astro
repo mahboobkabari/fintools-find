@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import ToolLayout from '@components/ToolLayout.astro';
+import EmiCalculatorWidget from '@components/calculators/EmiCalculatorWidget';
+import SipCalculatorWidget from '@components/calculators/SipCalculatorWidget';
+import HomeLoanCalculatorWidget from '@components/calculators/HomeLoanCalculatorWidget';
+import PersonalLoanCalculatorWidget from '@components/calculators/PersonalLoanCalculatorWidget';
+import LoanAmortizationCalculatorWidget from '@components/calculators/LoanAmortizationCalculatorWidget';
+import CarLoanCalculatorWidget from '@components/calculators/CarLoanCalculatorWidget';
+import LoanEligibilityCalculatorWidget from '@components/calculators/LoanEligibilityCalculatorWidget';
+import LoanPrepaymentCalculatorWidget from '@components/calculators/LoanPrepaymentCalculatorWidget';
+import EducationLoanCalculatorWidget from '@components/calculators/EducationLoanCalculatorWidget';
+import LumpsumCalculatorWidget from '@components/calculators/LumpsumCalculatorWidget';
+import StepUpSipCalculatorWidget from '@components/calculators/StepUpSipCalculatorWidget';
+import SwpCalculatorWidget from '@components/calculators/SwpCalculatorWidget';
+import CagrCalculatorWidget from '@components/calculators/CagrCalculatorWidget';
+import MutualFundReturnsCalculatorWidget from '@components/calculators/MutualFundReturnsCalculatorWidget';
+import IncomeTaxCalculatorWidget from '@components/calculators/IncomeTaxCalculatorWidget';
+import GstCalculatorWidget from '@components/calculators/GstCalculatorWidget';
+import VatCalculatorWidget from '@components/calculators/VatCalculatorWidget';
+import CapitalGainsTaxCalculatorWidget from '@components/calculators/CapitalGainsTaxCalculatorWidget';
+import HraCalculatorWidget from '@components/calculators/HraCalculatorWidget';
+import TdsCalculatorWidget from '@components/calculators/TdsCalculatorWidget';
+import TakeHomeSalaryCalculatorWidget from '@components/calculators/TakeHomeSalaryCalculatorWidget';
+import RetirementCorpusCalculatorWidget from '@components/calculators/RetirementCorpusCalculatorWidget';
+import NpsCalculatorWidget from '@components/calculators/NpsCalculatorWidget';
+import FourZeroOneKCalculatorWidget from '@components/calculators/401kCalculatorWidget';
+import ProvidentFundCalculatorWidget from '@components/calculators/ProvidentFundCalculatorWidget';
+import GratuityCalculatorWidget from '@components/calculators/GratuityCalculatorWidget';
+import FireCalculatorWidget from '@components/calculators/FireCalculatorWidget';
+import PensionCalculatorWidget from '@components/calculators/PensionCalculatorWidget';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools');
+  return tools.map((entry) => {
+    const slug = entry.slug || entry.data.slug || entry.id;
+    return {
+      params: {
+        category: entry.data.category,
+        tool: slug,
+      },
+      props: { entry, slug },
+    };
+  });
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data;
+---
+
+<ToolLayout
+  title={data.title}
+  metaDescription={data.metaDescription}
+  category={data.category}
+  categoryName={data.categoryName}
+  slug={slug}
+  publishDate={data.publishDate}
+  updatedDate={data.updatedDate}
+  howToUse={data.howToUse}
+  features={data.features}
+  benefits={data.benefits}
+  faqs={data.faqs}
+  relatedTools={data.relatedTools}
+  eeat={data.eeat}
+  advancedContent={data.advancedContent}
+>
+  <div slot="calculator">
+    {slug === 'emi-calculator' && <EmiCalculatorWidget client:visible />}
+    {slug === 'sip-calculator' && <SipCalculatorWidget client:visible />}
+    {slug === 'home-loan-calculator' && <HomeLoanCalculatorWidget client:visible />}
+    {slug === 'personal-loan-calculator' && <PersonalLoanCalculatorWidget client:visible />}
+    {slug === 'loan-amortization-calculator' && <LoanAmortizationCalculatorWidget client:visible />}
+    {slug === 'car-loan-calculator' && <CarLoanCalculatorWidget client:visible />}
+    {slug === 'loan-eligibility-calculator' && <LoanEligibilityCalculatorWidget client:visible />}
+    {slug === 'loan-prepayment-calculator' && <LoanPrepaymentCalculatorWidget client:visible />}
+    {slug === 'education-loan-calculator' && <EducationLoanCalculatorWidget client:visible />}
+    {slug === 'lumpsum-calculator' && <LumpsumCalculatorWidget client:visible />}
+    {slug === 'step-up-sip-calculator' && <StepUpSipCalculatorWidget client:visible />}
+    {slug === 'swp-calculator' && <SwpCalculatorWidget client:visible />}
+    {slug === 'cagr-calculator' && <CagrCalculatorWidget client:visible />}
+    {slug === 'mutual-fund-returns-calculator' && <MutualFundReturnsCalculatorWidget client:visible />}
+    {slug === 'income-tax-calculator' && <IncomeTaxCalculatorWidget client:visible />}
+    {slug === 'gst-calculator' && <GstCalculatorWidget client:visible />}
+    {slug === 'vat-calculator' && <VatCalculatorWidget client:visible />}
+    {slug === 'capital-gains-tax-calculator' && <CapitalGainsTaxCalculatorWidget client:visible />}
+    {slug === 'hra-calculator' && <HraCalculatorWidget client:visible />}
+    {slug === 'tds-calculator' && <TdsCalculatorWidget client:visible />}
+    {slug === 'take-home-salary-calculator' && <TakeHomeSalaryCalculatorWidget client:visible />}
+    {slug === 'retirement-corpus-calculator' && <RetirementCorpusCalculatorWidget client:visible />}
+    {slug === 'nps-calculator' && <NpsCalculatorWidget client:visible />}
+    {slug === '401k-calculator' && <FourZeroOneKCalculatorWidget client:visible />}
+    {slug === 'provident-fund-calculator' && <ProvidentFundCalculatorWidget client:visible />}
+    {slug === 'gratuity-calculator' && <GratuityCalculatorWidget client:visible />}
+    {slug === 'fire-calculator' && <FireCalculatorWidget client:visible />}
+    {slug === 'pension-calculator' && <PensionCalculatorWidget client:visible />}
+    {slug !== 'emi-calculator' && slug !== 'sip-calculator' && slug !== 'home-loan-calculator' && slug !== 'personal-loan-calculator' && slug !== 'loan-amortization-calculator' && slug !== 'car-loan-calculator' && slug !== 'loan-eligibility-calculator' && slug !== 'loan-prepayment-calculator' && slug !== 'education-loan-calculator' && slug !== 'lumpsum-calculator' && slug !== 'step-up-sip-calculator' && slug !== 'swp-calculator' && slug !== 'cagr-calculator' && slug !== 'mutual-fund-returns-calculator' && slug !== 'income-tax-calculator' && slug !== 'gst-calculator' && slug !== 'vat-calculator' && slug !== 'capital-gains-tax-calculator' && slug !== 'hra-calculator' && slug !== 'tds-calculator' && slug !== 'take-home-salary-calculator' && slug !== 'retirement-corpus-calculator' && slug !== 'nps-calculator' && slug !== '401k-calculator' && slug !== 'provident-fund-calculator' && slug !== 'gratuity-calculator' && slug !== 'fire-calculator' && slug !== 'pension-calculator' && (
+      <div class="p-6 bg-canvas border border-hairline rounded-xl shadow-soft">
+        <div class="p-4 bg-surface-soft rounded-lg text-center font-mono text-sm text-muted">
+          [ Interactive Calculator Island Placeholder for {data.title} ]
+        </div>
+      </div>
+    )}
+  </div>
+
+  <Content />
+</ToolLayout>

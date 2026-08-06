@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FaqSection from '../../components/FaqSection.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+const allTools = await getCollection('tools');
+
+// Group tools by category
+const categoriesMap = new Map();
+allTools.forEach((tool) => {
+  const catSlug = tool.data.category;
+  if (!categoriesMap.has(catSlug)) {
+    categoriesMap.set(catSlug, {
+      categorySlug: catSlug,
+      categoryName: tool.data.categoryName,
+      tools: [],
+    });
+  }
+  categoriesMap.get(catSlug).tools.push(tool);
+});
+
+const categoryList = Array.from(categoriesMap.values());
+
+const pageTitle = 'All Financial Calculators — Complete 194 Tool Directory';
+const pageDesc = 'Browse FinTool’s complete directory of free financial calculators across 16 categories including loans, investments, tax, retirement, and real estate.';
+const currentCanonical = Astro.url.href;
+
+const breadcrumbItems: Array<{ name: string; url: string }> = [
+  { name: 'Home', url: 'https://fintool.org/' },
+  { name: 'All Calculators', url: currentCanonical },
+];
+
+const pageFaqs: Array<{ question: string; answer: string }> = [
+  {
+    question: 'How many financial calculators are available on FinTool?',
+    answer: 'FinTool features 194 financial calculators spanning 16 categories including loans, investments, tax, retirement, crypto, real estate, and salary tools.'
+  },
+  {
+    question: 'Are all calculators free and private?',
+    answer: 'Yes, 100% of our calculations execute client-side inside your browser with zero data logging or account registration required.'
+  }
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title: pageTitle,
+  description: pageDesc,
+  url: currentCanonical,
+  categoryName: 'Financial Calculators',
+  breadcrumbs: breadcrumbItems,
+  faqs: pageFaqs,
+});
+---
+
+<BaseLayout title={pageTitle} description={pageDesc} schema={combinedSchemas}>
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+    <Breadcrumbs toolTitle="All Calculators" />
+
+    {/* Header Banner */}
+    <header class="mb-10 border-b border-hairline pb-8">
+      <span class="text-xs font-semibold uppercase tracking-wider text-primary block mb-2">Master Directory</span>
+      <h1 class="typography-display-md text-ink mb-3">All Financial Calculators</h1>
+      <p class="text-body text-base max-w-3xl leading-relaxed">{pageDesc}</p>
+
+      {/* Category Pills Quick Jump */}
+      <div class="flex flex-wrap gap-2 mt-6">
+        {categoryList.map((cat: any) => (
+          <a
+            href={`/tools/${cat.categorySlug}/`}
+            class="bg-surface-soft hover:bg-hairline text-ink text-xs font-medium px-3 py-1.5 rounded-pill transition-colors"
+          >
+            {cat.categoryName} ({cat.tools.length})
+          </a>
+        ))}
+      </div>
+    </header>
+
+    <AdSlot slotId="directory-top-banner" />
+
+    {/* Grouped Category Sections */}
+    <div class="space-y-16 my-12">
+      {categoryList.map((cat: any) => (
+        <section id={cat.categorySlug} class="space-y-6">
+          <div class="flex items-center justify-between border-b border-hairline pb-3">
+            <h2 class="text-2xl font-display text-ink">{cat.categoryName}</h2>
+            <a href={`/tools/${cat.categorySlug}/`} class="text-xs font-semibold text-primary hover:underline">
+              View Category Hub &rarr;
+            </a>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {cat.tools.map((tool: any) => {
+              const slug = tool.slug || tool.data.slug || tool.id;
+              return (
+                <a
+                  href={`/tools/${cat.categorySlug}/${slug}/`}
+                  class="block bg-canvas border border-hairline hover:border-primary rounded-xl p-6 shadow-soft hover:shadow-hover transition-all group"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="w-8 h-8 rounded-full bg-surface-soft text-primary font-mono text-xs font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                      ₹
+                    </span>
+                    <span class="text-[11px] font-mono text-muted uppercase tracking-wider">{tool.data.priority || 'P1'}</span>
+                  </div>
+                  <h3 class="text-base font-semibold text-ink group-hover:text-primary transition-colors mb-2">
+                    {tool.data.title}
+                  </h3>
+                  <p class="text-xs text-body line-clamp-2 leading-relaxed mb-4">
+                    {tool.data.metaDescription}
+                  </p>
+                  <span class="text-xs font-medium text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    Calculate Now &rarr;
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    {/* Directory FAQs */}
+    <FaqSection faqs={pageFaqs} title="Directory FAQs" />
+  </div>
+</BaseLayout>

@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import FaqSection from './FaqSection.astro';
+import RelatedTools from './RelatedTools.astro';
+import AdSlot from './AdSlot.astro';
+import DefinitionSnippet from './content/DefinitionSnippet.astro';
+import ProTipsSection from './content/ProTipsSection.astro';
+import MistakesSection from './content/MistakesSection.astro';
+import GlossarySection from './content/GlossarySection.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+export interface Props {
+  title: string;
+  metaDescription: string;
+  category: string;
+  categoryName: string;
+  slug: string;
+  publishDate?: Date | string;
+  updatedDate?: Date | string;
+  howToUse?: string[];
+  features?: string[];
+  benefits?: string[];
+  faqs?: Array<{ question: string; answer: string }>;
+  relatedTools?: string[];
+  eeat?: {
+    reviewedBy?: string;
+    reviewedDate?: Date | string;
+    methodology?: string;
+    dataSources?: string[];
+  };
+  advancedContent?: {
+    definitionSnippet?: string;
+    proTips?: string[];
+    commonMistakes?: string[];
+    keyTakeaways?: string[];
+    assumptions?: string[];
+    limitations?: string[];
+    glossaryTerms?: Array<{ term: string; definition: string }>;
+  };
+}
+
+const {
+  title,
+  metaDescription,
+  category,
+  categoryName,
+  slug,
+  publishDate,
+  updatedDate,
+  howToUse = [],
+  features = [],
+  benefits = [],
+  faqs = [],
+  relatedTools = [],
+  eeat,
+  advancedContent,
+} = Astro.props;
+
+const currentCanonical = Astro.url.href;
+const reviewerName = eeat?.reviewedBy || 'FinTool Engineering & Quant Team';
+const formattedDate = updatedDate
+  ? new Date(updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : publishDate
+  ? new Date(publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : 'August 2026';
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://fintool.org/' },
+  { name: categoryName, url: `https://fintool.org/tools/${category}/` },
+  { name: title, url: currentCanonical },
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title,
+  description: metaDescription,
+  url: currentCanonical,
+  categoryName,
+  breadcrumbs: breadcrumbItems,
+  faqs,
+});
+---
+
+<BaseLayout title={title} description={metaDescription} schema={combinedSchemas}>
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+    <Breadcrumbs categorySlug={category} categoryName={categoryName} toolTitle={title} />
+
+    <!-- 1. H1 + Short Intro + EEAT Trust Signals -->
+    <header class="mb-8 border-b border-hairline pb-6">
+      <h1 class="typography-display-md text-ink mb-3">{title}</h1>
+      <p class="text-body text-base max-w-3xl mb-4 leading-relaxed">{metaDescription}</p>
+
+      {/* EEAT Signals Badge */}
+      <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-muted">
+        <span class="flex items-center gap-1.5 bg-surface-soft px-3 py-1 rounded-pill border border-hairline">
+          <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Reviewed by {reviewerName}
+        </span>
+        <span class="flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Updated: {formattedDate}
+        </span>
+        <span>· 100% Client-Side Private Computation</span>
+      </div>
+
+      {/* Featured Snippet Definition Callout */}
+      {advancedContent?.definitionSnippet && (
+        <DefinitionSnippet term={title} definition={advancedContent.definitionSnippet} />
+      )}
+    </header>
+
+    <!-- 2. The Calculator Widget (Slot) -->
+    <section class="mb-12">
+      <slot name="calculator" />
+    </section>
+
+    <AdSlot slotId="tool-below-widget" />
+
+    <!-- 3. Introduction (Markdown Body Content Slot) -->
+    <article class="prose max-w-3xl text-body mb-12">
+      <slot />
+    </article>
+
+    <!-- 4. How to use it -->
+    {howToUse.length > 0 && (
+      <section class="my-12 max-w-3xl">
+        <h2 class="text-2xl font-display text-ink mb-4">How to Use the {title}</h2>
+        <ol class="list-decimal list-inside space-y-2 text-body">
+          {howToUse.map((step) => (
+            <li class="leading-relaxed">{step}</li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <!-- Advanced Pro Tips & Common Mistakes Callout Sections -->
+    {advancedContent?.proTips && <ProTipsSection tips={advancedContent.proTips} />}
+    {advancedContent?.commonMistakes && <MistakesSection mistakes={advancedContent.commonMistakes} />}
+
+    <!-- 5. Features & 6. Benefits Grid -->
+    {(features.length > 0 || benefits.length > 0) && (
+      <div class="grid md:grid-cols-2 gap-6 my-12 max-w-4xl">
+        {features.length > 0 && (
+          <div class="bg-canvas border border-hairline rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-ink mb-4">Key Features</h3>
+            <ul class="list-disc list-inside space-y-2 text-body text-sm">
+              {features.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {benefits.length > 0 && (
+          <div class="bg-canvas border border-hairline rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-ink mb-4">Benefits</h3>
+            <ul class="list-disc list-inside space-y-2 text-body text-sm">
+              {benefits.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- Glossary Terms -->
+    {advancedContent?.glossaryTerms && <GlossarySection terms={advancedContent.glossaryTerms} />}
+
+    <!-- 7. Formula Explanation Slot -->
+    <section class="my-12 max-w-3xl">
+      <slot name="formula" />
+    </section>
+
+    <!-- 8. FAQs -->
+    <FaqSection faqs={faqs} />
+
+    <!-- 9. Disclaimer & Methodology Notice -->
+    <div class="my-8 p-5 bg-surface-soft border border-hairline rounded-lg text-xs text-muted max-w-3xl space-y-2">
+      <p class="font-semibold text-ink">Methodology & Financial Accuracy Notice</p>
+      <p>
+        {eeat?.methodology || 'Calculations on this page utilize standard financial mathematics (Time Value of Money & Annuity formulas). All computations are executed client-side inside your browser for 100% data privacy.'}
+      </p>
+      <p>
+        <strong>Disclaimer:</strong> This tool provides estimates for educational and planning purposes only. Results do not constitute binding financial, tax, or investment advice. Consult a licensed professional before making major financial decisions.
+      </p>
+    </div>
+
+    <!-- 10. Related Tools -->
+    <RelatedTools currentCategory={category} currentSlug={slug} manualRelatedTools={relatedTools} />
+  </div>
+</BaseLayout>

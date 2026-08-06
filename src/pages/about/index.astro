@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const pageTitle = "About FinTool: Institutional-Grade Financial Calculators";
+const pageDescription = "Learn about FinTool, our mission to deliver 100% free, private, client-side financial calculators built with institutional accuracy and zero user tracking.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/about/`;
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'FinTool',
+  url: siteOrigin,
+  logo: `${siteOrigin}/favicon.svg`,
+  description: pageDescription,
+  sameAs: [],
+};
+
+const aboutPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  mainEntity: organizationSchema,
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl} schema={[organizationSchema, aboutPageSchema]}>
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+    <Breadcrumbs items={[{ name: 'About Us' }]} />
+
+    <header class="mb-12 border-b border-hairline pb-8">
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">About FinTool</h1>
+      <p class="text-lg md:text-xl text-body max-w-3xl leading-relaxed">
+        Building the web's most accurate, transparent, and private financial calculator hub—100% free, ad-supported, and powered by client-side computation.
+      </p>
+    </header>
+
+    <div class="space-y-12 text-body leading-relaxed text-base md:text-lg">
+      <section class="p-8 bg-surface-soft border border-hairline rounded-2xl">
+        <h2 class="text-2xl font-bold text-ink mb-4">Our Core Mission</h2>
+        <p class="mb-4">
+          Financial decisions—whether taking a home loan, planning retirement through 401(k) or NPS, calculating income tax under new tax regimes, or projecting SIP wealth—should be guided by clear, uncompromised mathematical facts.
+        </p>
+        <p>
+          FinTool was established to eliminate financial opacity by offering <strong>194 institutional-grade calculators across 16 categories</strong> that compute instantly in your browser with zero latency, zero mandatory registration, and zero data tracking.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl md:text-3xl font-bold text-ink mb-6">The Three Pillars of FinTool</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="p-6 bg-canvas border border-hairline rounded-xl shadow-soft">
+            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-mono font-bold flex items-center justify-center mb-4 text-lg">1</div>
+            <h3 class="text-lg font-bold text-ink mb-2">Institutional Accuracy</h3>
+            <p class="text-sm text-body">
+              Every engine executes verified formulas aligned with central bank guidelines, IRS codes, EPFO statutory splits, and academic portfolio theories (Trinity 4% SWR).
+            </p>
+          </div>
+
+          <div class="p-6 bg-canvas border border-hairline rounded-xl shadow-soft">
+            <div class="w-10 h-10 rounded-full bg-semantic-up/10 text-semantic-up font-mono font-bold flex items-center justify-center mb-4 text-lg">2</div>
+            <h3 class="text-lg font-bold text-ink mb-2">100% Client-Side Privacy</h3>
+            <p class="text-sm text-body">
+              Your financial data never leaves your device. All math logic executes locally in JavaScript—zero input numbers are transmitted to or stored on backend servers.
+            </p>
+          </div>
+
+          <div class="p-6 bg-canvas border border-hairline rounded-xl shadow-soft">
+            <div class="w-10 h-10 rounded-full bg-accent-amber/10 text-accent-amber font-mono font-bold flex items-center justify-center mb-4 text-lg">3</div>
+            <h3 class="text-lg font-bold text-ink mb-2">Zero Paywalls</h3>
+            <p class="text-sm text-body">
+              All tools remain 100% free forever. Supported by clean, non-intrusive advertising, ensuring unbiased tools free from predatory lead-generation tactics.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">The Golden Calculator Standard</h2>
+        <p class="mb-4">
+          To maintain uncompromising quality, every published calculator passes our strict 8-dimension checklist:
+        </p>
+        <ul class="list-disc pl-6 space-y-2 text-body">
+          <li><strong>Pure Math Engine:</strong> Modular, zero-dependency logic tested against edge cases.</li>
+          <li><strong>Comprehensive Vitest Unit Tests:</strong> 100% test coverage on calculations and statutory thresholds.</li>
+          <li><strong>Publication-Grade Educational Guides:</strong> 1,000+ words of real-world worked examples, LaTeX formulas, and 5 actionable strategies.</li>
+          <li><strong>Transparent Governance:</strong> Peer-reviewed formulas documented in our <a href="/methodology/" class="text-primary hover:underline font-semibold">Methodology</a> and <a href="/sources/" class="text-primary hover:underline font-semibold">Institutional Sources</a>.</li>
+        </ul>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">Explore Our Tool Directory</h2>
+        <p class="mb-6">
+          Access our published calculators across key financial sectors:
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/tools/loans/" class="button-secondary-light">Loan & EMI Calculators</a>
+          <a href="/tools/investment/" class="button-secondary-light">Investment Calculators</a>
+          <a href="/tools/tax/" class="button-secondary-light">Tax & Salary Calculators</a>
+          <a href="/tools/retirement/" class="button-secondary-light">Retirement Calculators</a>
+          <a href="/tools/" class="button-calculate">Explore All Tools</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

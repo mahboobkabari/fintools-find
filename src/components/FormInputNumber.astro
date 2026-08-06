@@ -1,0 +1,45 @@
+---
+export interface Props {
+  id: string;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step?: number;
+  prefix?: string;
+  suffix?: string;
+}
+
+const { id, label, value, min, max, step = 1, prefix = '', suffix = '' } = Astro.props;
+---
+
+<div class="mb-6">
+  <div class="flex items-center justify-between mb-2">
+    <label for={id} class="text-sm font-medium text-ink">{label}</label>
+    <div class="flex items-center bg-surface-strong px-3 py-1 rounded-md border border-hairline focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+      {prefix && <span class="text-sm font-mono text-muted mr-1">{prefix}</span>}
+      <input
+        type="number"
+        id={id}
+        name={id}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        class="w-28 bg-transparent text-right font-mono text-sm font-semibold text-ink focus:outline-none"
+      />
+      {suffix && <span class="text-xs font-mono text-muted ml-1">{suffix}</span>}
+    </div>
+  </div>
+
+  <input
+    type="range"
+    id={`${id}-slider`}
+    min={min}
+    max={max}
+    step={step}
+    value={value}
+    class="w-full h-2 bg-surface-strong rounded-lg appearance-none cursor-pointer accent-primary"
+    aria-label={`${label} slider`}
+  />
+</div>

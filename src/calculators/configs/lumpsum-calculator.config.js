@@ -1,0 +1,60 @@
+import { calculateLumpsumTool } from '../investment/lumpsum-calculator.js';
+
+export const lumpsumCalculatorConfig = {
+  title: 'Lumpsum Investment Details',
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateLumpsumTool,
+  primaryResult: {
+    key: 'maturityValue',
+    label: 'Expected Maturity Value',
+  },
+  ratioBarItems: [
+    { key: 'totalInvested', label: 'Invested Amount', colorClass: 'bg-primary' },
+    { key: 'estReturns', label: 'Est. Returns', colorClass: 'bg-semantic-up' },
+  ],
+  summaryItems: [
+    { key: 'totalInvested', label: 'Total Invested Amount' },
+    { key: 'estReturns', label: 'Estimated Wealth Gain', class: 'text-semantic-up' },
+    { key: 'maturityValue', label: 'Total Maturity Corpus', isTotal: true },
+  ],
+  inputs: [
+    {
+      id: 'initialInvestment',
+      type: 'number',
+      label: 'One-Time Investment Amount',
+      min: 1000,
+      max: 10000000,
+      step: 5000,
+      prefix: '₹',
+      minLabel: '₹1K',
+      maxLabel: '₹1 Cr',
+      default: 100000,
+    },
+    {
+      id: 'expectedReturnRate',
+      type: 'number',
+      label: 'Expected Return Rate (p.a.)',
+      min: 1,
+      max: 30,
+      step: 0.5,
+      suffix: '%',
+      minLabel: '1%',
+      maxLabel: '30%',
+      default: 12,
+    },
+    {
+      id: 'tenureYears',
+      type: 'number',
+      label: 'Investment Period (Years)',
+      min: 1,
+      max: 40,
+      step: 1,
+      suffix: 'Yrs',
+      minLabel: '1 Yr',
+      maxLabel: '40 Yrs',
+      default: 10,
+    },
+  ],
+  hasYearlySchedule: true,
+};

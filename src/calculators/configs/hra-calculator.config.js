@@ -1,0 +1,62 @@
+import { calculateHraCalculator } from '../tax/hra-calculator.js';
+
+export const hraCalculatorConfig = {
+  title: 'HRA Exemption Details',
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateHraCalculator,
+  primaryResult: {
+    key: 'exemptHra',
+    label: 'Total Tax-Exempt HRA (Sec 10(13A))',
+  },
+  ratioBarItems: [
+    { key: 'exemptHra', label: 'Tax-Exempt HRA', colorClass: 'bg-semantic-up' },
+    { key: 'taxableHra', label: 'Taxable HRA', colorClass: 'bg-accent-amber' },
+  ],
+  summaryItems: [
+    { key: 'actualHra', label: 'Actual HRA Received from Employer' },
+    { key: 'rentMinusTenPercent', label: 'Rent Paid minus 10% Basic Salary' },
+    { key: 'salaryPercentageLimit', label: 'Salary Limit (50% Metro / 40% Non-Metro)' },
+    { key: 'exemptHra', label: 'Total Tax-Exempt HRA Amount', isTotal: true },
+    { key: 'taxableHra', label: 'Taxable HRA Amount (Added to Income)', class: 'text-accent-amber' },
+  ],
+  inputs: [
+    {
+      id: 'basicSalary',
+      type: 'number',
+      label: 'Annual Basic Salary + DA (₹)',
+      min: 100000,
+      max: 10000000,
+      step: 10000,
+      prefix: '₹',
+      minLabel: '₹1L',
+      maxLabel: '₹1 Cr',
+      default: 600000,
+    },
+    {
+      id: 'hraReceived',
+      type: 'number',
+      label: 'Annual HRA Received (₹)',
+      min: 10000,
+      max: 5000000,
+      step: 5000,
+      prefix: '₹',
+      minLabel: '₹10K',
+      maxLabel: '₹50L',
+      default: 240000,
+    },
+    {
+      id: 'rentPaid',
+      type: 'number',
+      label: 'Total Annual Rent Paid (₹)',
+      min: 10000,
+      max: 6000000,
+      step: 5000,
+      prefix: '₹',
+      minLabel: '₹10K',
+      maxLabel: '₹60L',
+      default: 300000,
+    },
+  ],
+  hasAmortizationTable: false,
+};

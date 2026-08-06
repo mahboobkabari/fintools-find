@@ -1,0 +1,62 @@
+import { calculatePensionCalculator } from '../retirement/pension-calculator.js';
+
+export const pensionCalculatorConfig = {
+  title: 'Pension Payout Details',
+  currency: 'USD',
+  currencySymbol: '$',
+  calculateFn: calculatePensionCalculator,
+  primaryResult: {
+    key: 'monthlyPension',
+    label: 'Guaranteed Monthly Pension Income',
+  },
+  ratioBarItems: [
+    { key: 'annualPension', label: 'Annual Pension Income', colorClass: 'bg-primary' },
+    { key: 'pensionCorpus', label: 'Lump Sum Pension Corpus', colorClass: 'bg-semantic-up' },
+  ],
+  summaryItems: [
+    { key: 'pensionCorpus', label: 'Total Accumulated Pension Corpus' },
+    { key: 'annuityRate', label: 'Guaranteed Annual Annuity Rate (%)' },
+    { key: 'monthlyPension', label: 'Guaranteed Monthly Pension Payout', isTotal: true, class: 'text-primary' },
+    { key: 'annualPension', label: 'Guaranteed Annual Pension Income' },
+    { key: 'totalGuaranteedPayout', label: 'Total Cumulative Guaranteed Payout' },
+  ],
+  inputs: [
+    {
+      id: 'pensionCorpus',
+      type: 'number',
+      label: 'Total Pension Corpus ($ or ₹)',
+      min: 10000,
+      max: 5000000,
+      step: 10000,
+      prefix: '$',
+      minLabel: '$10K',
+      maxLabel: '$5M',
+      default: 500000,
+    },
+    {
+      id: 'annuityRate',
+      type: 'number',
+      label: 'Guaranteed Annual Annuity Rate (%)',
+      min: 2,
+      max: 12,
+      step: 0.25,
+      suffix: '%',
+      minLabel: '2%',
+      maxLabel: '12%',
+      default: 6.5,
+    },
+    {
+      id: 'guaranteeYears',
+      type: 'number',
+      label: 'Guaranteed Payout Period (Years)',
+      min: 5,
+      max: 40,
+      step: 1,
+      suffix: 'Yrs',
+      minLabel: '5 Yrs',
+      maxLabel: '40 Yrs',
+      default: 20,
+    },
+  ],
+  hasAmortizationTable: false,
+};

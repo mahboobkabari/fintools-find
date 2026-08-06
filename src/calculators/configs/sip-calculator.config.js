@@ -1,0 +1,60 @@
+import { calculateSipTool } from '../investment/sip.js';
+
+export const sipCalculatorConfig = {
+  title: 'SIP Investment Details',
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateSipTool,
+  primaryResult: {
+    key: 'maturityValue',
+    label: 'Expected Maturity Value',
+  },
+  ratioBarItems: [
+    { key: 'totalInvested', label: 'Invested Amount', colorClass: 'bg-primary' },
+    { key: 'estReturns', label: 'Est. Returns', colorClass: 'bg-semantic-up' },
+  ],
+  summaryItems: [
+    { key: 'totalInvested', label: 'Total Invested Amount' },
+    { key: 'estReturns', label: 'Estimated Wealth Gain', class: 'text-semantic-up' },
+    { key: 'maturityValue', label: 'Total Maturity Corpus', isTotal: true },
+  ],
+  inputs: [
+    {
+      id: 'monthlyInvestment',
+      type: 'number',
+      label: 'Monthly SIP Amount',
+      min: 500,
+      max: 1000000,
+      step: 500,
+      prefix: '₹',
+      minLabel: '₹500',
+      maxLabel: '₹10L',
+      default: 5000,
+    },
+    {
+      id: 'expectedReturnRate',
+      type: 'number',
+      label: 'Expected Return Rate (p.a.)',
+      min: 1,
+      max: 30,
+      step: 0.5,
+      suffix: '%',
+      minLabel: '1%',
+      maxLabel: '30%',
+      default: 12,
+    },
+    {
+      id: 'tenureYears',
+      type: 'number',
+      label: 'Investment Period (Years)',
+      min: 1,
+      max: 40,
+      step: 1,
+      suffix: 'Yrs',
+      minLabel: '1 Yr',
+      maxLabel: '40 Yrs',
+      default: 10,
+    },
+  ],
+  hasYearlySchedule: true,
+};

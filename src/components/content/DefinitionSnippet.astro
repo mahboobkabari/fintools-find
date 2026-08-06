@@ -1,0 +1,15 @@
+---
+export interface Props {
+  term: string;
+  definition: string;
+}
+
+const { term, definition } = Astro.props;
+---
+
+<blockquote class="my-6 p-5 bg-surface-soft border-l-4 border-primary rounded-r-lg shadow-soft text-body not-italic">
+  <span class="text-xs font-semibold uppercase tracking-wider text-primary block mb-1">Definition (Featured Snippet)</span>
+  <p class="text-sm md:text-base text-ink font-medium leading-relaxed">
+    <strong>{term}:</strong> {definition}
+  </p>
+</blockquote>

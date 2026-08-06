@@ -1,0 +1,67 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  schema?: object | object[];
+}
+
+const { title, description, canonicalUrl, ogImage, schema } = Astro.props;
+
+const currentCanonical = canonicalUrl || Astro.url.href;
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const currentOgImage = ogImage || `${siteOrigin}/og-default.svg`;
+const schemaArray = Array.isArray(schema) ? schema : schema ? [schema] : [];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0052ff" />
+
+    <!-- SEO Meta Tags -->
+    <title>{title} | FinTool</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={currentCanonical} />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} | FinTool`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={currentCanonical} />
+    <meta property="og:image" content={currentOgImage} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | FinTool`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={currentOgImage} />
+
+    <!-- Preload Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+    {schemaArray.map((s) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />
+    ))}
+
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-canvas text-body font-sans antialiased">
+    <Header />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

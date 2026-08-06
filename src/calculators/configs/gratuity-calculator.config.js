@@ -1,0 +1,62 @@
+import { calculateGratuityCalculator } from '../retirement/gratuity-calculator.js';
+
+export const gratuityCalculatorConfig = {
+  title: 'Gratuity Details',
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateGratuityCalculator,
+  primaryResult: {
+    key: 'gratuityAmount',
+    label: 'Total Statutory Gratuity Payout',
+  },
+  ratioBarItems: [
+    { key: 'taxFreeGratuity', label: 'Tax-Free Gratuity (Sec 10(10))', colorClass: 'bg-semantic-up' },
+    { key: 'taxableGratuity', label: 'Taxable Gratuity', colorClass: 'bg-accent-amber' },
+  ],
+  summaryItems: [
+    { key: 'lastDrawnBasic', label: 'Last Drawn Basic Salary + DA' },
+    { key: 'roundedYears', label: 'Recognized Years of Service' },
+    { key: 'gratuityAmount', label: 'Total Statutory Gratuity Amount', isTotal: true },
+    { key: 'taxFreeGratuity', label: 'Tax-Free Exemption Limit (Sec 10(10))', class: 'text-semantic-up' },
+    { key: 'taxableGratuity', label: 'Taxable Gratuity Amount', class: 'text-accent-amber' },
+  ],
+  inputs: [
+    {
+      id: 'lastDrawnBasic',
+      type: 'number',
+      label: 'Last Drawn Basic Salary + DA (₹)',
+      min: 5000,
+      max: 1000000,
+      step: 2500,
+      prefix: '₹',
+      minLabel: '₹5K',
+      maxLabel: '₹10L',
+      default: 50000,
+    },
+    {
+      id: 'tenureYears',
+      type: 'number',
+      label: 'Completed Years of Service',
+      min: 1,
+      max: 50,
+      step: 1,
+      suffix: 'Yrs',
+      minLabel: '1 Yr',
+      maxLabel: '50 Yrs',
+      default: 15,
+    },
+    {
+      id: 'tenureMonths',
+      type: 'number',
+      label: 'Additional Service Months',
+      min: 0,
+      max: 11,
+      step: 1,
+      suffix: 'Mos',
+      minLabel: '0 Mos',
+      maxLabel: '11 Mos',
+      default: 7,
+    },
+  ],
+  hasAmortizationTable: false,
+};

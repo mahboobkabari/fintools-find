@@ -1,0 +1,62 @@
+import { calculateCagr } from '../investment/cagr-calculator.js';
+
+export const cagrCalculatorConfig = {
+  title: 'Investment Growth Parameters',
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateCagr,
+  primaryResult: {
+    key: 'cagrPct',
+    label: 'Compound Annual Growth Rate (CAGR)',
+    suffix: '%',
+  },
+  ratioBarItems: [
+    { key: 'initialValue', label: 'Initial Investment', colorClass: 'bg-primary' },
+    { key: 'absoluteGain', label: 'Absolute Capital Gain', colorClass: 'bg-semantic-up' },
+  ],
+  summaryItems: [
+    { key: 'initialValue', label: 'Initial Investment Value' },
+    { key: 'finalValue', label: 'Final Maturity Value' },
+    { key: 'absoluteGain', label: 'Absolute Capital Gain', class: 'text-semantic-up font-bold' },
+    { key: 'cagrPct', label: 'Annualized CAGR (%)', isTotal: true },
+  ],
+  inputs: [
+    {
+      id: 'initialValue',
+      type: 'number',
+      label: 'Initial Investment Value',
+      min: 1000,
+      max: 10000000,
+      step: 5000,
+      prefix: '₹',
+      minLabel: '₹1K',
+      maxLabel: '₹1 Cr',
+      default: 100000,
+    },
+    {
+      id: 'finalValue',
+      type: 'number',
+      label: 'Final Investment Value',
+      min: 1000,
+      max: 50000000,
+      step: 10000,
+      prefix: '₹',
+      minLabel: '₹1K',
+      maxLabel: '₹5 Cr',
+      default: 250000,
+    },
+    {
+      id: 'tenureYears',
+      type: 'number',
+      label: 'Holding Period (Years)',
+      min: 1,
+      max: 40,
+      step: 1,
+      suffix: 'Yrs',
+      minLabel: '1 Yr',
+      maxLabel: '40 Yrs',
+      default: 5,
+    },
+  ],
+  hasYearlySchedule: true,
+};

@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FaqSection from '../components/FaqSection.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+const allTools = await getCollection('tools');
+
+const homeTitle = 'FinTool — Free Online Financial Calculators';
+const homeDesc = 'Free, institutional-grade financial calculators for loans, EMI, mutual fund SIPs, tax, retirement, and investments with 100% data privacy.';
+const currentCanonical = 'https://fintool.org/';
+
+const categories = [
+  { slug: 'loans', name: 'Loan & EMI Calculators', desc: 'Calculate home, car, personal loan EMIs, prepayment savings, and amortization schedules.', count: '8 Tools' },
+  { slug: 'investment', name: 'Investment Calculators', desc: 'Estimate returns for mutual fund SIPs, step-up SIPs, SWPs, lumpsum, and CAGR.', count: '6 Tools' },
+  { slug: 'tax', name: 'Tax & Salary Calculators', desc: 'Calculate Income Tax under New vs Old Tax Regime, GST, TDS, HRA, and Take-Home Salary.', count: '7 Tools' },
+  { slug: 'retirement', name: 'Retirement Calculators', desc: 'Plan retirement corpus, 401(k), NPS, EPF, Gratuity, Pension, and FIRE benchmarks.', count: '7 Tools' },
+];
+
+const homeFaqs: Array<{ question: string; answer: string }> = [
+  {
+    question: 'What is FinTool?',
+    answer: 'FinTool is an independent financial platform offering 28 active interactive calculators for loans, investments, tax planning, and retirement.'
+  },
+  {
+    question: 'Is my financial data secure?',
+    answer: 'Yes, 100% of calculations take place client-side inside your browser. No financial data is saved or transmitted to external servers.'
+  }
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title: homeTitle,
+  description: homeDesc,
+  url: currentCanonical,
+  categoryName: 'Financial Platform',
+  faqs: homeFaqs,
+});
+---
+
+<BaseLayout title={homeTitle} description={homeDesc} schema={combinedSchemas}>
+  {/* Hero Section */}
+  <section class="bg-canvas border-b border-hairline py-16 md:py-24 px-4 md:px-8">
+    <div class="max-w-[1200px] mx-auto text-center space-y-6">
+      <span class="inline-block bg-surface-soft text-primary font-mono text-xs font-semibold px-4 py-1.5 rounded-pill border border-hairline">
+        28 Institutional Financial Calculators · 100% Client Privacy
+      </span>
+      <h1 class="typography-display-md text-ink max-w-4xl mx-auto tracking-tight">
+        Institutional Financial Planning, <br class="hidden sm:inline" />
+        <span class="text-primary">Calculated Instantly.</span>
+      </h1>
+      <p class="text-body text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        Calculate loan EMIs, mutual fund SIP returns, tax deductions, and retirement goals with institutional accuracy and zero data logging.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+        <a href="/tools/" class="button-primary text-base px-6 py-3">
+          Explore All 28 Tools &rarr;
+        </a>
+        <a href="/tools/loans/emi-calculator/" class="button-secondary-light text-base px-6 py-3">
+          Try EMI Calculator
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-16 space-y-20">
+    <AdSlot slotId="home-top-banner" />
+
+    {/* Featured Tools Grid */}
+    <section>
+      <div class="flex items-center justify-between border-b border-hairline pb-4 mb-8">
+        <h2 class="text-2xl font-display text-ink">Popular Calculators</h2>
+        <a href="/tools/" class="text-xs font-semibold text-primary hover:underline">
+          View All 28 Tools &rarr;
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allTools.slice(0, 6).map((tool: any) => {
+          const slug = tool.slug || tool.data.slug || tool.id;
+          return (
+            <a
+              href={`/tools/${tool.data.category}/${slug}/`}
+              class="block bg-canvas border border-hairline hover:border-primary rounded-xl p-6 shadow-soft hover:shadow-hover transition-all group"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-full bg-surface-soft text-primary font-mono text-xs font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  ₹
+                </span>
+                <span class="text-[11px] font-mono text-muted uppercase tracking-wider">{tool.data.categoryName}</span>
+              </div>
+              <h3 class="text-base font-semibold text-ink group-hover:text-primary transition-colors mb-2">
+                {tool.data.title}
+              </h3>
+              <p class="text-xs text-body line-clamp-2 leading-relaxed mb-4">
+                {tool.data.metaDescription}
+              </p>
+              <span class="text-xs font-medium text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Open Calculator &rarr;
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    {/* Category Hubs Grid */}
+    <section>
+      <div class="border-b border-hairline pb-4 mb-8">
+        <h2 class="text-2xl font-display text-ink">Active Financial Categories</h2>
+        <p class="text-sm text-body mt-1">Browse calculators organized by financial category</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((cat) => (
+          <a
+            href={`/tools/${cat.slug}/`}
+            class="block bg-canvas border border-hairline hover:border-primary rounded-xl p-6 shadow-soft hover:shadow-hover transition-all group"
+          >
+            <span class="text-xs font-mono font-medium text-primary block mb-2">{cat.count}</span>
+            <h3 class="text-base font-semibold text-ink group-hover:text-primary transition-colors mb-2">
+              {cat.name}
+            </h3>
+            <p class="text-xs text-body leading-relaxed">{cat.desc}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {/* Platform Trust & Privacy Section */}
+    <section class="bg-surface-soft border border-hairline rounded-2xl p-8 md:p-12 text-center space-y-4">
+      <h2 class="text-2xl font-display text-ink">100% Client-Side Privacy</h2>
+      <p class="text-body text-sm max-w-2xl mx-auto leading-relaxed">
+        Your financial numbers belong strictly to you. FinTool processes all calculations directly inside your web browser. Zero input data is stored, tracked, or sent to external servers.
+      </p>
+    </section>
+
+    {/* Homepage FAQs */}
+    <FaqSection faqs={homeFaqs} title="Frequently Asked Questions" />
+  </div>
+</BaseLayout>

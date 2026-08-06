@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import FaqSection from '../../../components/FaqSection.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+export async function getStaticPaths() {
+  const allTools = await getCollection('tools');
+  
+  // Extract unique categories
+  const categoriesMap = new Map();
+  allTools.forEach((tool) => {
+    const catSlug = tool.data.category;
+    if (!categoriesMap.has(catSlug)) {
+      categoriesMap.set(catSlug, {
+        categorySlug: catSlug,
+        categoryName: tool.data.categoryName,
+        tools: [],
+      });
+    }
+    categoriesMap.get(catSlug).tools.push(tool);
+  });
+
+  return Array.from(categoriesMap.values()).map((catData: any) => ({
+    params: { category: catData.categorySlug },
+    props: { ...catData },
+  }));
+}
+
+const { categorySlug, categoryName, tools } = Astro.props;
+
+const currentCanonical = Astro.url.href;
+const hubTitle = `${categoryName} — Free Online Calculators`;
+const hubDesc = `Free online ${categoryName.toLowerCase()}. Calculate payments, interest, schedules, and financial benchmarks instantly with zero data retention.`;
+
+const breadcrumbItems: Array<{ name: string; url: string }> = [
+  { name: 'Home', url: 'https://fintool.org/' },
+  { name: categoryName, url: currentCanonical },
+];
+
+const categoryFaqs: Array<{ question: string; answer: string }> = [
+  {
+    question: `What are ${categoryName}?`,
+    answer: `${categoryName} are interactive financial planning tools designed to calculate repayments, growth schedules, tax estimates, and investment returns accurately.`
+  },
+  {
+    question: `Are these ${categoryName.toLowerCase()} free to use?`,
+    answer: `Yes, all ${categoryName.toLowerCase()} on FinTool are 100% free with unlimited calculations and zero data logging.`
+  },
+  {
+    question: `How accurate are the results?`,
+    answer: `Our calculators utilize institutional-grade financial formulas (Time Value of Money & compounding mathematics) verified by Vitest unit tests.`
+  }
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title: hubTitle,
+  description: hubDesc,
+  url: currentCanonical,
+  categoryName,
+  breadcrumbs: breadcrumbItems,
+  faqs: categoryFaqs,
+});
+---
+
+<BaseLayout title={hubTitle} description={hubDesc} schema={combinedSchemas}>
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+    <Breadcrumbs categorySlug={categorySlug} categoryName={categoryName} />
+
+    {/* Category Hub Banner Header */}
+    <header class="mb-10 border-b border-hairline pb-8">
+      <span class="text-xs font-semibold uppercase tracking-wider text-primary block mb-2">Category Hub</span>
+      <h1 class="typography-display-md text-ink mb-3">{categoryName}</h1>
+      <p class="text-body text-base max-w-3xl leading-relaxed">{hubDesc}</p>
+      
+      <div class="flex items-center gap-4 text-xs font-mono text-muted mt-4">
+        <span>{tools.length} {tools.length === 1 ? 'Calculator' : 'Calculators'} Available</span>
+        <span>· 100% Client-Side Privacy</span>
+        <span>· Updated August 2026</span>
+      </div>
+    </header>
+
+    <AdSlot slotId="category-top-banner" />
+
+    {/* Calculators Directory Grid */}
+    <section class="my-12">
+      <h2 class="text-xl font-bold text-ink mb-6">Available {categoryName}</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tools.map((tool: any) => {
+          const slug = tool.slug || tool.data.slug || tool.id;
+          return (
+            <a
+              href={`/tools/${categorySlug}/${slug}/`}
+              class="block bg-canvas border border-hairline hover:border-primary rounded-xl p-6 shadow-soft hover:shadow-hover transition-all group"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-full bg-surface-soft text-primary font-mono text-xs font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  ₹
+                </span>
+                <span class="text-[11px] font-mono text-muted uppercase tracking-wider">{tool.data.priority || 'P1'}</span>
+              </div>
+              <h3 class="text-base font-semibold text-ink group-hover:text-primary transition-colors mb-2">
+                {tool.data.title}
+              </h3>
+              <p class="text-xs text-body line-clamp-2 leading-relaxed mb-4">
+                {tool.data.metaDescription}
+              </p>
+              <span class="text-xs font-medium text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Open Calculator &rarr;
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    {/* Category FAQs */}
+    <FaqSection faqs={categoryFaqs} title={`${categoryName} FAQs`} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+const categories = [
+  { slug: 'loans', name: 'Loans & EMI' },
+  { slug: 'investment', name: 'Investment' },
+  { slug: 'tax', name: 'Tax' },
+  { slug: 'retirement', name: 'Retirement' },
+];
+---
+<header class="w-full bg-canvas border-b border-hairline sticky top-0 z-50 h-16 flex items-center px-4 md:px-8">
+  <div class="max-w-[1200px] w-full mx-auto flex items-center justify-between">
+    <!-- Wordmark -->
+    <a href="/" class="flex items-center gap-2 text-ink font-sans font-bold text-xl tracking-tight hover:opacity-90 transition-opacity">
+      <span class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-mono text-sm">₹</span>
+      <span>FinTool</span>
+    </a>
+
+    <!-- Primary Nav Categories -->
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-body">
+      {categories.map((cat) => (
+        <a href={`/tools/${cat.slug}/`} class="hover:text-primary transition-colors">{cat.name}</a>
+      ))}
+      <a href="/tools/" class="hover:text-primary font-semibold text-ink transition-colors">All 28 Tools</a>
+    </nav>
+
+    <!-- Search Pill / All Tools Link -->
+    <a href="/tools/" class="flex items-center gap-2 bg-surface-strong px-4 py-2 rounded-pill text-xs font-medium text-ink hover:bg-hairline transition-colors">
+      <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <span>Find Calculator</span>
+    </a>
+  </div>
+</header>

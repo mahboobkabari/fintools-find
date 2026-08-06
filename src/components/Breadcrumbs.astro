@@ -1,0 +1,84 @@
+---
+export interface Props {
+  categorySlug?: string;
+  categoryName?: string;
+  toolTitle?: string;
+  items?: Array<{ name: string; href?: string }>;
+}
+
+const { categorySlug, categoryName, toolTitle, items } = Astro.props;
+const siteUrl = Astro.site ? Astro.site.origin : 'https://fintool.org';
+
+let breadcrumbElements = [
+  { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl }
+];
+
+if (items && items.length > 0) {
+  items.forEach((it, idx) => {
+    breadcrumbElements.push({
+      '@type': 'ListItem',
+      position: idx + 2,
+      name: it.name,
+      item: it.href ? (it.href.startsWith('http') ? it.href : `${siteUrl}${it.href}`) : Astro.url.href,
+    });
+  });
+} else {
+  if (categoryName && categorySlug) {
+    breadcrumbElements.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: categoryName,
+      item: `${siteUrl}/tools/${categorySlug}/`,
+    });
+  }
+
+  if (toolTitle) {
+    breadcrumbElements.push({
+      '@type': 'ListItem',
+      position: breadcrumbElements.length + 1,
+      name: toolTitle,
+      item: Astro.url.href,
+    });
+  }
+}
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbElements,
+};
+---
+
+<nav aria-label="Breadcrumb" class="text-xs text-muted mb-6 flex items-center gap-2 flex-wrap">
+  <a href="/" class="hover:text-ink transition-colors">Home</a>
+  
+  {items && items.length > 0 ? (
+    items.map((it) => (
+      <>
+        <span>/</span>
+        {it.href ? (
+          <a href={it.href} class="hover:text-ink transition-colors">{it.name}</a>
+        ) : (
+          <span class="text-ink font-medium">{it.name}</span>
+        )}
+      </>
+    ))
+  ) : (
+    <>
+      {categorySlug && categoryName && (
+        <>
+          <span>/</span>
+          <a href={`/tools/${categorySlug}/`} class="hover:text-ink transition-colors">{categoryName}</a>
+        </>
+      )}
+      {toolTitle && (
+        <>
+          <span>/</span>
+          <span class="text-ink font-medium">{toolTitle}</span>
+        </>
+      )}
+    </>
+  )}
+</nav>
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />

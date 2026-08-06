@@ -1,0 +1,126 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  :root {
+    --color-primary: #0052ff;
+    --color-primary-active: #003ecc;
+    --color-primary-disabled: #a8b8cc;
+    --color-accent-amber: #f4b000;
+    --color-canvas: #ffffff;
+    --color-surface-soft: #f7f7f7;
+    --color-surface-strong: #eef0f3;
+    --color-surface-dark: #0a0b0d;
+    --color-surface-dark-elevated: #16181c;
+    --color-hairline: #dee1e6;
+    --color-hairline-soft: #eef0f3;
+    --color-ink: #0a0b0d;
+    --color-body: #5b616e;
+    --color-muted: #7c828a;
+    --color-semantic-up: #05b169;
+    --color-semantic-down: #cf202f;
+  }
+
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--color-body);
+    background-color: var(--color-canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+}
+
+/* Custom Design System Classes */
+.typography-display-mega {
+  font-family: 'Inter', sans-serif;
+  font-size: 80px;
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -2px;
+}
+
+@media (max-width: 768px) {
+  .typography-display-mega {
+    font-size: 44px;
+    letter-spacing: -1px;
+  }
+}
+
+.typography-display-lg {
+  font-family: 'Inter', sans-serif;
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -1.3px;
+}
+
+.typography-display-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 1.09;
+  letter-spacing: -1px;
+}
+
+.typography-result-mega {
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.typography-number-display {
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Buttons */
+.button-calculate {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  height: 44px;
+  padding: 12px 20px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.button-calculate:hover {
+  background-color: var(--color-primary-active);
+}
+
+.button-calculate:disabled {
+  background-color: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+.button-secondary-light {
+  background-color: var(--color-surface-strong);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 16px;
+  height: 44px;
+  padding: 12px 20px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.button-secondary-light:hover {
+  background-color: var(--color-hairline);
+}

@@ -1,0 +1,17 @@
+{
+  "name": "FinTool — Institutional-Grade Financial Calculators",
+  "short_name": "FinTool",
+  "description": "100% free, client-side financial calculators for loans, investment, tax, and retirement.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0052ff",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

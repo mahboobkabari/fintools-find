@@ -1,0 +1,25 @@
+---
+export interface Props {
+  tips: string[];
+}
+
+const { tips = [] } = Astro.props;
+if (!tips || tips.length === 0) return null;
+---
+
+<div class="my-8 p-6 bg-canvas border border-hairline rounded-xl shadow-soft">
+  <div class="flex items-center gap-2 mb-4">
+    <svg class="w-5 h-5 text-accent-amber" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 100-2h-1a1 1 0 100 2h1zM5.757 15.657a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM6 10a1 1 0 100-2H5a1 1 0 100 2h1zM5.757 4.343a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM10 18a1 1 0 100-2v1a1 1 0 100 2z" />
+    </svg>
+    <h3 class="text-lg font-semibold text-ink">Pro Tips & Strategic Best Practices</h3>
+  </div>
+  <ul class="space-y-3 text-sm text-body">
+    {tips.map((tip) => (
+      <li class="flex items-start gap-2.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent-amber mt-2 shrink-0" />
+        <span class="leading-relaxed">{tip}</span>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const pageTitle = "404: Page Not Found";
+const pageDescription = "The page you requested could not be found. Search our published financial calculators across Loans, Investment, Tax, and Retirement.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/404.html`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <head slot="head">
+    <meta name="robots" content="noindex, follow" />
+  </head>
+
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-16 text-center">
+    <Breadcrumbs items={[{ name: '404 Page Not Found' }]} />
+
+    <div class="my-12">
+      <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 text-primary font-mono text-4xl font-bold mb-6">
+        404
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">Page Not Found</h1>
+      <p class="text-lg text-body max-w-lg mx-auto mb-8 leading-relaxed">
+        The financial tool or page you are looking for doesn't exist or may have moved.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <a href="/" class="button-calculate">Return to Homepage</a>
+        <a href="/tools/" class="button-secondary-light">Browse All 28 Calculators</a>
+      </div>
+    </div>
+
+    <!-- Quick Navigation Categories -->
+    <div class="border-t border-hairline pt-12 text-left">
+      <h2 class="text-xl font-bold text-ink mb-6 text-center">Explore Popular Calculator Categories</h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+        <a href="/tools/loans/" class="p-4 bg-surface-soft border border-hairline rounded-xl text-center hover:border-primary transition-colors group">
+          <span class="block text-ink font-semibold group-hover:text-primary transition-colors">Loans & EMI</span>
+          <span class="text-xs text-muted">8 Tools</span>
+        </a>
+
+        <a href="/tools/investment/" class="p-4 bg-surface-soft border border-hairline rounded-xl text-center hover:border-primary transition-colors group">
+          <span class="block text-ink font-semibold group-hover:text-primary transition-colors">Investment</span>
+          <span class="text-xs text-muted">6 Tools</span>
+        </a>
+
+        <a href="/tools/tax/" class="p-4 bg-surface-soft border border-hairline rounded-xl text-center hover:border-primary transition-colors group">
+          <span class="block text-ink font-semibold group-hover:text-primary transition-colors">Tax & Salary</span>
+          <span class="text-xs text-muted">7 Tools</span>
+        </a>
+
+        <a href="/tools/retirement/" class="p-4 bg-surface-soft border border-hairline rounded-xl text-center hover:border-primary transition-colors group">
+          <span class="block text-ink font-semibold group-hover:text-primary transition-colors">Retirement</span>
+          <span class="text-xs text-muted">7 Tools</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const pageTitle = "Editorial Policy: Golden Calculator Standard & Peer Review";
+const pageDescription = "FinTool's Editorial Policy: How we research, build, peer-review, and update our financial calculators to ensure institutional accuracy and zero bias.";
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://fintool.org';
+const canonicalUrl = `${siteOrigin}/editorial-policy/`;
+
+const editorialSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl} schema={editorialSchema}>
+  <div class="max-w-[1000px] mx-auto px-4 md:px-8 py-12">
+    <Breadcrumbs items={[{ name: 'Editorial Policy' }]} />
+
+    <header class="mb-12 border-b border-hairline pb-8">
+      <h1 class="text-3xl md:text-5xl font-bold text-ink tracking-tight mb-4">Editorial Policy</h1>
+      <p class="text-lg md:text-xl text-body max-w-3xl leading-relaxed">
+        Our commitment to uncompromising mathematical precision, institutional accuracy, and editorial independence across all 194 financial tools.
+      </p>
+    </header>
+
+    <div class="space-y-10 text-body leading-relaxed text-base md:text-lg">
+      <section class="p-8 bg-surface-soft border border-hairline rounded-2xl">
+        <h2 class="text-2xl font-bold text-ink mb-4">The 8-Dimension Golden Calculator Standard</h2>
+        <p class="mb-4">
+          Every tool published on FinTool undergoes rigorous engineering and quant validation against our mandatory 8-dimension quality gate:
+        </p>
+        <ol class="list-decimal pl-6 space-y-3">
+          <li><strong>Pure Math Engine:</strong> Decoupled JavaScript mathematical engine supporting nullish coalescing default handling and zero UI dependency.</li>
+          <li><strong>Automated Vitest Coverage:</strong> 100% test pass rate across standard benchmarks, statutory limits, and extreme input boundaries.</li>
+          <li><strong>Declarative UI Schema:</strong> Unified user interface featuring interactive sliders, `ratioBarItems`, and total summary breakdowns.</li>
+          <li><strong>Publication-Grade Guide:</strong> Minimum 1,000+ words of content incorporating LaTeX equations, worked step-by-step examples, and 5 actionable strategies.</li>
+          <li><strong>Regulatory Compliance:</strong> Strict adherence to statutory rules (CBDT, IRS, EPFO, PFRDA, Consumer Financial Protection Bureau).</li>
+          <li><strong>EEAT Standards:</strong> Documented methodology, author metadata, and primary institutional data sources.</li>
+          <li><strong>Contextual Internal Linking:</strong> Seamless navigation between related tools across Loans, Investment, Tax, and Retirement categories.</li>
+          <li><strong>Zero Latency Build:</strong> Static HTML compilation verifying zero Astro build warnings and optimal client-side hydration.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-ink mb-4">Independence & Commercial Neutrality</h2>
+        <p class="mb-4">
+          FinTool does not accept paid placements, sponsored calculator modifications, or referral commissions from banks, mutual funds, or insurance providers.
+        </p>
+        <p>
+          Our mathematical outputs remain 100% objective, giving users unbiased calculations free from commercial influence.
+        </p>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">Statutory Updates & Maintenance Cadence</h2>
+        <p class="mb-4">
+          Tax laws, interest rate ceilings, and pension regulations evolve frequently. Our quant team continuously monitors:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Annual Budget announcements and Central Board of Direct Taxes (CBDT) income tax slab updates.</li>
+          <li>US Internal Revenue Service (IRS) contribution limit notifications (e.g. 401(k) and IRA limits).</li>
+          <li>Employees' Provident Fund Organisation (EPFO) declared annual interest rates.</li>
+          <li>PFRDA circulars and statutory annuity requirements.</li>
+        </ul>
+      </section>
+
+      <section class="border-t border-hairline pt-8">
+        <h2 class="text-2xl font-bold text-ink mb-4">Corrections & User Feedback</h2>
+        <p class="mb-4">
+          If you identify a potential formula discrepancy or regulatory rule change, please submit a report to <span class="font-mono font-semibold text-ink">security@fintool.org</span> or via our <a href="/contact/" class="text-primary hover:underline font-semibold">Contact Page</a>. Discrepancies are audited and resolved within 24 hours.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

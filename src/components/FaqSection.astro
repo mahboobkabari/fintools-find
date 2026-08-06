@@ -1,0 +1,51 @@
+---
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  faqs: FaqItem[];
+  title?: string;
+}
+
+const { faqs = [], title = 'Frequently Asked Questions' } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': faqs.map((faq) => ({
+    '@type': 'Question',
+    'name': faq.question,
+    'acceptedAnswer': {
+      '@type': 'Answer',
+      'text': faq.answer,
+    },
+  })),
+};
+---
+
+{faqs.length > 0 && (
+  <section class="my-16">
+    <h2 class="text-2xl md:text-3xl font-display text-ink mb-8">{title}</h2>
+    <div class="space-y-4 max-w-3xl">
+      {faqs.map((faq) => (
+        <details class="group bg-surface-soft border border-hairline rounded-xl p-5 [&_summary::-webkit-details-marker]:hidden">
+          <summary class="flex items-center justify-between font-semibold text-ink cursor-pointer list-none text-base">
+            <span>{faq.question}</span>
+            <span class="ml-4 transition group-open:rotate-180 text-muted">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </summary>
+          <p class="mt-4 text-body text-sm leading-relaxed border-t border-hairline pt-4">
+            {faq.answer}
+          </p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+)}
