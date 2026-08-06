@@ -5,10 +5,10 @@ import { getCurrencySymbol } from '../../../constants/currencies.js';
 import FormInputNumber from './FormInputNumber';
 import FormToggleSwitch from './FormToggleSwitch';
 import AmortizationTable from './AmortizationTable';
-import ResultRatioBar from './ResultRatioBar';
+import EmiDonutChart from './EmiDonutChart';
 
 export default function BaseLoanWidget({
-  title = 'Loan Details',
+  title = 'Loan Repayment Parameters',
   currency = 'INR',
   currencySymbol,
   amountConfig = { id: 'amount', label: 'Loan Amount', min: 10000, max: 20000000, step: 10000, minLabel: '₹10K', maxLabel: '₹2 Cr', default: 1000000 },
@@ -38,23 +38,18 @@ export default function BaseLoanWidget({
     return calculateFn({ amount, rate, tenure, tenureType });
   }, [amount, rate, tenure, tenureType, calculateFn]);
 
-  const interestPct = useMemo(() => {
-    return calculatePercentage(results.totalInterest, results.totalPayment);
-  }, [results]);
-
-  const principalPct = 100 - interestPct;
-
-  const ratioBarItems = [
-    { label: 'Principal', percentage: principalPct, colorClass: 'bg-primary' },
-    { label: 'Interest', percentage: interestPct, colorClass: 'bg-accent-amber' },
-  ];
-
   return (
     <div class="space-y-8">
+      {/* Top Main Calculator Workspace */}
       <div class="grid lg:grid-cols-12 gap-8 items-start">
-        {/* Input Controls Panel */}
-        <div class="lg:col-span-7 bg-canvas border border-hairline rounded-xl p-6 md:p-8 space-y-6" aria-label="Calculator input parameters">
-          <h3 class="text-lg font-semibold text-ink border-b border-hairline pb-3">{title}</h3>
+        {/* Left Panel: Inputs */}
+        <div class="lg:col-span-6 bg-canvas border border-hairline rounded-2xl p-6 md:p-8 space-y-6 shadow-soft" aria-label="Calculator input parameters">
+          <div class="flex items-center justify-between border-b border-hairline pb-4">
+            <h3 class="text-xl font-bold font-heading text-ink">{title}</h3>
+            <span class="text-xs font-mono font-medium text-primary bg-primary/10 px-3 py-1 rounded-pill">
+              100% Client-Side
+            </span>
+          </div>
 
           {/* Amount Input */}
           <FormInputNumber
@@ -92,12 +87,12 @@ export default function BaseLoanWidget({
                 value={tenureType}
                 onChange={handleTenureTypeChange}
                 options={[
-                  { label: 'Yr', value: 'years' },
-                  { label: 'Mo', value: 'months' },
+                  { label: 'Years', value: 'years' },
+                  { label: 'Months', value: 'months' },
                 ]}
               />
 
-              <div class="flex items-center bg-surface-strong px-3 py-1.5 rounded-md border border-hairline focus-within:border-primary">
+              <div class="flex items-center bg-surface-strong px-3.5 py-1.5 rounded-xl border border-hairline focus-within:border-primary">
                 <input
                   type="number"
                   id={tenureConfig.id}
@@ -106,10 +101,10 @@ export default function BaseLoanWidget({
                   min={1}
                   max={tenureType === 'years' ? (tenureConfig.maxYears || 30) : (tenureConfig.maxMonths || 360)}
                   step={1}
-                  class="w-20 bg-transparent text-right font-mono text-sm font-semibold text-ink focus:outline-none"
+                  class="w-20 bg-transparent text-right font-mono text-base font-bold text-ink focus:outline-none"
                   aria-label={`${tenureConfig.label} quantity`}
                 />
-                <span class="text-xs font-mono text-muted ml-1">{tenureType === 'years' ? 'Yrs' : 'Mos'}</span>
+                <span class="text-xs font-mono text-muted ml-1.5 font-semibold">{tenureType === 'years' ? 'Yrs' : 'Mos'}</span>
               </div>
             </div>
             <input
@@ -120,62 +115,80 @@ export default function BaseLoanWidget({
               step={1}
               value={tenure}
               onInput={(e) => setTenure(Number(e.currentTarget.value))}
-              class="w-full h-2 bg-surface-strong rounded-lg appearance-none cursor-pointer accent-primary"
+              class="w-full h-2.5 bg-surface-strong rounded-lg appearance-none cursor-pointer accent-primary"
               aria-label={`${tenureConfig.label} slider`}
             />
-            <div class="flex justify-between text-[11px] font-mono text-muted mt-1">
-              <span>1 {tenureType === 'years' ? 'Yr' : 'Mo'}</span>
-              <span>{tenureType === 'years' ? `${tenureConfig.maxYears || 30} Yrs` : `${tenureConfig.maxMonths || 360} Mos`}</span>
+            <div class="flex justify-between text-[11px] font-mono text-muted mt-1.5 font-medium">
+              <span>1 {tenureType === 'years' ? 'Year' : 'Month'}</span>
+              <span>{tenureType === 'years' ? `${tenureConfig.maxYears || 30} Years` : `${tenureConfig.maxMonths || 360} Months`}</span>
             </div>
           </div>
 
-          {/* Optional Extra Inputs Slot */}
           {extraInputs}
         </div>
 
-        {/* Sticky Result Panel */}
-        <div class="lg:col-span-5 bg-canvas border border-hairline rounded-xl p-6 md:p-8 shadow-soft space-y-6 sticky top-24" aria-label="Loan calculation summary">
-          <div>
-            <span class="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">Monthly EMI</span>
-            <div class="typography-result-mega text-ink font-mono" aria-live="polite">
+        {/* Right Panel: Flagship Results & KPI Dashboard */}
+        <div class="lg:col-span-6 space-y-6">
+          {/* Monthly EMI Mega KPI Card */}
+          <div class="p-6 md:p-8 bg-gradient-to-br from-primary to-primary-active text-white rounded-2xl shadow-glass space-y-3 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-100 font-heading">Monthly EMI Repayment</span>
+              <span class="text-[11px] font-mono bg-white/20 px-2.5 py-0.5 rounded-pill font-semibold text-white">Fixed Monthly</span>
+            </div>
+            <div class="text-4xl md:text-5xl font-extrabold font-mono tracking-tight" aria-live="polite">
               {formatCurrency(results.emi, currency)}
             </div>
+            <p class="text-xs text-blue-100 leading-relaxed pt-1">
+              Your exact required monthly installment for {tenure} {tenureType} at {rate}% annual interest.
+            </p>
           </div>
 
-          {/* Principal vs Interest Visual Ratio Bar */}
-          <ResultRatioBar items={ratioBarItems} />
+          {/* KPI Summary Cards Grid */}
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-4 bg-canvas border border-hairline rounded-xl shadow-soft">
+              <span class="block text-[11px] font-semibold text-muted uppercase tracking-wider mb-1">Principal</span>
+              <span class="text-sm md:text-base font-bold font-mono text-ink block truncate">{formatCurrency(results.principal, currency)}</span>
+            </div>
 
-          {/* Summary Breakdown */}
-          <div class="space-y-3 pt-4 border-t border-hairline text-sm">
-            <div class="flex justify-between items-center">
-              <span class="text-body">Principal Amount</span>
-              <span class="font-mono font-medium text-ink">{formatCurrency(results.principal, currency)}</span>
+            <div class="p-4 bg-canvas border border-hairline rounded-xl shadow-soft">
+              <span class="block text-[11px] font-semibold text-semantic-warning uppercase tracking-wider mb-1">Total Interest</span>
+              <span class="text-sm md:text-base font-bold font-mono text-semantic-warning block truncate">{formatCurrency(results.totalInterest, currency)}</span>
             </div>
-            <div class="flex justify-between items-center">
-              <span class="text-body">Total Interest Payable</span>
-              <span class="font-mono font-medium text-semantic-down">{formatCurrency(results.totalInterest, currency)}</span>
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-hairline-soft font-semibold">
-              <span class="text-ink">Total Amount Payable</span>
-              <span class="font-mono text-ink text-base">{formatCurrency(results.totalPayment, currency)}</span>
+
+            <div class="p-4 bg-canvas border border-hairline rounded-xl shadow-soft">
+              <span class="block text-[11px] font-semibold text-ink uppercase tracking-wider mb-1">Total Outflow</span>
+              <span class="text-sm md:text-base font-bold font-mono text-ink block truncate">{formatCurrency(results.totalPayment, currency)}</span>
             </div>
           </div>
 
+          {/* Animated Donut Ratio Breakdown */}
+          <EmiDonutChart
+            principal={results.principal}
+            totalInterest={results.totalInterest}
+            totalPayment={results.totalPayment}
+            currency={currency}
+          />
+
+          {/* Schedule Action Button */}
           <button
             type="button"
             onClick={() => setShowAmortization(!showAmortization)}
             aria-expanded={showAmortization}
             aria-controls="amortization-schedule-container"
-            class="w-full button-secondary-light text-center"
+            class="w-full py-3.5 px-6 bg-surface-strong hover:bg-hairline text-ink font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2 border border-hairline"
           >
-            {showAmortization ? 'Hide Amortization Table' : 'View Full Schedule'}
+            <svg class={`w-4 h-4 text-primary transition-transform ${showAmortization ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+            <span>{showAmortization ? 'Hide Amortization Schedule' : 'View Full Amortization Schedule'}</span>
           </button>
         </div>
       </div>
 
       {/* Collapsible Amortization Table */}
       {showAmortization && (
-        <div id="amortization-schedule-container">
+        <div id="amortization-schedule-container" class="pt-4">
           <AmortizationTable schedule={results.schedule} currency={currency} />
         </div>
       )}
