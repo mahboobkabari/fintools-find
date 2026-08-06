@@ -1,0 +1,45 @@
+---
+export interface TaxProvision {
+  section: string;
+  title: string;
+  description: string;
+  limitText?: string;
+  colorClass?: string;
+}
+
+export interface Props {
+  badgeText?: string;
+  title: string;
+  description?: string;
+  provisions: TaxProvision[];
+}
+
+const {
+  badgeText = 'Statutory Tax Relief',
+  title,
+  description,
+  provisions = [],
+} = Astro.props;
+---
+
+<section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-8 md:p-10 shadow-glass space-y-6">
+  <div class="space-y-2">
+    <span class="text-xs font-mono font-bold uppercase tracking-wider text-blue-300">{badgeText}</span>
+    <h2 class="font-heading font-bold text-2xl md:text-3xl text-white">{title}</h2>
+    {description && <p class="text-blue-100 text-sm max-w-2xl">{description}</p>}
+  </div>
+
+  <div class={`grid sm:grid-cols-${Math.min(2, provisions.length)} gap-6`}>
+    {provisions.map((prov) => (
+      <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 space-y-2">
+        <span class={`text-xs font-mono font-bold uppercase tracking-wider block ${prov.colorClass || 'text-emerald-300'}`}>
+          {prov.section}
+        </span>
+        <h3 class="font-heading font-bold text-lg text-white">{prov.title}</h3>
+        <p class="text-xs text-blue-100 leading-relaxed">
+          {prov.description} {prov.limitText && <strong class="text-white font-mono text-sm font-bold">{prov.limitText}</strong>}
+        </p>
+      </div>
+    ))}
+  </div>
+</section>

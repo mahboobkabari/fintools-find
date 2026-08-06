@@ -1,0 +1,57 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  badgeText?: string;
+  reviewerName?: string;
+  updatedDate?: string;
+  privacyText?: string;
+}
+
+const {
+  title,
+  description,
+  badgeText = 'FLAGSHIP CALCULATOR · 100% CLIENT-SIDE PRIVATE',
+  reviewerName = 'FinTool Engineering & Quant Team',
+  updatedDate = 'August 2026',
+  privacyText = 'Zero Server Data Storage',
+} = Astro.props;
+---
+
+<header class="my-8 text-center max-w-4xl mx-auto space-y-4">
+  <div class="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 rounded-pill text-xs font-mono font-bold tracking-wide">
+    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+    <span>{badgeText}</span>
+  </div>
+
+  <h1 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-tight">
+    {title}
+  </h1>
+
+  <p class="text-body text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+    {description}
+  </p>
+
+  <div class="flex flex-wrap items-center justify-center gap-3 pt-2 text-xs font-mono text-muted">
+    <span class="inline-flex items-center gap-1.5 bg-canvas px-3.5 py-1.5 rounded-pill border border-hairline shadow-soft font-semibold text-ink">
+      <svg class="w-4 h-4 text-semantic-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Reviewed by {reviewerName}
+    </span>
+
+    <span class="inline-flex items-center gap-1.5 bg-canvas px-3.5 py-1.5 rounded-pill border border-hairline shadow-soft">
+      <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Updated {updatedDate}
+    </span>
+
+    <span class="inline-flex items-center gap-1.5 bg-canvas px-3.5 py-1.5 rounded-pill border border-hairline shadow-soft">
+      <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+      {privacyText}
+    </span>
+  </div>
+</header>

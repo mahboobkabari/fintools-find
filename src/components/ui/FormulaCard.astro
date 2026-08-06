@@ -1,0 +1,52 @@
+---
+export interface FormulaParameter {
+  symbol: string;
+  title: string;
+  description: string;
+  colorClass?: string;
+}
+
+export interface Props {
+  badgeText?: string;
+  title: string;
+  subBadge?: string;
+  formula: string;
+  parameters: FormulaParameter[];
+}
+
+const {
+  badgeText = 'Mathematical Engine',
+  title,
+  subBadge = 'Standard TVM Formula',
+  formula,
+  parameters = [],
+} = Astro.props;
+---
+
+<section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-6">
+  <div class="border-b border-hairline pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+    <div>
+      <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">{badgeText}</span>
+      <h2 class="font-heading font-bold text-2xl text-ink">{title}</h2>
+    </div>
+    <span class="text-xs font-mono bg-surface-strong px-3 py-1 rounded-pill text-muted font-semibold">{subBadge}</span>
+  </div>
+
+  <div class="p-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl text-center space-y-4 shadow-glass">
+    <span class="text-xs font-mono text-blue-400 font-semibold uppercase tracking-widest block">Formula Expression</span>
+    <div class="font-mono text-2xl sm:text-3xl md:text-4xl text-white font-bold tracking-wider overflow-x-auto py-2">
+      {formula}
+    </div>
+  </div>
+
+  <div class={`grid sm:grid-cols-${Math.min(3, parameters.length)} gap-4 text-sm`}>
+    {parameters.map((param) => (
+      <div class="p-5 bg-background border border-hairline rounded-xl space-y-1">
+        <span class={`font-mono font-bold text-base block ${param.colorClass || 'text-primary'}`}>
+          {param.symbol} — {param.title}
+        </span>
+        <p class="text-xs text-body leading-relaxed">{param.description}</p>
+      </div>
+    ))}
+  </div>
+</section>

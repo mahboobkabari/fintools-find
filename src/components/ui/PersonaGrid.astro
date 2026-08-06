@@ -1,0 +1,46 @@
+---
+export interface Persona {
+  title: string;
+  description: string;
+  bgClass?: string;
+  textClass?: string;
+  iconSvg?: string;
+}
+
+export interface Props {
+  badgeText?: string;
+  title: string;
+  personas: Persona[];
+}
+
+const {
+  badgeText = 'Target Borrowers',
+  title,
+  personas = [],
+} = Astro.props;
+---
+
+<section class="space-y-6">
+  <div class="text-center max-w-2xl mx-auto space-y-2">
+    <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">{badgeText}</span>
+    <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">{title}</h2>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {personas.map((persona) => (
+      <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
+        <div class={`w-12 h-12 rounded-2xl flex items-center justify-center ${persona.bgClass || 'bg-blue-50'} ${persona.textClass || 'text-primary'}`}>
+          {persona.iconSvg ? (
+            <Fragment set:html={persona.iconSvg} />
+          ) : (
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          )}
+        </div>
+        <h3 class="font-heading font-bold text-ink text-base">{persona.title}</h3>
+        <p class="text-xs text-body leading-relaxed">{persona.description}</p>
+      </div>
+    ))}
+  </div>
+</section>

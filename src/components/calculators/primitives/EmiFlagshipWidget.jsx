@@ -2,7 +2,15 @@ import { useState, useMemo, useEffect } from 'preact/hooks';
 import { calculateEmi } from '../../../calculators/loans/emi.js';
 import { calculateLoan } from '../../../calculators/core/loanEngine.js';
 import { formatCurrency } from '@utils/formatters.js';
-import EmiDonutChart from './EmiDonutChart';
+
+// Modular UI Components
+import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
+import ResultDashboard from '../../ui/ResultDashboard';
+import ResultDonutChart from '../../ui/ResultDonutChart';
+import FinancialHealthGauge from '../../ui/FinancialHealthGauge';
+import RecommendationCard from '../../ui/RecommendationCard';
+import InsightCard from '../../ui/InsightCard';
+import ShareActions from '../../ui/ShareActions';
 import AmortizationTable from './AmortizationTable';
 
 export default function EmiFlagshipWidget() {
@@ -167,8 +175,6 @@ export default function EmiFlagshipWidget() {
   // Interest Multiplier
   const interestMultiplier = results.principal > 0 ? (results.totalInterest / results.principal).toFixed(2) : 0;
   const totalOutflowMultiplier = results.principal > 0 ? (results.totalPayment / results.principal).toFixed(2) : 1;
-
-  // Rate Savings
   const rateSavings = Math.max(0, results.totalInterest - lowerRateResults.totalInterest);
 
   // Copy share URL handler
@@ -198,43 +204,7 @@ export default function EmiFlagshipWidget() {
   return (
     <div class="space-y-10">
       {/* 1. One-Tap Scenario Preset Cards */}
-      <section class="space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-mono font-bold uppercase tracking-wider text-muted">Quick Scenario Presets</span>
-          <span class="text-xs font-mono text-primary font-semibold">1-Tap Auto Fill</span>
-        </div>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {presets.map((p) => {
-            const isSelected = activePreset === p.id;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => applyPreset(p)}
-                class={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between space-y-2 focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isSelected
-                    ? 'bg-primary text-white border-primary shadow-glass scale-[1.02]'
-                    : 'bg-canvas border-hairline hover:border-primary/50 text-ink shadow-soft'
-                }`}
-              >
-                <div class="flex items-center justify-between">
-                  <span class="text-xl">{p.icon}</span>
-                  {isSelected && <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>}
-                </div>
-                <div>
-                  <span class={`font-heading font-bold text-sm block ${isSelected ? 'text-white' : 'text-ink'}`}>
-                    {p.label}
-                  </span>
-                  <span class={`text-[11px] font-mono block mt-0.5 ${isSelected ? 'text-blue-100' : 'text-muted'}`}>
-                    {p.desc}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+      <ScenarioPresetCards presets={presets} activePreset={activePreset} onSelect={applyPreset} />
 
       {/* 2. Interactive Calculator Workspace */}
       <div class="grid lg:grid-cols-12 gap-8 items-start">
@@ -242,28 +212,7 @@ export default function EmiFlagshipWidget() {
         <div class="lg:col-span-6 bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-7 shadow-soft">
           <div class="flex items-center justify-between border-b border-hairline pb-4">
             <h3 class="text-xl font-bold font-heading text-ink">Loan Parameters</h3>
-            <div class="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                class="px-3 py-1.5 bg-surface-strong hover:bg-hairline text-ink text-xs font-semibold rounded-pill transition-colors flex items-center gap-1.5 border border-hairline"
-                title="Copy shareable scenario URL"
-              >
-                <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                </svg>
-                <span>{copiedToast ? 'Copied!' : 'Share'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReset}
-                class="px-3 py-1.5 bg-surface-strong hover:bg-hairline text-muted hover:text-ink text-xs font-semibold rounded-pill transition-colors border border-hairline"
-                title="Reset to defaults"
-              >
-                Reset
-              </button>
-            </div>
+            <ShareActions onShare={handleCopyLink} onReset={handleReset} copiedToast={copiedToast} />
           </div>
 
           {/* Amount Control */}
@@ -428,7 +377,7 @@ export default function EmiFlagshipWidget() {
             </div>
           </div>
 
-          {/* Optional Salary Field for Affordability Gauge */}
+          {/* Optional Salary Field */}
           <div class="pt-4 border-t border-hairline space-y-2">
             <div class="flex items-center justify-between">
               <label htmlFor="net-salary" class="text-xs font-semibold uppercase tracking-wider text-muted flex items-center gap-1.5">
@@ -452,52 +401,29 @@ export default function EmiFlagshipWidget() {
           </div>
         </div>
 
-        {/* Right Panel: Flagship Results Dashboard */}
+        {/* Right Panel: Modular Result Dashboard */}
         <div class="lg:col-span-6 space-y-6">
-          {/* Monthly EMI Mega KPI Card */}
-          <div class="p-6 sm:p-8 bg-gradient-to-br from-blue-600 via-primary to-blue-800 text-white rounded-3xl shadow-glass space-y-3 relative overflow-hidden">
-            <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-100 font-heading">Required Monthly EMI</span>
-              <span class="text-[11px] font-mono bg-white/20 px-3 py-1 rounded-pill font-bold text-white">Fixed Installment</span>
-            </div>
-
-            <div class="text-4xl sm:text-5xl font-extrabold font-mono tracking-tight" aria-live="polite">
-              {formatCurrency(results.emi, 'INR')}
-            </div>
-
-            <p class="text-xs text-blue-100 leading-relaxed pt-1">
-              Monthly repayment for {tenure} {tenureType} at {rate}% annual interest rate.
-            </p>
-          </div>
-
-          {/* 3 KPI Summary Cards Grid */}
-          <div class="grid grid-cols-3 gap-3">
-            <div class="p-4 bg-canvas border border-hairline rounded-2xl shadow-soft">
-              <span class="block text-[11px] font-bold text-muted uppercase tracking-wider mb-1">Principal</span>
-              <span class="text-xs sm:text-base font-bold font-mono text-ink block truncate">{formatCurrency(results.principal, 'INR')}</span>
-            </div>
-
-            <div class="p-4 bg-canvas border border-hairline rounded-2xl shadow-soft">
-              <span class="block text-[11px] font-bold text-semantic-warning uppercase tracking-wider mb-1">Total Interest</span>
-              <span class="text-xs sm:text-base font-bold font-mono text-semantic-warning block truncate">{formatCurrency(results.totalInterest, 'INR')}</span>
-            </div>
-
-            <div class="p-4 bg-canvas border border-hairline rounded-2xl shadow-soft">
-              <span class="block text-[11px] font-bold text-ink uppercase tracking-wider mb-1">Total Outflow</span>
-              <span class="text-xs sm:text-base font-bold font-mono text-ink block truncate">{formatCurrency(results.totalPayment, 'INR')}</span>
-            </div>
-          </div>
-
-          {/* Animated Donut Chart */}
-          <EmiDonutChart
-            principal={results.principal}
-            totalInterest={results.totalInterest}
-            totalPayment={results.totalPayment}
-            currency="INR"
+          <ResultDashboard
+            heroTitle="Required Monthly EMI"
+            heroValue={results.emi}
+            heroBadge="Fixed Installment"
+            heroSubtext={`Monthly repayment for ${tenure} ${tenureType} at ${rate}% annual interest rate.`}
+            metrics={[
+              { label: 'Principal', value: results.principal, labelColor: 'text-muted', valueColor: 'text-ink' },
+              { label: 'Total Interest', value: results.totalInterest, labelColor: 'text-semantic-warning', valueColor: 'text-semantic-warning' },
+              { label: 'Total Outflow', value: results.totalPayment, labelColor: 'text-ink', valueColor: 'text-ink' },
+            ]}
           />
 
-          {/* Schedule Button */}
+          <ResultDonutChart
+            primaryValue={results.principal}
+            primaryLabel="Principal Amount"
+            secondaryValue={results.totalInterest}
+            secondaryLabel="Total Interest"
+            totalValue={results.totalPayment}
+            centerLabel="Interest"
+          />
+
           <button
             type="button"
             onClick={() => setShowAmortization(!showAmortization)}
@@ -520,110 +446,52 @@ export default function EmiFlagshipWidget() {
         </div>
       )}
 
-      {/* 3. Prepayment Savings Coach & Affordability Gauge Grid */}
+      {/* 3. Modular Prepayment Savings Coach & Affordability Gauge Grid */}
       <div class="grid md:grid-cols-2 gap-8 pt-4">
-        {/* Prepayment Savings Coach Card */}
-        <div class="p-8 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl shadow-glass space-y-4 relative overflow-hidden">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Smart Prepayment Coach
-            </span>
-            <span class="text-[10px] font-mono bg-white/10 text-white px-2.5 py-0.5 rounded-pill font-bold">
-              1 Extra EMI / Year
-            </span>
-          </div>
+        <RecommendationCard
+          tagLine="Smart Prepayment Coach"
+          badgeText="1 Extra EMI / Year"
+          title="Save Interest & Finish Early"
+          description={`By making just one additional EMI payment (₹${formatCurrency(results.emi, 'INR')}) toward principal each year:`}
+          metrics={[
+            { label: 'Interest Saved', value: savedInterest, labelColor: 'text-emerald-300' },
+            { label: 'Time Saved', value: `${savedYearsFormatted} Years`, labelColor: 'text-blue-300' },
+          ]}
+        />
 
-          <h4 class="font-heading font-bold text-xl text-white">Save Interest & Finish Early</h4>
-
-          <p class="text-xs text-slate-300 leading-relaxed">
-            By making just <strong>one additional EMI payment (₹{formatCurrency(results.emi, 'INR')})</strong> toward principal each year:
-          </p>
-
-          <div class="grid grid-cols-2 gap-3 pt-1">
-            <div class="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 space-y-1">
-              <span class="text-[11px] font-mono text-emerald-300 uppercase tracking-wider block font-semibold">Interest Saved</span>
-              <span class="text-lg font-bold font-mono text-white block">{formatCurrency(savedInterest, 'INR')}</span>
-            </div>
-
-            <div class="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 space-y-1">
-              <span class="text-[11px] font-mono text-blue-300 uppercase tracking-wider block font-semibold">Time Saved</span>
-              <span class="text-lg font-bold font-mono text-white block">{savedYearsFormatted} Years</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Income Affordability Gauge Card (FOIR) */}
-        <div class={`p-8 border-2 ${foirStatus.borderColor} bg-canvas rounded-3xl shadow-soft space-y-4`}>
-          <div class="flex items-center justify-between border-b border-hairline pb-3">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-muted">Affordability Check</span>
-            <span class={`text-xs font-mono font-bold px-3 py-0.5 rounded-pill ${foirStatus.bgColor} ${foirStatus.textColor}`}>
-              {foirStatus.badge}
-            </span>
-          </div>
-
-          <div class="flex items-center gap-6">
-            {/* Circular Gauge Visual */}
-            <div class="relative w-24 h-24 flex-shrink-0 flex items-center justify-center">
-              <svg width="96" height="96" viewBox="0 0 96 96" class="transform -rotate-90">
-                <circle cx="48" cy="48" r="38" stroke="#E2E8F0" stroke-width="8" fill="transparent" />
-                <circle
-                  cx="48"
-                  cy="48"
-                  r="38"
-                  stroke={foirStatus.color}
-                  stroke-width="8"
-                  stroke-dasharray={2 * Math.PI * 38}
-                  stroke-dashoffset={2 * Math.PI * 38 - (foirPct / 100) * (2 * Math.PI * 38)}
-                  stroke-linecap="round"
-                  fill="transparent"
-                  class="transition-all duration-500"
-                />
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-xs font-mono font-bold text-ink">{foirPct}%</span>
-                <span class="text-[9px] font-mono text-muted uppercase">FOIR</span>
-              </div>
-            </div>
-
-            <div class="space-y-1">
-              <h4 class="font-heading font-bold text-lg text-ink">Salary Commitment Ratio</h4>
-              <p class="text-xs text-body leading-relaxed">{foirStatus.desc}</p>
-            </div>
-          </div>
-        </div>
+        <FinancialHealthGauge
+          ratioPct={foirPct}
+          status={foirStatus}
+          title="Salary Commitment Ratio"
+          label="FOIR"
+        />
       </div>
 
-      {/* 4. Dynamic Financial Intelligence Cards Grid */}
-      <section class="space-y-4 pt-2">
-        <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary block">Dynamic Financial Intelligence</span>
-        
-        <div class="grid sm:grid-cols-3 gap-4 text-xs">
-          <div class="p-5 bg-canvas border border-hairline rounded-2xl space-y-2 shadow-soft">
-            <span class="text-[11px] font-mono font-bold text-primary uppercase tracking-wider block">Interest Multiplier</span>
-            <span class="font-mono font-extrabold text-xl text-ink block">{interestMultiplier}×</span>
-            <p class="text-body leading-relaxed">
-              You pay ₹{interestMultiplier} in cumulative bank interest for every ₹1.00 of principal borrowed.
-            </p>
-          </div>
-
-          <div class="p-5 bg-canvas border border-hairline rounded-2xl space-y-2 shadow-soft">
-            <span class="text-[11px] font-mono font-bold text-semantic-success uppercase tracking-wider block">Rate Sensitivity (-0.5%)</span>
-            <span class="font-mono font-extrabold text-xl text-semantic-success block">{formatCurrency(rateSavings, 'INR')}</span>
-            <p class="text-body leading-relaxed">
-              A 0.5% lower interest rate ({rate - 0.5}%) saves ₹{formatCurrency(rateSavings, 'INR')} over your tenure.
-            </p>
-          </div>
-
-          <div class="p-5 bg-canvas border border-hairline rounded-2xl space-y-2 shadow-soft">
-            <span class="text-[11px] font-mono font-bold text-accent-sky uppercase tracking-wider block">Total Outflow Ratio</span>
-            <span class="font-mono font-extrabold text-xl text-ink block">{totalOutflowMultiplier}×</span>
-            <p class="text-body leading-relaxed">
-              Total repayment amount equals {totalOutflowMultiplier} times the original loan amount.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* 4. Modular Dynamic Financial Intelligence Cards */}
+      <InsightCard
+        title="Dynamic Financial Intelligence"
+        insights={[
+          {
+            label: 'Interest Multiplier',
+            value: `${interestMultiplier}×`,
+            labelColor: 'text-primary',
+            desc: `You pay ₹${interestMultiplier} in cumulative bank interest for every ₹1.00 of principal borrowed.`,
+          },
+          {
+            label: 'Rate Sensitivity (-0.5%)',
+            value: formatCurrency(rateSavings, 'INR'),
+            labelColor: 'text-semantic-success',
+            valueColor: 'text-semantic-success',
+            desc: `A 0.5% lower interest rate (${rate - 0.5}%) saves ₹${formatCurrency(rateSavings, 'INR')} over your tenure.`,
+          },
+          {
+            label: 'Total Outflow Ratio',
+            value: `${totalOutflowMultiplier}×`,
+            labelColor: 'text-accent-sky',
+            desc: `Total repayment amount equals ${totalOutflowMultiplier} times the original loan amount.`,
+          },
+        ]}
+      />
     </div>
   );
 }
