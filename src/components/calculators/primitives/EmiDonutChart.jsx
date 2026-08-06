@@ -12,10 +12,21 @@ export default function EmiDonutChart({ principal, totalInterest, totalPayment, 
   const interestOffset = circumference - (interestPct / 100) * circumference;
 
   return (
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-surface-soft border border-hairline rounded-2xl">
+    <div
+      class="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-surface-soft border border-hairline rounded-2xl"
+      role="region"
+      aria-label="Payment ratio visual breakdown"
+    >
       {/* SVG Donut Visual */}
       <div class="relative w-44 h-44 flex-shrink-0 flex items-center justify-center">
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} class="transform -rotate-90">
+        <svg
+          width={size}
+          height={size}
+          viewBox={`0 0 ${size} ${size}`}
+          class="transform -rotate-90"
+          role="img"
+          aria-label={`Principal to Interest ratio donut chart: ${principalPct}% Principal, ${interestPct}% Interest`}
+        >
           {/* Principal Circle (Base Track - Blue) */}
           <circle
             cx={size / 2}
@@ -41,7 +52,7 @@ export default function EmiDonutChart({ principal, totalInterest, totalPayment, 
         </svg>
 
         {/* Center Donut Label */}
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
           <span class="text-xs font-semibold uppercase tracking-wider text-muted">Interest</span>
           <span class="text-2xl font-bold font-mono text-ink">{interestPct}%</span>
         </div>
@@ -52,7 +63,7 @@ export default function EmiDonutChart({ principal, totalInterest, totalPayment, 
         {/* Principal Legend Item */}
         <div class="p-3.5 bg-canvas border border-hairline rounded-xl flex items-center justify-between shadow-soft">
           <div class="flex items-center gap-3">
-            <span class="w-3.5 h-3.5 rounded-full bg-primary flex-shrink-0"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-primary flex-shrink-0" aria-hidden="true"></span>
             <div>
               <span class="block text-xs font-semibold text-ink">Principal Amount</span>
               <span class="text-[11px] text-muted font-mono">{principalPct}% of Total</span>
@@ -64,7 +75,7 @@ export default function EmiDonutChart({ principal, totalInterest, totalPayment, 
         {/* Interest Legend Item */}
         <div class="p-3.5 bg-canvas border border-hairline rounded-xl flex items-center justify-between shadow-soft">
           <div class="flex items-center gap-3">
-            <span class="w-3.5 h-3.5 rounded-full bg-accent-amber flex-shrink-0"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-accent-amber flex-shrink-0" aria-hidden="true"></span>
             <div>
               <span class="block text-xs font-semibold text-ink">Total Interest</span>
               <span class="text-[11px] text-muted font-mono">{interestPct}% of Total</span>
