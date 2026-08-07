@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { npsCalculatorConfig } from '../../calculators/configs/nps-calculator.config.js';
+import NpsFlagshipWidget from './primitives/NpsFlagshipWidget';
 
 export default function NpsCalculatorWidget() {
-  return <UniversalCalculatorWidget config={npsCalculatorConfig} />;
+  return <NpsFlagshipWidget />;
 }
