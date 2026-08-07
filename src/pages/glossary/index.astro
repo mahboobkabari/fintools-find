@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import ToolLayout from '@components/ToolLayout.astro';
+import AlphabetIndex from '@components/ui/AlphabetIndex.astro';
+
+const glossary = await getCollection('glossary');
+
+// Group terms by first letter
+const groupedTerms: Record<string, typeof glossary> = {};
+glossary.forEach((item) => {
+  const title = item.data.title || item.id;
+  const firstLetter = title.charAt(0).toUpperCase();
+  if (!groupedTerms[firstLetter]) {
+    groupedTerms[firstLetter] = [];
+  }
+  groupedTerms[firstLetter].push(item);
+});
+
+const sortedLetters = Object.keys(groupedTerms).sort();
+---
+
+<ToolLayout
+  title="Institutional Financial Glossary & Dictionary | Fintools Find"
+  metaDescription="Comprehensive financial dictionary defining EMI, CAGR, XIRR, NAV, FOIR, LTV, and 500+ investment, loan, and tax terms."
+  category="glossary"
+  categoryName="Financial Glossary"
+  slug="glossary"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <header class="text-center max-w-3xl mx-auto space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-surface-strong border border-hairline text-xs font-mono text-muted">
+        <span>📖</span>
+        <span class="uppercase tracking-wider">Financial Reference Engine</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-ink leading-tight">
+        Institutional Financial Glossary
+      </h1>
+      <p class="text-xs sm:text-sm text-body leading-relaxed">
+        Clear, precise definitions, formulas, real-world examples, and common mistakes for essential banking, investment, and tax terms.
+      </p>
+    </header>
+
+    {/* A-Z ALPHABET JUMP BAR */}
+    <AlphabetIndex />
+
+    {/* GROUPED GLOSSARY LIST */}
+    <div class="space-y-10">
+      {sortedLetters.map((letter) => (
+        <section id={`letter-${letter}`} class="space-y-4">
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-extrabold font-heading text-primary w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+              {letter}
+            </h2>
+            <div class="h-px bg-hairline flex-1"></div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            {groupedTerms[letter].map((item) => {
+              const slug = item.data.slug || item.id;
+              return (
+                <a
+                  href={`/glossary/${slug}/`}
+                  class="p-5 bg-canvas hover:bg-surface-soft border border-hairline rounded-2xl space-y-2 transition-all shadow-soft group block"
+                >
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-base font-heading text-ink group-hover:text-primary transition-colors">
+                      {item.data.title}
+                    </h3>
+                    <span class="text-xs font-mono font-bold text-muted bg-surface-strong px-2 py-0.5 rounded-lg border border-hairline uppercase">
+                      {item.data.category}
+                    </span>
+                  </div>
+                  <p class="text-xs text-body line-clamp-2">
+                    {item.data.shortDefinition}
+                  </p>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</ToolLayout>

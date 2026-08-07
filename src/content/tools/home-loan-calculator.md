@@ -37,7 +37,7 @@ calculatorModule: "loans/home-loan-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations follow standard RBI LTV limits and reducing balance annuity mathematics. Monthly compounding aligns with Indian banking standards."
   dataSources:
     - "Reserve Bank of India (RBI) Housing Finance Master Directions"

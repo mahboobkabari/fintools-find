@@ -1,11 +1,11 @@
 /**
- * Centralized Structured Data (JSON-LD) Generator
+ * Centralized Structured Data (JSON-LD) Generator for Fintools Find
  */
 
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'FinTool',
+  name: 'Fintools Find',
   url: 'https://fintool.org',
   logo: 'https://fintool.org/favicon.svg',
   description: 'Free, institutional-grade financial calculators and wealth planning tools.',
@@ -14,7 +14,7 @@ export const ORGANIZATION_SCHEMA = {
 export const WEBSITE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'FinTool',
+  name: 'Fintools Find',
   url: 'https://fintool.org',
   potentialAction: {
     '@type': 'SearchAction',

@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'preact/hooks';
 import { formatCurrency } from '@utils/formatters.js';
-import { calculatePercentage } from '@utils/mathHelpers.js';
 import { getCurrencySymbol } from '../../../constants/currencies.js';
 import FormInputNumber from './FormInputNumber';
 import FormToggleSwitch from './FormToggleSwitch';

@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import RetirementCorpusCalculatorWidget from '../calculators/RetirementCorpusCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Wealth Accumulation Phase', description: 'Aggressively build compounding equity mutual funds, EPF, and NPS nest egg during early career.' },
+  { stepNumber: '02', title: 'Pre-Retirement Transition', description: 'Consolidate debt, clear home mortgages, and gradually shift 30% capital into conservative debt instruments.' },
+  { stepNumber: '03', title: 'Financial Independence Day', description: 'Reach target nest egg corpus at chosen retirement age and initiate Systematic Withdrawal Plan (SWP).' },
+  { stepNumber: '04', title: 'Capital Preservation & Legacy', description: 'Manage real post-retirement returns above inflation to ensure corpus lasts past life expectancy.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Young Starters (Age 25–30)', description: 'Harness 30+ years of exponential compounding. Small monthly SIPs today grow into multi-crore retirement nest eggs effortlessly.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Mid-Career Planners (Age 35–45)', description: 'Recalibrate retirement goals alongside child education, evaluate corpus gaps, and step up monthly SIP contributions.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Peak Earners (Age 45–55)', description: 'Maximize debt-free asset building, optimize NPS 80CCD(1B) tax benefits, and lock in target retirement timeline.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Pre-Retirees (Age 55–60)', description: 'Conduct final longevity stress tests, establish 3-year liquid emergency buffers, and configure SWP withdrawal plans.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Inflation-Adjusted Retirement Annuity Formula',
+  formula: 'CR = E_{\\text{annual}} \\times \\left[ \\frac{1 - (1 + r_{\\text{real}})^{-n}}{r_{\\text{real}}} \\right] \\quad \\text{where } r_{\\text{real}} = \\frac{1 + r_{\\text{post}}}{1 + i} - 1',
+  parameters: [
+    { symbol: 'CR', title: 'Required Target Corpus', description: 'Total nest egg required on Day 1 of retirement.', colorClass: 'text-primary' },
+    { symbol: 'E_annual', title: 'Future Annual Expense', description: 'Current annual living expense inflated to retirement age.', colorClass: 'text-accent-amber' },
+    { symbol: 'r_real', title: 'Real Post-Retirement Return', description: 'Net return rate post-retirement minus annual inflation rate.', colorClass: 'text-semantic-success' },
+    { symbol: 'n', title: 'Years in Retirement', description: 'Total years between retirement age and life expectancy.', colorClass: 'text-accent-sky' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Age 25 Starter (₹35k/mo Current Expenses)',
+    tag: '35 Yrs Runway',
+    subtitle: 'Young Starter',
+    metrics: [
+      { label: 'Target Retirement Age', value: '60 Years' },
+      { label: 'Future Monthly Expense (Age 60)', value: '₹2,68,900 / mo' },
+      { label: 'Required Target Nest Egg', value: '₹6.28 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Required Monthly SIP Today', value: '₹9,650 / mo', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Starting at age 25 requires only ₹9,650/month to build a ₹6.28 Crore corpus due to 35 years of compounding.',
+  },
+  {
+    title: 'Age 35 Planner (₹60k/mo Current Expenses)',
+    tag: '25 Yrs Runway',
+    subtitle: 'Mid-Career',
+    metrics: [
+      { label: 'Target Retirement Age', value: '60 Years' },
+      { label: 'Future Monthly Expense (Age 60)', value: '₹2,57,500 / mo' },
+      { label: 'Required Target Nest Egg', value: '₹6.01 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Required Monthly SIP Today', value: '₹31,800 / mo', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'Waiting until age 35 increases required monthly SIP to ₹31,800—showing the cost of delayed action.',
+  },
+  {
+    title: 'Age 45 Peak Earner (₹1.0L/mo Current Expenses)',
+    tag: '15 Yrs Runway',
+    subtitle: 'Peak Earner',
+    metrics: [
+      { label: 'Target Retirement Age', value: '60 Years' },
+      { label: 'Future Monthly Expense (Age 60)', value: '₹2,39,600 / mo' },
+      { label: 'Required Target Nest Egg', value: '₹5.59 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Required Monthly SIP Today', value: '₹1,11,900 / mo', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'With a 15-year horizon, higher existing savings (₹35L+) or stepping up monthly SIP is critical.',
+  },
+  {
+    title: 'Age 55 Pre-Retiree (₹1.2L/mo Current Expenses)',
+    tag: '5 Yrs Runway',
+    subtitle: 'Final Stretch',
+    metrics: [
+      { label: 'Target Retirement Age', value: '60 Years' },
+      { label: 'Existing Nest Egg Accumulated', value: '₹1.0 Crore' },
+      { label: 'Required Target Nest Egg', value: '₹4.35 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Required Monthly SIP Today', value: '₹2,48,000 / mo', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'In the final stretch, shifting portfolio allocation to preserve capital and delaying retirement by 2 years yields massive relief.',
+  },
+];
+
+const comparisonData = {
+  title: 'Retiring at Age 55 vs. Retiring at Age 60 Comparison',
+  subtitle: 'Evaluating the compounding impact of working 5 additional years',
+  optionA: {
+    badge: 'EARLY FREEDOM',
+    title: 'Early Retirement (Age 55)',
+    items: [
+      { isPositive: false, text: 'Higher Target Corpus: Requires 40% larger corpus because retirement duration increases to 30 years.' },
+      { isPositive: false, text: 'Steeper Monthly SIP: Higher monthly investment commitment during compounding years.' },
+      { isPositive: true, text: 'Lifestyle Freedom: Enjoy 5 extra years of active retirement and travel.' },
+    ],
+  },
+  optionB: {
+    badge: 'RECOMMENDED (LONGER COMPOUNDING)',
+    title: 'Standard Retirement (Age 60)',
+    items: [
+      { isPositive: true, text: 'Lower Corpus Needed: 5 fewer years of retirement expense drawdowns.' },
+      { isPositive: true, text: '5 Extra Years Compounding: Existing savings grow significantly larger before drawdowns begin.' },
+      { isPositive: true, text: 'Lower Monthly SIP: Manageable monthly investment burden throughout career.' },
+    ],
+  },
+};
+
+const strategies = [
+  { number: '01', title: 'Start Early for 30+ Year Compounding', description: 'Starting retirement investments at age 25 instead of 35 reduces required monthly SIP by over 60%.' },
+  { number: '02', title: 'Step-Up Monthly SIP by 10% Annually', description: 'Increasing your retirement SIP alongside salary raises can double your final nest egg without lifestyle sacrifice.' },
+  { number: '03', title: 'Utilize NPS Section 80CCD(1B) Tax Relief', description: 'Invest ₹50,000 annually in NPS for exclusive tax savings while building a pension fund.' },
+  { number: '04', title: 'Maintain Inflation-Beating Equity Allocation', description: 'Keep 60%–70% of pre-retirement portfolio in equity index funds to outpace 6% annual inflation.' },
+  { number: '05', title: 'Establish 3-Year Liquid Emergency Bucket', description: 'Keep 3 years of living expenses in liquid debt funds post-retirement to avoid selling equity during market downturns.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+  strategies={strategies}
+>
+  <RetirementCorpusCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

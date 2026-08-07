@@ -1,0 +1,352 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import RelatedTools from '../RelatedTools.astro';
+import AdSlot from '../AdSlot.astro';
+import { generateCombinedSchemas } from '@utils/schema.js';
+
+// Reusable Presentation Sections
+import HeroSection from '../ui/HeroSection.astro';
+import TimelineSection from '../ui/TimelineSection.astro';
+import PersonaGrid from '../ui/PersonaGrid.astro';
+import FormulaCard from '../ui/FormulaCard.astro';
+import TaxReliefCard from '../ui/TaxReliefCard.astro';
+import FAQAccordion from '../ui/FAQAccordion.jsx';
+
+export interface Props {
+  data: any;
+  slug: string;
+  sections?: string[];
+  timelineSteps?: Array<{ stepNumber: string; title: string; description: string; colorClass?: string }>;
+  targetPersonas?: Array<{ title: string; description: string; bgClass?: string; textClass?: string }>;
+  formulaDetails?: { title: string; formula: string; parameters: Array<{ symbol: string; title: string; description: string; colorClass?: string }> };
+  taxProvisions?: Array<{ section: string; title: string; description: string; limitText: string; colorClass?: string }>;
+  caseStudies?: Array<{ title: string; subtitle: string; tag: string; metrics: Array<{ label: string; value: string; colorClass?: string }>; takeaway: string }>;
+  strategies?: Array<{ number: string; title: string; description: string }>;
+  comparisonData?: {
+    title: string;
+    subtitle: string;
+    optionA: { badge: string; title: string; items: Array<{ isPositive: boolean; text: string }> };
+    optionB: { badge: string; title: string; items: Array<{ isPositive: boolean; text: string }> };
+  };
+}
+
+const {
+  data,
+  slug,
+  sections = [
+    'hero',
+    'widget',
+    'timeline',
+    'personas',
+    'benefits_features',
+    'formula',
+    'case_studies',
+    'comparison',
+    'tax_relief',
+    'strategies',
+    'common_mistakes',
+    'faqs',
+    'related_tools',
+  ],
+  timelineSteps = [],
+  targetPersonas = [],
+  formulaDetails,
+  taxProvisions = [],
+  caseStudies = [],
+  strategies = [],
+  comparisonData,
+} = Astro.props;
+
+const currentCanonical = Astro.url.href;
+const reviewerName = data.eeat?.reviewedBy || 'Fintools Find Engineering & Quant Team';
+const formattedDate = data.updatedDate
+  ? new Date(data.updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : 'August 2026';
+
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://fintool.org/' },
+  { name: data.categoryName, url: `https://fintool.org/tools/${data.category}/` },
+  { name: data.title, url: currentCanonical },
+];
+
+const combinedSchemas = generateCombinedSchemas({
+  title: data.title,
+  description: data.metaDescription,
+  url: currentCanonical,
+  categoryName: data.categoryName,
+  breadcrumbs: breadcrumbItems,
+  faqs: data.faqs || [],
+});
+
+const faqsList = data.faqs || [];
+---
+
+<BaseLayout title={data.title} description={data.metaDescription} schema={combinedSchemas}>
+  <div class="bg-background min-h-screen pb-20">
+    <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+      {/* Breadcrumbs */}
+      <Breadcrumbs categorySlug={data.category} categoryName={data.categoryName} toolTitle={data.title} />
+
+      {/* Hero Header */}
+      {sections.includes('hero') && (
+        <HeroSection
+          title={data.title}
+          description={data.metaDescription}
+          reviewerName={reviewerName}
+          updatedDate={formattedDate}
+        />
+      )}
+
+      {/* Calculator Widget Slot */}
+      {sections.includes('widget') && (
+        <section class="mb-16">
+          <slot name="calculator" />
+        </section>
+      )}
+
+      <AdSlot slotId={`${slug}-below-widget`} />
+
+      {/* Declarative Section Registry Output */}
+      <div class="space-y-16 mt-16">
+
+        {/* Timeline Section */}
+        {sections.includes('timeline') && timelineSteps.length > 0 && (
+          <TimelineSection
+            title="How Repayment & Lifecycle Works"
+            description="Understanding the key phases of your loan or investment timeline"
+            steps={timelineSteps}
+          />
+        )}
+
+        {/* Personas Grid */}
+        {sections.includes('personas') && targetPersonas.length > 0 && (
+          <PersonaGrid
+            title={`Who Should Use the ${data.title}?`}
+            personas={targetPersonas}
+          />
+        )}
+
+        {/* Benefits & Features Grid */}
+        {sections.includes('benefits_features') && (data.benefits?.length > 0 || data.features?.length > 0) && (
+          <div class="grid md:grid-cols-2 gap-8">
+            {data.benefits && data.benefits.length > 0 && (
+              <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
+                <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-semantic-success"></span>
+                  Key Benefits
+                </h3>
+                <ul class="space-y-4 text-sm text-body">
+                  {data.benefits.map((benefit: string) => (
+                    <li class="flex items-start gap-3">
+                      <svg class="w-5 h-5 text-semantic-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                      <span class="leading-relaxed">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {data.features && data.features.length > 0 && (
+              <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
+                <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-primary"></span>
+                  Platform Features
+                </h3>
+                <ul class="space-y-4 text-sm text-body">
+                  {data.features.map((feature: string) => (
+                    <li class="flex items-start gap-3">
+                      <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                      </svg>
+                      <span class="leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Mathematical Engine Formula */}
+        {sections.includes('formula') && formulaDetails && (
+          <FormulaCard
+            title={formulaDetails.title}
+            formula={formulaDetails.formula}
+            parameters={formulaDetails.parameters}
+          />
+        )}
+
+        {/* Worked Case Studies */}
+        {sections.includes('case_studies') && caseStudies.length > 0 && (
+          <section class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Case Studies</span>
+              <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Practical Worked Scenarios</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+              {caseStudies.map((cs, idx) => (
+                <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6 hover:border-primary transition-all">
+                  <div class="flex items-center justify-between border-b border-hairline pb-4">
+                    <div>
+                      <span class="text-xs font-mono font-bold text-primary block">Example {idx + 1}</span>
+                      <h3 class="font-heading font-bold text-lg text-ink">{cs.title}</h3>
+                    </div>
+                    <span class="text-xs font-mono bg-blue-50 text-primary font-bold px-3 py-1 rounded-pill">{cs.tag}</span>
+                  </div>
+
+                  <div class="space-y-3 text-sm">
+                    {cs.metrics.map((m) => (
+                      <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
+                        <span class="text-body">{m.label}</span>
+                        <span class={`font-mono font-bold ${m.colorClass || 'text-ink'}`}>{m.value}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div class="p-4 bg-amber-50 border border-amber-200/60 rounded-2xl text-xs text-amber-900 leading-relaxed font-medium">
+                    <strong>Key Takeaway:</strong> {cs.takeaway}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Comparison Section */}
+        {sections.includes('comparison') && comparisonData && (
+          <section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Comparative Analysis</span>
+              <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">{comparisonData.title}</h2>
+              <p class="text-body text-sm">{comparisonData.subtitle}</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+              <div class="p-8 bg-background border-2 border-semantic-success/30 rounded-2xl space-y-4 relative">
+                <span class="inline-block bg-semantic-success text-white font-mono text-xs font-bold px-3 py-1 rounded-pill">
+                  {comparisonData.optionA.badge}
+                </span>
+                <h3 class="font-heading font-bold text-xl text-ink">{comparisonData.optionA.title}</h3>
+                
+                <ul class="space-y-3 text-xs text-body">
+                  {comparisonData.optionA.items.map((item) => (
+                    <li class="flex items-start gap-2.5">
+                      <span class="text-semantic-success font-bold">✓</span>
+                      <span class="leading-relaxed">{item.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="p-8 bg-background border-2 border-semantic-warning/30 rounded-2xl space-y-4 relative">
+                <span class="inline-block bg-semantic-warning text-white font-mono text-xs font-bold px-3 py-1 rounded-pill">
+                  {comparisonData.optionB.badge}
+                </span>
+                <h3 class="font-heading font-bold text-xl text-ink">{comparisonData.optionB.title}</h3>
+                
+                <ul class="space-y-3 text-xs text-body">
+                  {comparisonData.optionB.items.map((item) => (
+                    <li class="flex items-start gap-2.5">
+                      <span class="text-semantic-warning font-bold">⚠️</span>
+                      <span class="leading-relaxed">{item.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Tax Relief Card */}
+        {sections.includes('tax_relief') && taxProvisions.length > 0 && (
+          <TaxReliefCard
+            title="Tax Savings & Relief Provisions"
+            description="Applicable statutory tax benefits under Indian Income Tax Act"
+            provisions={taxProvisions}
+          />
+        )}
+
+        {/* Strategies Section */}
+        {sections.includes('strategies') && strategies.length > 0 && (
+          <section class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Optimization Strategies</span>
+              <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Practical Strategies to Save Money</h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {strategies.map((st, idx) => (
+                <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
+                  <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">
+                    Strategy {st.number || `0${idx + 1}`}
+                  </span>
+                  <h3 class="font-heading font-bold text-ink text-base">{st.title}</h3>
+                  <p class="text-xs text-body leading-relaxed">{st.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Common Mistakes Warning Cards */}
+        {sections.includes('common_mistakes') && data.advancedContent?.commonMistakes && (
+          <section class="bg-amber-500/5 border border-amber-500/20 rounded-3xl p-8 shadow-soft space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-semantic-warning/20 text-semantic-warning flex items-center justify-center font-bold text-lg">
+                ⚠️
+              </div>
+              <div>
+                <h3 class="font-heading font-bold text-xl text-ink">Common Mistakes to Avoid</h3>
+                <p class="text-xs text-muted">Critical financial oversights that reduce long-term returns</p>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              {data.advancedContent.commonMistakes.map((mistake: string) => (
+                <div class="p-5 bg-canvas border border-amber-200/80 rounded-2xl flex items-start gap-3 shadow-soft">
+                  <span class="text-semantic-warning font-bold text-base mt-0.5">✕</span>
+                  <p class="text-xs text-body leading-relaxed">{mistake}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* FAQs */}
+        {sections.includes('faqs') && faqsList.length > 0 && (
+          <section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Frequently Asked Questions</span>
+              <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">{data.title} FAQs</h2>
+              <p class="text-body text-sm">Clear answers to common questions about calculations and methodology</p>
+            </div>
+
+            <FAQAccordion faqs={faqsList} client:visible />
+          </section>
+        )}
+
+        {/* Related Tools */}
+        {sections.includes('related_tools') && (
+          <section class="space-y-6">
+            <div class="flex items-center justify-between border-b border-hairline pb-4">
+              <div>
+                <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Tool Hub</span>
+                <h2 class="font-heading font-bold text-2xl text-ink">Related Financial Calculators</h2>
+              </div>
+              <a href={`/tools/${data.category}/`} class="text-xs font-semibold text-primary hover:underline">
+                View All Tools &rarr;
+              </a>
+            </div>
+
+            <RelatedTools currentCategory={data.category} currentSlug={slug} manualRelatedTools={data.relatedTools || []} />
+          </section>
+        )}
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>

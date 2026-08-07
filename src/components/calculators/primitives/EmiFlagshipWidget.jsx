@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect } from 'preact/hooks';
+import { useState, useMemo } from 'preact/hooks';
 import { calculateEmi } from '../../../calculators/loans/emi.js';
 import { calculateLoan } from '../../../calculators/core/loanEngine.js';
 import { formatCurrency } from '@utils/formatters.js';
+import { useUrlSync } from '../../hooks/useUrlSync.js';
 
 // Modular UI Components
 import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
@@ -12,101 +13,38 @@ import RecommendationCard from '../../ui/RecommendationCard';
 import InsightCard from '../../ui/InsightCard';
 import ShareActions from '../../ui/ShareActions';
 import AmortizationTable from './AmortizationTable';
+import FormInputNumber from './FormInputNumber';
+
+const DEFAULT_EMI_STATE = {
+  amount: 1000000,
+  rate: 8.5,
+  tenure: 20,
+  tenureType: 'years',
+  salary: 150000,
+};
 
 export default function EmiFlagshipWidget() {
-  // Initial parameters with URL query / hash fallback
-  const [amount, setAmount] = useState(1000000);
-  const [rate, setRate] = useState(8.5);
-  const [tenure, setTenure] = useState(20);
-  const [tenureType, setTenureType] = useState('years');
-  const [salary, setSalary] = useState(150000);
+  const [params, setParam, resetUrlState] = useUrlSync(DEFAULT_EMI_STATE);
+  const { amount, rate, tenure, tenureType, salary } = params;
+
   const [activePreset, setActivePreset] = useState(null);
   const [showAmortization, setShowAmortization] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
 
-  // Sync parameters from URL query string on client mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const urlAmount = Number(params.get('amount'));
-      const urlRate = Number(params.get('rate'));
-      const urlTenure = Number(params.get('tenure'));
-      const urlTenureType = params.get('tenureType');
-      const urlSalary = Number(params.get('salary'));
-
-      if (urlAmount > 0) setAmount(urlAmount);
-      if (urlRate > 0) setRate(urlRate);
-      if (urlTenure > 0) setTenure(urlTenure);
-      if (urlTenureType === 'months' || urlTenureType === 'years') setTenureType(urlTenureType);
-      if (urlSalary > 0) setSalary(urlSalary);
-    }
-  }, []);
-
-  // Sync state back to URL query parameters without reloading
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.history.replaceState) {
-      const params = new URLSearchParams();
-      params.set('amount', amount);
-      params.set('rate', rate);
-      params.set('tenure', tenure);
-      params.set('tenureType', tenureType);
-      if (salary > 0) params.set('salary', salary);
-
-      const newUrl = `${window.location.pathname}?${params.toString()}`;
-      window.history.replaceState(null, '', newUrl);
-    }
-  }, [amount, rate, tenure, tenureType, salary]);
-
   // Presets Configuration
   const presets = [
-    {
-      id: 'home',
-      label: 'Home Loan',
-      icon: '🏡',
-      amount: 5000000,
-      rate: 8.5,
-      tenure: 20,
-      tenureType: 'years',
-      desc: '₹50L @ 8.5% for 20 Yrs',
-    },
-    {
-      id: 'car',
-      label: 'Car Loan',
-      icon: '🚗',
-      amount: 1000000,
-      rate: 9.0,
-      tenure: 5,
-      tenureType: 'years',
-      desc: '₹10L @ 9.0% for 5 Yrs',
-    },
-    {
-      id: 'edu',
-      label: 'Education Loan',
-      icon: '🎓',
-      amount: 1500000,
-      rate: 10.0,
-      tenure: 7,
-      tenureType: 'years',
-      desc: '₹15L @ 10.0% for 7 Yrs',
-    },
-    {
-      id: 'personal',
-      label: 'Personal Loan',
-      icon: '💼',
-      amount: 500000,
-      rate: 12.0,
-      tenure: 3,
-      tenureType: 'years',
-      desc: '₹5L @ 12.0% for 3 Yrs',
-    },
+    { id: 'home', label: 'Home Loan', icon: '🏡', amount: 5000000, rate: 8.5, tenure: 20, tenureType: 'years', desc: '₹50L @ 8.5% for 20 Yrs' },
+    { id: 'car', label: 'Car Loan', icon: '🚗', amount: 1000000, rate: 9.0, tenure: 5, tenureType: 'years', desc: '₹10L @ 9.0% for 5 Yrs' },
+    { id: 'edu', label: 'Education Loan', icon: '🎓', amount: 1500000, rate: 10.0, tenure: 7, tenureType: 'years', desc: '₹15L @ 10.0% for 7 Yrs' },
+    { id: 'personal', label: 'Personal Loan', icon: '💼', amount: 500000, rate: 12.0, tenure: 3, tenureType: 'years', desc: '₹5L @ 12.0% for 3 Yrs' },
   ];
 
   const applyPreset = (p) => {
     setActivePreset(p.id);
-    setAmount(p.amount);
-    setRate(p.rate);
-    setTenure(p.tenure);
-    setTenureType(p.tenureType);
+    setParam('amount', p.amount);
+    setParam('rate', p.rate);
+    setParam('tenure', p.tenure);
+    setParam('tenureType', p.tenureType);
   };
 
   // 1. Standard Calculation Results
@@ -114,7 +52,7 @@ export default function EmiFlagshipWidget() {
     return calculateEmi({ amount, rate, tenure, tenureType });
   }, [amount, rate, tenure, tenureType]);
 
-  // 2. Accelerated Calculation Results (1 Extra EMI per year = baseEmi / 12 per month)
+  // 2. Accelerated Calculation Results
   const acceleratedResults = useMemo(() => {
     const extraPrepaymentPerMonth = Math.round(results.emi / 12);
     return calculateLoan({
@@ -172,12 +110,11 @@ export default function EmiFlagshipWidget() {
   const savedMonths = Math.max(0, results.tenureMonths - acceleratedResults.actualPayoffMonths);
   const savedYearsFormatted = (savedMonths / 12).toFixed(1);
 
-  // Interest Multiplier
+  // Interest Multipliers
   const interestMultiplier = results.principal > 0 ? (results.totalInterest / results.principal).toFixed(2) : 0;
   const totalOutflowMultiplier = results.principal > 0 ? (results.totalPayment / results.principal).toFixed(2) : 1;
   const rateSavings = Math.max(0, results.totalInterest - lowerRateResults.totalInterest);
 
-  // Copy share URL handler
   const handleCopyLink = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
@@ -188,138 +125,67 @@ export default function EmiFlagshipWidget() {
 
   const handleReset = () => {
     setActivePreset(null);
-    setAmount(1000000);
-    setRate(8.5);
-    setTenure(20);
-    setTenureType('years');
-    setSalary(150000);
+    resetUrlState();
   };
 
-  // Slider Percentage Fill Calculations
-  const amountPct = Math.min(100, Math.max(0, ((amount - 10000) / (20000000 - 10000)) * 100));
-  const ratePct = Math.min(100, Math.max(0, ((rate - 1) / (30 - 1)) * 100));
   const maxTenureVal = tenureType === 'years' ? 30 : 360;
-  const tenurePct = Math.min(100, Math.max(0, ((tenure - 1) / (maxTenureVal - 1)) * 100));
 
   return (
     <div class="space-y-10">
-      {/* 1. One-Tap Scenario Preset Cards */}
+      {/* 1. Presets */}
       <ScenarioPresetCards presets={presets} activePreset={activePreset} onSelect={applyPreset} />
 
       {/* 2. Interactive Calculator Workspace */}
       <div class="grid lg:grid-cols-12 gap-8 items-start">
-        {/* Left Panel: Sliders & Controls */}
+        {/* Left Panel: Inputs */}
         <div class="lg:col-span-6 bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-7 shadow-soft">
           <div class="flex items-center justify-between border-b border-hairline pb-4">
             <h3 class="text-xl font-bold font-heading text-ink">Loan Parameters</h3>
             <ShareActions onShare={handleCopyLink} onReset={handleReset} copiedToast={copiedToast} />
           </div>
 
-          {/* Amount Control */}
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label htmlFor="emi-amount" class="text-sm font-semibold text-ink">
-                Loan Amount (₹)
-              </label>
-              <div class="flex items-center bg-surface-strong px-3.5 py-1.5 rounded-xl border border-hairline focus-within:border-primary">
-                <span class="text-xs font-mono text-muted mr-1 font-bold">₹</span>
-                <input
-                  type="number"
-                  id="emi-amount"
-                  value={amount}
-                  onInput={(e) => setAmount(Number(e.currentTarget.value) || 10000)}
-                  min={10000}
-                  max={20000000}
-                  step={10000}
-                  class="w-32 bg-transparent text-right font-mono text-sm font-bold text-ink focus:outline-none"
-                  aria-label="Loan Amount input"
-                />
-              </div>
-            </div>
+          <FormInputNumber
+            id="emi-amount"
+            label="Loan Amount (₹)"
+            value={amount}
+            min={10000}
+            max={20000000}
+            step={10000}
+            prefix="₹"
+            minLabel="₹10K"
+            maxLabel="₹2 Cr"
+            onChange={(val) => setParam('amount', val)}
+          />
 
-            <div class="relative pt-1">
-              <input
-                type="range"
-                min={10000}
-                max={20000000}
-                step={10000}
-                value={amount}
-                onInput={(e) => setAmount(Number(e.currentTarget.value))}
-                style={{
-                  background: `linear-gradient(to right, #2563EB 0%, #2563EB ${amountPct}%, #E2E8F0 ${amountPct}%, #E2E8F0 100%)`,
-                }}
-                class="w-full h-2.5 rounded-lg appearance-none cursor-pointer accent-primary"
-                aria-label="Loan Amount slider"
-              />
-              <div class="flex justify-between text-[11px] font-mono text-muted mt-1 font-medium">
-                <span>₹10K</span>
-                <span>₹2 Cr</span>
-              </div>
-            </div>
-          </div>
+          <FormInputNumber
+            id="emi-rate"
+            label="Interest Rate (p.a.)"
+            value={rate}
+            min={1}
+            max={30}
+            step={0.1}
+            suffix="%"
+            minLabel="1%"
+            maxLabel="30%"
+            inputWidthClass="w-20"
+            onChange={(val) => setParam('rate', val)}
+          />
 
-          {/* Interest Rate Control */}
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label htmlFor="emi-rate" class="text-sm font-semibold text-ink">
-                Interest Rate (p.a.)
-              </label>
-              <div class="flex items-center bg-surface-strong px-3.5 py-1.5 rounded-xl border border-hairline focus-within:border-primary">
-                <input
-                  type="number"
-                  id="emi-rate"
-                  value={rate}
-                  onInput={(e) => setRate(Number(e.currentTarget.value) || 1)}
-                  min={1}
-                  max={30}
-                  step={0.1}
-                  class="w-20 bg-transparent text-right font-mono text-sm font-bold text-ink focus:outline-none"
-                  aria-label="Interest Rate input"
-                />
-                <span class="text-xs font-mono text-muted ml-1 font-bold">%</span>
-              </div>
-            </div>
-
-            <div class="relative pt-1">
-              <input
-                type="range"
-                min={1}
-                max={30}
-                step={0.1}
-                value={rate}
-                onInput={(e) => setRate(Number(e.currentTarget.value))}
-                style={{
-                  background: `linear-gradient(to right, #2563EB 0%, #2563EB ${ratePct}%, #E2E8F0 ${ratePct}%, #E2E8F0 100%)`,
-                }}
-                class="w-full h-2.5 rounded-lg appearance-none cursor-pointer accent-primary"
-                aria-label="Interest Rate slider"
-              />
-              <div class="flex justify-between text-[11px] font-mono text-muted mt-1 font-medium">
-                <span>1%</span>
-                <span>30%</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Tenure Control */}
+          {/* Tenure Control with Yrs/Mos Toggle */}
           <div class="space-y-2">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <label htmlFor="emi-tenure" class="text-sm font-semibold text-ink">
-                  Tenure
-                </label>
+                <span class="text-sm font-semibold text-ink">Tenure</span>
                 <div class="inline-flex p-0.5 bg-surface-strong rounded-lg border border-hairline text-xs font-semibold">
                   <button
                     type="button"
                     onClick={() => {
                       if (tenureType === 'months') {
-                        setTenure(Math.max(1, Math.round(tenure / 12)));
-                        setTenureType('years');
+                        setParam('tenure', Math.max(1, Math.round(tenure / 12)));
+                        setParam('tenureType', 'years');
                       }
                     }}
-                    class={`px-2.5 py-0.5 rounded-md transition-colors ${
-                      tenureType === 'years' ? 'bg-primary text-white' : 'text-muted'
-                    }`}
+                    class={`px-2.5 py-0.5 rounded-md transition-colors ${tenureType === 'years' ? 'bg-primary text-white' : 'text-muted'}`}
                   >
                     Yrs
                   </button>
@@ -327,81 +193,49 @@ export default function EmiFlagshipWidget() {
                     type="button"
                     onClick={() => {
                       if (tenureType === 'years') {
-                        setTenure(Math.min(360, tenure * 12));
-                        setTenureType('months');
+                        setParam('tenure', Math.min(360, tenure * 12));
+                        setParam('tenureType', 'months');
                       }
                     }}
-                    class={`px-2.5 py-0.5 rounded-md transition-colors ${
-                      tenureType === 'months' ? 'bg-primary text-white' : 'text-muted'
-                    }`}
+                    class={`px-2.5 py-0.5 rounded-md transition-colors ${tenureType === 'months' ? 'bg-primary text-white' : 'text-muted'}`}
                   >
                     Mos
                   </button>
                 </div>
               </div>
-
-              <div class="flex items-center bg-surface-strong px-3.5 py-1.5 rounded-xl border border-hairline focus-within:border-primary">
-                <input
-                  type="number"
-                  id="emi-tenure"
-                  value={tenure}
-                  onInput={(e) => setTenure(Number(e.currentTarget.value) || 1)}
-                  min={1}
-                  max={maxTenureVal}
-                  step={1}
-                  class="w-20 bg-transparent text-right font-mono text-sm font-bold text-ink focus:outline-none"
-                  aria-label="Tenure input"
-                />
-                <span class="text-xs font-mono text-muted ml-1 font-semibold">{tenureType === 'years' ? 'Yrs' : 'Mos'}</span>
-              </div>
             </div>
 
-            <div class="relative pt-1">
-              <input
-                type="range"
-                min={1}
-                max={maxTenureVal}
-                step={1}
-                value={tenure}
-                onInput={(e) => setTenure(Number(e.currentTarget.value))}
-                style={{
-                  background: `linear-gradient(to right, #2563EB 0%, #2563EB ${tenurePct}%, #E2E8F0 ${tenurePct}%, #E2E8F0 100%)`,
-                }}
-                class="w-full h-2.5 rounded-lg appearance-none cursor-pointer accent-primary"
-                aria-label="Tenure slider"
-              />
-              <div class="flex justify-between text-[11px] font-mono text-muted mt-1 font-medium">
-                <span>1 {tenureType === 'years' ? 'Yr' : 'Mo'}</span>
-                <span>{maxTenureVal} {tenureType === 'years' ? 'Yrs' : 'Mos'}</span>
-              </div>
-            </div>
+            <FormInputNumber
+              id="emi-tenure"
+              label=""
+              value={tenure}
+              min={1}
+              max={maxTenureVal}
+              step={1}
+              suffix={tenureType === 'years' ? 'Yrs' : 'Mos'}
+              minLabel={`1 ${tenureType === 'years' ? 'Yr' : 'Mo'}`}
+              maxLabel={`${maxTenureVal} ${tenureType === 'years' ? 'Yrs' : 'Mos'}`}
+              inputWidthClass="w-20"
+              onChange={(val) => setParam('tenure', val)}
+            />
           </div>
 
-          {/* Optional Salary Field */}
-          <div class="pt-4 border-t border-hairline space-y-2">
-            <div class="flex items-center justify-between">
-              <label htmlFor="net-salary" class="text-xs font-semibold uppercase tracking-wider text-muted flex items-center gap-1.5">
-                <span>Net Monthly Income</span>
-                <span class="text-[10px] text-primary font-mono bg-primary/10 px-2 py-0.5 rounded-pill">Affordability Check</span>
-              </label>
-              <div class="flex items-center bg-surface-strong px-3.5 py-1 rounded-xl border border-hairline">
-                <span class="text-xs font-mono text-muted mr-1 font-bold">₹</span>
-                <input
-                  type="number"
-                  id="net-salary"
-                  value={salary}
-                  onInput={(e) => setSalary(Number(e.currentTarget.value) || 0)}
-                  min={0}
-                  step={5000}
-                  class="w-28 bg-transparent text-right font-mono text-xs font-bold text-ink focus:outline-none"
-                  aria-label="Net Monthly Income input"
-                />
-              </div>
-            </div>
+          <div class="pt-4 border-t border-hairline">
+            <FormInputNumber
+              id="net-salary"
+              label="Net Monthly Income"
+              badgeText="Affordability Check"
+              value={salary}
+              min={0}
+              max={5000000}
+              step={5000}
+              prefix="₹"
+              onChange={(val) => setParam('salary', val)}
+            />
           </div>
         </div>
 
-        {/* Right Panel: Modular Result Dashboard */}
+        {/* Right Panel: Result Dashboard */}
         <div class="lg:col-span-6 space-y-6">
           <ResultDashboard
             heroTitle="Required Monthly EMI"
@@ -410,7 +244,7 @@ export default function EmiFlagshipWidget() {
             heroSubtext={`Monthly repayment for ${tenure} ${tenureType} at ${rate}% annual interest rate.`}
             metrics={[
               { label: 'Principal', value: results.principal, labelColor: 'text-muted', valueColor: 'text-ink' },
-              { label: 'Total Interest', value: results.totalInterest, labelColor: 'text-semantic-warning', valueColor: 'text-semantic-warning' },
+              { label: 'Total Interest', value: results.totalInterest, labelColor: 'text-semantic-warning', valueColor: 'text-semantic-warning', trend: 'up' },
               { label: 'Total Outflow', value: results.totalPayment, labelColor: 'text-ink', valueColor: 'text-ink' },
             ]}
           />
@@ -439,14 +273,14 @@ export default function EmiFlagshipWidget() {
         </div>
       </div>
 
-      {/* Collapsible Amortization Table */}
+      {/* Amortization Table */}
       {showAmortization && (
         <div id="amortization-schedule-container" class="pt-2">
           <AmortizationTable schedule={results.schedule} currency="INR" />
         </div>
       )}
 
-      {/* 3. Modular Prepayment Savings Coach & Affordability Gauge Grid */}
+      {/* Prepayment Savings & Affordability */}
       <div class="grid md:grid-cols-2 gap-8 pt-4">
         <RecommendationCard
           tagLine="Smart Prepayment Coach"
@@ -467,7 +301,7 @@ export default function EmiFlagshipWidget() {
         />
       </div>
 
-      {/* 4. Modular Dynamic Financial Intelligence Cards */}
+      {/* Financial Intelligence */}
       <InsightCard
         title="Dynamic Financial Intelligence"
         insights={[

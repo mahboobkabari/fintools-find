@@ -39,7 +39,7 @@ calculatorModule: "retirement/retirement-corpus-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations execute standard Time Value of Money (TVM) annuity formulas and Fisher equation real rate of return modeling."
   dataSources:
     - "PFRDA (Pension Fund Regulatory and Development Authority) Retirement Standards"

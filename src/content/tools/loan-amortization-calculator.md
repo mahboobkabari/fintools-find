@@ -34,7 +34,7 @@ calculatorModule: "loans/loan-amortization-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Amortization schedule computations strictly adhere to standard Reducing Balance Annuity mathematics."
   dataSources:
     - "Standard Time Value of Money (TVM) Amortization Formulations"

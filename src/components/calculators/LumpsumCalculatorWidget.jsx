@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { lumpsumCalculatorConfig } from '../../calculators/configs/lumpsum-calculator.config.js';
+import LumpsumFlagshipWidget from './primitives/LumpsumFlagshipWidget';
 
 export default function LumpsumCalculatorWidget() {
-  return <UniversalCalculatorWidget config={lumpsumCalculatorConfig} />;
+  return <LumpsumFlagshipWidget />;
 }

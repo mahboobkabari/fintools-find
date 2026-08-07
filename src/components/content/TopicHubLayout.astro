@@ -1,0 +1,194 @@
+---
+import ToolLayout from '../ToolLayout.astro';
+import TopicHubHero from '../ui/TopicHubHero.astro';
+import HubStats from '../ui/HubStats.astro';
+import LearningRoadmap from '../ui/LearningRoadmap.astro';
+import GlossaryPreview from '../ui/GlossaryPreview.astro';
+import FAQAccordion from '../ui/FAQAccordion';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const canonicalUrl = `https://fintool.find/${slug}/`;
+
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: data.title,
+  description: data.metaDescription,
+  url: canonicalUrl,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Fintools Find',
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://fintool.find/' },
+    { '@type': 'ListItem', position: 2, name: data.title, item: canonicalUrl },
+  ],
+};
+
+const faqSchema = data.faqs && data.faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faqs.map((faq: any) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+} : null;
+---
+
+<ToolLayout
+  title={data.title}
+  metaDescription={data.metaDescription}
+  category={data.category}
+  categoryName="Topic Hub"
+  slug={slug}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  {faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-12">
+    {/* 1. HERO HEADER */}
+    <TopicHubHero
+      title={data.title}
+      heroSubtitle={data.heroSubtitle}
+      category={data.category}
+    />
+
+    {/* 2. HUB STATS COUNTERS */}
+    <HubStats stats={data.stats} />
+
+    {/* 3. FEATURED CALCULATORS GRID */}
+    {data.featuredCalculators && data.featuredCalculators.length > 0 && (
+      <div class="space-y-6">
+        <div class="border-b border-hairline pb-4 flex items-center justify-between">
+          <div>
+            <h3 class="text-xl font-bold font-heading text-ink">Institutional Financial Calculators</h3>
+            <p class="text-xs text-muted mt-1">Interactive decision engines powered by real-time math models.</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-xl border border-primary/20">
+            {data.featuredCalculators.length} Tools Available
+          </span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {data.featuredCalculators.map((calcSlug: string) => (
+            <a
+              href={`/tools/${data.category}/${calcSlug}/`}
+              class="p-5 bg-canvas hover:bg-surface-soft border border-hairline rounded-2xl space-y-2 transition-all shadow-soft group block"
+            >
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-mono font-bold text-primary bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-500/20 uppercase">
+                  CALCULATOR
+                </span>
+                <span class="text-xs text-muted group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+              <h4 class="font-bold text-sm font-heading text-ink group-hover:text-primary transition-colors">
+                {calcSlug.replace('-', ' ').toUpperCase()} Calculator
+              </h4>
+              <p class="text-xs text-body line-clamp-2">
+                Calculate EMIs, interest savings, and repayment schedules instantly.
+              </p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* 4. FEATURED GUIDES GRID */}
+    {data.featuredGuides && data.featuredGuides.length > 0 && (
+      <div class="space-y-6">
+        <div class="border-b border-hairline pb-4">
+          <h3 class="text-xl font-bold font-heading text-ink">Flagship Educational Guides</h3>
+          <p class="text-xs text-muted mt-1">CFP-reviewed articles breaking down complex financial concepts.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          {data.featuredGuides.map((guideSlug: string) => (
+            <a
+              href={`/guides/${guideSlug}/`}
+              class="p-5 bg-canvas hover:bg-surface-soft border border-hairline rounded-2xl space-y-2 transition-all shadow-soft group block"
+            >
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-mono font-bold text-accent-sky bg-sky-500/10 px-2 py-0.5 rounded-lg border border-sky-500/20 uppercase">
+                  GUIDE
+                </span>
+                <span class="text-xs text-muted group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+              <h4 class="font-bold text-sm font-heading text-ink group-hover:text-accent-sky transition-colors">
+                {guideSlug.replace('-', ' ').toUpperCase()} Guide
+              </h4>
+              <p class="text-xs text-body line-clamp-2">
+                Deep dive into mathematical formulas, worked examples, and common mistakes.
+              </p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* 5. FEATURED COMPARISONS GRID */}
+    {data.featuredComparisons && data.featuredComparisons.length > 0 && (
+      <div class="space-y-6">
+        <div class="border-b border-hairline pb-4">
+          <h3 class="text-xl font-bold font-heading text-ink">Head-to-Head Comparisons</h3>
+          <p class="text-xs text-muted mt-1">Side-by-side matrices analyzing interest rates, tax benefits, and risk.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          {data.featuredComparisons.map((compSlug: string) => (
+            <a
+              href={`/compare/${compSlug}/`}
+              class="p-5 bg-canvas hover:bg-surface-soft border border-hairline rounded-2xl space-y-2 transition-all shadow-soft group block"
+            >
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-mono font-bold text-semantic-success bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20 uppercase">
+                  COMPARISON
+                </span>
+                <span class="text-xs text-muted group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+              <h4 class="font-bold text-sm font-heading text-ink group-hover:text-semantic-success transition-colors">
+                {compSlug.replace('-', ' ').toUpperCase()}
+              </h4>
+              <p class="text-xs text-body line-clamp-2">
+                Compare features, interest costs, pros & cons, and expert verdicts.
+              </p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* 6. LEARNING ROADMAP */}
+    <LearningRoadmap roadmap={data.learningRoadmap} />
+
+    {/* 7. GLOSSARY PREVIEW */}
+    <GlossaryPreview terms={data.glossaryTerms} />
+
+    {/* 8. DEEP DIVE MARKDOWN EDITORIAL CONTENT */}
+    <article class="prose prose-slate max-w-none bg-canvas border border-hairline rounded-3xl p-6 sm:p-10 shadow-soft text-body space-y-6">
+      <slot />
+    </article>
+
+    {/* 9. FAQ ACCORDION */}
+    {data.faqs && data.faqs.length > 0 && (
+      <div class="bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-6 shadow-soft">
+        <h3 class="text-xl font-bold font-heading text-ink">Frequently Asked Questions</h3>
+        <FAQAccordion faqs={data.faqs} client:visible />
+      </div>
+    )}
+  </div>
+</ToolLayout>

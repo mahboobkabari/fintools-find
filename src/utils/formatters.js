@@ -1,5 +1,5 @@
 /**
-  Locale-aware Currency and Number Formatting Utilities for FinTool.
+  Locale-aware Currency and Number Formatting Utilities for Fintools Find.
  */
 
 /**

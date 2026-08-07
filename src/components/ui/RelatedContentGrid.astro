@@ -1,0 +1,120 @@
+---
+export interface Props {
+  content: {
+    category: string;
+    hubUrl: string;
+    relatedCalculators: Array<{ title: string; slug: string; url: string }>;
+    relatedGuides: Array<{ title: string; slug: string; metaDescription: string; readingTime: string; url: string }>;
+    relatedComparisons: Array<{ title: string; slug: string; url: string }>;
+    relatedTerms: Array<{ title: string; slug: string; shortDefinition: string; url: string }>;
+  };
+}
+
+const { content } = Astro.props;
+---
+
+{content && (
+  <section class="space-y-8 my-12 border-t border-hairline pt-10" aria-label="Explore Related Knowledge">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div>
+        <span class="text-xs font-mono font-bold text-primary uppercase tracking-wider block">Intelligent Knowledge Graph</span>
+        <h3 class="text-2xl font-extrabold font-heading text-ink">Explore Related Financial Decision Tools</h3>
+      </div>
+      <a
+        href={content.hubUrl}
+        class="px-4 py-2 rounded-2xl bg-surface-strong hover:bg-primary hover:text-white border border-hairline text-xs font-bold font-mono transition-all"
+      >
+        Explore {content.category.toUpperCase()} Authority Hub →
+      </a>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      {/* Calculators Quadrant */}
+      {content.relatedCalculators && content.relatedCalculators.length > 0 && (
+        <div class="p-6 rounded-3xl bg-canvas border border-hairline space-y-3 shadow-soft">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-xl border border-primary/20 uppercase">
+              🧮 RELATED CALCULATORS
+            </span>
+          </div>
+          <div class="space-y-2">
+            {content.relatedCalculators.map((c) => (
+              <a
+                href={c.url}
+                class="p-3 rounded-2xl bg-surface-strong hover:bg-surface-soft border border-hairline/60 flex items-center justify-between text-xs font-bold text-ink transition-colors group block"
+              >
+                <span>{c.title}</span>
+                <span class="text-primary group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Guides Quadrant */}
+      {content.relatedGuides && content.relatedGuides.length > 0 && (
+        <div class="p-6 rounded-3xl bg-canvas border border-hairline space-y-3 shadow-soft">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-accent-sky bg-sky-500/10 px-2.5 py-1 rounded-xl border border-sky-500/20 uppercase">
+              📖 EDUCATIONAL GUIDES
+            </span>
+          </div>
+          <div class="space-y-2">
+            {content.relatedGuides.map((g) => (
+              <a
+                href={g.url}
+                class="p-3 rounded-2xl bg-surface-strong hover:bg-surface-soft border border-hairline/60 flex items-center justify-between text-xs font-bold text-ink transition-colors group block"
+              >
+                <span>{g.title}</span>
+                <span class="text-accent-sky group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Comparisons Quadrant */}
+      {content.relatedComparisons && content.relatedComparisons.length > 0 && (
+        <div class="p-6 rounded-3xl bg-canvas border border-hairline space-y-3 shadow-soft">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-semantic-success bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20 uppercase">
+              ⚔️ HEAD-TO-HEAD COMPARISONS
+            </span>
+          </div>
+          <div class="space-y-2">
+            {content.relatedComparisons.map((comp) => (
+              <a
+                href={comp.url}
+                class="p-3 rounded-2xl bg-surface-strong hover:bg-surface-soft border border-hairline/60 flex items-center justify-between text-xs font-bold text-ink transition-colors group block"
+              >
+                <span>{comp.title}</span>
+                <span class="text-semantic-success group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Glossary Terms Quadrant */}
+      {content.relatedTerms && content.relatedTerms.length > 0 && (
+        <div class="p-6 rounded-3xl bg-canvas border border-hairline space-y-3 shadow-soft">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-accent-amber bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20 uppercase">
+              📌 GLOSSARY DEFINITIONS
+            </span>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap text-xs">
+            {content.relatedTerms.map((t) => (
+              <a
+                href={t.url}
+                class="px-3 py-1.5 rounded-xl bg-surface-strong hover:bg-primary hover:text-white border border-hairline transition-colors font-mono font-bold text-ink"
+              >
+                {t.title}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+)}

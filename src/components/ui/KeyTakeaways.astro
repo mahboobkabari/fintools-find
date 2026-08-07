@@ -1,0 +1,24 @@
+---
+export interface Props {
+  takeaways: string[];
+}
+
+const { takeaways } = Astro.props;
+---
+
+{takeaways && takeaways.length > 0 && (
+  <div class="p-6 sm:p-8 rounded-3xl bg-blue-500/5 border border-blue-500/20 shadow-soft space-y-4">
+    <div class="flex items-center gap-2 text-primary font-heading font-extrabold text-base">
+      <span class="text-xl">💡</span>
+      <h3>Key Takeaways at a Glance</h3>
+    </div>
+    <ul class="grid sm:grid-cols-2 gap-3 text-xs text-body">
+      {takeaways.map((item) => (
+        <li class="flex items-start gap-2 bg-canvas/80 p-3 rounded-2xl border border-hairline/60">
+          <span class="text-primary font-bold">✓</span>
+          <span class="leading-relaxed">{item}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

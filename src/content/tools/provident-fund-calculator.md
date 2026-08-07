@@ -39,7 +39,7 @@ calculatorModule: "retirement/provident-fund-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations execute official EPFO monthly interest compounding rules and Section 10(11) tax exemption provisions."
   dataSources:
     - "Employees' Provident Fund Organisation (EPFO) Official Interest Rate Notifications"

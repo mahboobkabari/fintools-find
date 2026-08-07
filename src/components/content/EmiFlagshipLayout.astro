@@ -1,18 +1,6 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../Breadcrumbs.astro';
+import FlagshipLayout from './FlagshipLayout.astro';
 import EmiCalculatorWidget from '../calculators/EmiCalculatorWidget';
-import RelatedTools from '../RelatedTools.astro';
-import AdSlot from '../AdSlot.astro';
-import { generateCombinedSchemas } from '@utils/schema.js';
-
-// Modular UI Primitives
-import HeroSection from '../ui/HeroSection.astro';
-import TimelineSection from '../ui/TimelineSection.astro';
-import PersonaGrid from '../ui/PersonaGrid.astro';
-import FormulaCard from '../ui/FormulaCard.astro';
-import TaxReliefCard from '../ui/TaxReliefCard.astro';
-import FAQAccordion from '../ui/FAQAccordion.jsx';
 
 export interface Props {
   data: any;
@@ -21,428 +9,104 @@ export interface Props {
 
 const { data, slug } = Astro.props;
 
-const currentCanonical = Astro.url.href;
-const reviewerName = data.eeat?.reviewedBy || 'FinTool Engineering & Quant Team';
-const formattedDate = data.updatedDate
-  ? new Date(data.updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  : 'August 2026';
-
-const breadcrumbItems = [
-  { name: 'Home', url: 'https://fintool.org/' },
-  { name: data.categoryName, url: `https://fintool.org/tools/${data.category}/` },
-  { name: data.title, url: currentCanonical },
-];
-
-const combinedSchemas = generateCombinedSchemas({
-  title: data.title,
-  description: data.metaDescription,
-  url: currentCanonical,
-  categoryName: data.categoryName,
-  breadcrumbs: breadcrumbItems,
-  faqs: data.faqs || [],
-});
-
-const faqsList = data.faqs || [];
-
 const timelineSteps = [
-  {
-    stepNumber: '01',
-    title: 'Principal Disbursal',
-    description: 'The lender approves and disburses the upfront loan principal ($P$) directly to your account or seller.',
-    colorClass: 'bg-primary/10 text-primary',
-  },
-  {
-    stepNumber: '02',
-    title: 'Monthly Installment',
-    description: 'You pay a fixed monthly amount (EMI) on a specified date each calendar month throughout tenure ($n$).',
-    colorClass: 'bg-primary/10 text-primary',
-  },
-  {
-    stepNumber: '03',
-    title: 'Interest & Principal Split',
-    description: 'Early EMIs cover accrued interest; principal repayment increases progressively toward the end of tenure.',
-    colorClass: 'bg-accent-amber/10 text-semantic-warning',
-  },
-  {
-    stepNumber: '04',
-    title: 'Zero Loan Closure',
-    description: 'Upon final installment completion, outstanding principal reaches zero and the loan is fully extinguished.',
-    colorClass: 'bg-semantic-success/10 text-semantic-success',
-  },
+  { stepNumber: '01', title: 'Principal Disbursal', description: 'The lender approves and disburses the upfront loan principal ($P$) directly to your account or seller.' },
+  { stepNumber: '02', title: 'Monthly Installment', description: 'You pay a fixed monthly amount (EMI) on a specified date each calendar month throughout tenure ($n$).' },
+  { stepNumber: '03', title: 'Interest & Principal Split', description: 'Early EMIs cover accrued interest; principal repayment increases progressively toward the end of tenure.', colorClass: 'text-semantic-warning' },
+  { stepNumber: '04', title: 'Zero Loan Closure', description: 'Upon final installment completion, outstanding principal reaches zero and the loan is fully extinguished.', colorClass: 'text-semantic-success' },
 ];
 
 const targetPersonas = [
-  {
-    title: 'Home Buyers',
-    description: 'Estimate 15–30 year mortgage EMIs, tax deductions under Section 80C/24(b), and long-term interest burden.',
-    bgClass: 'bg-blue-50',
-    textClass: 'text-primary',
-  },
-  {
-    title: 'Car & Vehicle Buyers',
-    description: 'Calculate 3–7 year auto loan monthly payments and compare dealer interest rate quotes.',
-    bgClass: 'bg-sky-50',
-    textClass: 'text-accent-sky',
-  },
-  {
-    title: 'Personal Loan Borrowers',
-    description: 'Analyze unsecured debt repayments and verify whether monthly installments fit under 40% of income.',
-    bgClass: 'bg-emerald-50',
-    textClass: 'text-semantic-success',
-  },
-  {
-    title: 'Education Loan Students',
-    description: 'Plan post-degree moratorium periods and evaluate repayment schedules before signing loan offers.',
-    bgClass: 'bg-amber-50',
-    textClass: 'text-semantic-warning',
-  },
+  { title: 'Home Buyers', description: 'Estimate 15–30 year mortgage EMIs, tax deductions under Section 80C/24(b), and long-term interest burden.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Car & Vehicle Buyers', description: 'Calculate 3–7 year auto loan monthly payments and compare dealer interest rate quotes.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Personal Loan Borrowers', description: 'Analyze unsecured debt repayments and verify whether monthly installments fit under 40% of income.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Education Loan Students', description: 'Plan post-degree moratorium periods and evaluate repayment schedules before signing loan offers.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
 ];
 
-const formulaParameters = [
-  { symbol: 'P', title: 'Principal Amount', description: 'The total original lump-sum capital borrowed from the bank.', colorClass: 'text-primary' },
-  { symbol: 'r', title: 'Monthly Rate', description: 'Annual interest rate divided by 12 months (Annual Rate / 12 / 100).', colorClass: 'text-accent-amber' },
-  { symbol: 'n', title: 'Tenure in Months', description: 'Total loan repayment duration in months (Years × 12).', colorClass: 'text-semantic-success' },
-];
+const formulaDetails = {
+  title: 'The Reducing Balance EMI Formula',
+  formula: 'EMI = P \\times r \\times \\left[ \\frac{(1 + r)^n}{(1 + r)^n - 1} \\right]',
+  parameters: [
+    { symbol: 'P', title: 'Principal Amount', description: 'The total original lump-sum capital borrowed from the bank.', colorClass: 'text-primary' },
+    { symbol: 'r', title: 'Monthly Rate', description: 'Annual interest rate divided by 12 months (Annual Rate / 12 / 100).', colorClass: 'text-accent-amber' },
+    { symbol: 'n', title: 'Tenure in Months', description: 'Total loan repayment duration in months (Years × 12).', colorClass: 'text-semantic-success' },
+  ],
+};
 
 const taxProvisions = [
+  { section: 'Section 80C', title: 'Principal Repayment Deduction', description: 'Claim tax deductions on principal loan repayments under Section 80C.', limitText: '₹1,50,000 / year', colorClass: 'text-emerald-300' },
+  { section: 'Section 24(b)', title: 'Interest Repayment Deduction', description: 'Claim tax deductions on cumulative interest paid for self-occupied properties.', limitText: '₹2,00,000 / year', colorClass: 'text-amber-300' },
+];
+
+const caseStudies = [
   {
-    section: 'Section 80C',
-    title: 'Principal Repayment Deduction',
-    description: 'Claim up to tax deductions on principal loan repayments under Section 80C.',
-    limitText: '₹1,50,000 / year',
-    colorClass: 'text-emerald-300',
+    title: 'Home Loan (₹10 Lakhs @ 8.5% for 20 Yrs)',
+    tag: '240 Months',
+    subtitle: 'Mortgage Amortization',
+    metrics: [
+      { label: 'Monthly Interest Rate (r)', value: '0.007083' },
+      { label: 'Monthly EMI Payment', value: '₹8,678 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Total Repayment Amount', value: '₹20,82,720' },
+      { label: 'Total Cumulative Interest', value: '₹10,82,720', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'Over a 20-year term, cumulative interest (₹10.82 Lakhs) exceeds the original borrowed principal (₹10 Lakhs).',
   },
   {
-    section: 'Section 24(b)',
-    title: 'Interest Repayment Deduction',
-    description: 'Claim tax deductions on cumulative interest paid for self-occupied properties.',
-    limitText: '₹2,00,000 / year',
-    colorClass: 'text-amber-300',
+    title: 'Personal Loan (₹5 Lakhs @ 11.5% for 3 Yrs)',
+    tag: '36 Months',
+    subtitle: 'Short-term Debt',
+    metrics: [
+      { label: 'Monthly Interest Rate (r)', value: '0.009583' },
+      { label: 'Monthly EMI Payment', value: '₹16,493 / mo', colorClass: 'text-accent-sky font-bold' },
+      { label: 'Total Repayment Amount', value: '₹5,93,755' },
+      { label: 'Total Cumulative Interest', value: '₹93,755', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'On a short 3-year term, interest represents only 15.8% of total outflow compared to 52% in a 20-year mortgage.',
   },
+];
+
+const comparisonData = {
+  title: 'Reducing Balance vs. Flat Rate Comparison',
+  subtitle: 'Understanding how banks calculate interest on your outstanding loan principal',
+  optionA: {
+    badge: 'RECOMMENDED (BANK STANDARD)',
+    title: 'Reducing Balance Interest Rate',
+    items: [
+      { isPositive: true, text: 'Calculation Method: Interest calculated only on the remaining unpaid principal balance each month.' },
+      { isPositive: true, text: 'Effective Interest: Lower total cumulative interest paid over the loan term.' },
+      { isPositive: true, text: 'Industry Standard: Standard rule used for Home Loans and Car Loans.' },
+    ],
+  },
+  optionB: {
+    badge: 'EXPENSIVE (CONSUMER LOANS)',
+    title: 'Flat Interest Rate',
+    items: [
+      { isPositive: false, text: 'Calculation Method: Interest charged on original full principal throughout complete loan duration.' },
+      { isPositive: false, text: 'Effective Interest: Effective interest burden is almost double the advertised flat rate.' },
+      { isPositive: false, text: 'Industry Use: Common in offline consumer durable schemes and short-term NBFC offers.' },
+    ],
+  },
+};
+
+const strategies = [
+  { number: '01', title: 'Increase Down Payment', description: 'Making a higher initial down payment directly reduces principal amount (P), lowering monthly EMI.' },
+  { number: '02', title: 'Extend Loan Tenure', description: 'Spreading principal payments over more months lowers monthly EMI, though it increases total interest.' },
+  { number: '03', title: 'Negotiate Interest Rate', description: 'A strong CIBIL credit score (750+) qualifies you for concessionary interest rates from prime bank lenders.' },
+  { number: '04', title: 'Make Partial Prepayments', description: 'Applying annual bonuses toward principal prepayments slashes interest burden.' },
+  { number: '05', title: 'Optimize Debt Repayment', description: 'Compare prepayment vs tenure adjustment savings using our financial planning tools.' },
 ];
 ---
 
-<BaseLayout title={data.title} description={data.metaDescription} schema={combinedSchemas}>
-  <div class="bg-background min-h-screen pb-20">
-    <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
-      {/* Breadcrumb Navigation */}
-      <Breadcrumbs categorySlug={data.category} categoryName={data.categoryName} toolTitle={data.title} />
-
-      {/* Hero Header */}
-      <HeroSection
-        title="EMI Calculator: Instant Loan Repayment & Amortization Schedule"
-        description={data.metaDescription}
-        reviewerName={reviewerName}
-        updatedDate={formattedDate}
-      />
-
-      {/* Calculator Workspace Above The Fold */}
-      <section class="mb-16">
-        <EmiCalculatorWidget client:visible />
-      </section>
-
-      <AdSlot slotId="emi-below-widget" />
-
-      {/* Main Feature Sections */}
-      <div class="space-y-16 mt-16">
-        
-        {/* Process Architecture Timeline */}
-        <TimelineSection
-          title="How Loan EMI Repayment Works"
-          description="Understanding the 4-phase lifecycle of an Equated Monthly Installment"
-          steps={timelineSteps}
-        />
-
-        {/* Target Personas */}
-        <PersonaGrid
-          title="Who Should Use an EMI Calculator?"
-          personas={targetPersonas}
-        />
-
-        {/* Benefits & Features Grid */}
-        <div class="grid md:grid-cols-2 gap-8">
-          <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
-            <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-semantic-success"></span>
-              Key Benefits of Using FinTool EMI Engine
-            </h3>
-            <ul class="space-y-4 text-sm text-body">
-              {data.benefits && data.benefits.map((benefit: string) => (
-                <li class="flex items-start gap-3">
-                  <svg class="w-5 h-5 text-semantic-success flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                  </svg>
-                  <span class="leading-relaxed">{benefit}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6">
-            <h3 class="font-heading font-bold text-xl text-ink flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-primary"></span>
-              Platform Features & Functionality
-            </h3>
-            <ul class="space-y-4 text-sm text-body">
-              {data.features && data.features.map((feature: string) => (
-                <li class="flex items-start gap-3">
-                  <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                  </svg>
-                  <span class="leading-relaxed">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Mathematical Engine Formula */}
-        <FormulaCard
-          title="The Reducing Balance EMI Formula"
-          formula="EMI = P × r × [ (1 + r)ⁿ / ((1 + r)ⁿ - 1) ]"
-          parameters={formulaParameters}
-        />
-
-        {/* Worked Case Studies */}
-        <section class="space-y-6">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Case Studies</span>
-            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Practical Worked Calculation Examples</h2>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6 hover:border-primary transition-all">
-              <div class="flex items-center justify-between border-b border-hairline pb-4">
-                <div>
-                  <span class="text-xs font-mono font-bold text-primary block">Example 1</span>
-                  <h3 class="font-heading font-bold text-lg text-ink">Home Loan (₹10 Lakhs @ 8.5% for 20 Yrs)</h3>
-                </div>
-                <span class="text-xs font-mono bg-blue-50 text-primary font-bold px-3 py-1 rounded-pill">240 Months</span>
-              </div>
-
-              <div class="space-y-3 text-sm">
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Monthly Interest Rate (<span class="font-mono">$r$</span>)</span>
-                  <span class="font-mono font-semibold text-ink">0.007083</span>
-                </div>
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Monthly EMI Payment</span>
-                  <span class="font-mono font-bold text-primary text-base">₹8,678 / mo</span>
-                </div>
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Total Repayment Amount</span>
-                  <span class="font-mono font-semibold text-ink">₹20,82,720</span>
-                </div>
-                <div class="flex justify-between items-center py-1">
-                  <span class="text-body">Total Cumulative Interest</span>
-                  <span class="font-mono font-bold text-semantic-warning text-base">₹10,82,720</span>
-                </div>
-              </div>
-
-              <div class="p-4 bg-amber-50 border border-amber-200/60 rounded-2xl text-xs text-amber-900 leading-relaxed font-medium">
-                <strong>Key Takeaway:</strong> Over a 20-year term, cumulative interest (₹10.82 Lakhs) exceeds the original borrowed principal (₹10 Lakhs).
-              </div>
-            </div>
-
-            <div class="bg-canvas border border-hairline rounded-3xl p-8 shadow-soft space-y-6 hover:border-primary transition-all">
-              <div class="flex items-center justify-between border-b border-hairline pb-4">
-                <div>
-                  <span class="text-xs font-mono font-bold text-accent-sky block">Example 2</span>
-                  <h3 class="font-heading font-bold text-lg text-ink">Personal Loan (₹5 Lakhs @ 11.5% for 3 Yrs)</h3>
-                </div>
-                <span class="text-xs font-mono bg-sky-50 text-accent-sky font-bold px-3 py-1 rounded-pill">36 Months</span>
-              </div>
-
-              <div class="space-y-3 text-sm">
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Monthly Interest Rate (<span class="font-mono">$r$</span>)</span>
-                  <span class="font-mono font-semibold text-ink">0.009583</span>
-                </div>
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Monthly EMI Payment</span>
-                  <span class="font-mono font-bold text-accent-sky text-base">₹16,493 / mo</span>
-                </div>
-                <div class="flex justify-between items-center py-1 border-b border-hairline-soft">
-                  <span class="text-body">Total Repayment Amount</span>
-                  <span class="font-mono font-semibold text-ink">₹5,93,755</span>
-                </div>
-                <div class="flex justify-between items-center py-1">
-                  <span class="text-body">Total Cumulative Interest</span>
-                  <span class="font-mono font-bold text-semantic-warning text-base">₹93,755</span>
-                </div>
-              </div>
-
-              <div class="p-4 bg-blue-50 border border-blue-200/60 rounded-2xl text-xs text-blue-900 leading-relaxed font-medium">
-                <strong>Key Takeaway:</strong> On a short 3-year term, interest represents only 15.8% of total outflow compared to 52% in a 20-year mortgage.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Reducing Balance vs Flat Rate Comparison */}
-        <section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-8">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Interest Rate Mechanics</span>
-            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Reducing Balance vs. Flat Rate Comparison</h2>
-            <p class="text-body text-sm">Understanding how banks calculate interest on your outstanding loan principal</p>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-8">
-            <div class="p-8 bg-background border-2 border-semantic-success/30 rounded-2xl space-y-4 relative">
-              <span class="inline-block bg-semantic-success text-white font-mono text-xs font-bold px-3 py-1 rounded-pill">
-                RECOMMENDED (BANK STANDARD)
-              </span>
-              <h3 class="font-heading font-bold text-xl text-ink">Reducing Balance Interest Rate</h3>
-              
-              <ul class="space-y-3 text-xs text-body">
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-success font-bold">✓</span>
-                  <span><strong>Calculation Method:</strong> Interest calculated only on the remaining unpaid principal balance each month.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-success font-bold">✓</span>
-                  <span><strong>Effective Interest:</strong> Lower total cumulative interest paid over the loan term.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-success font-bold">✓</span>
-                  <span><strong>Industry Standard:</strong> Standard rule used for [Home Loans](/tools/loans/home-loan-calculator/) and [Car Loans](/tools/loans/car-loan-calculator/).</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="p-8 bg-background border-2 border-semantic-warning/30 rounded-2xl space-y-4 relative">
-              <span class="inline-block bg-semantic-warning text-white font-mono text-xs font-bold px-3 py-1 rounded-pill">
-                EXPENSIVE (CONSUMER LOANS)
-              </span>
-              <h3 class="font-heading font-bold text-xl text-ink">Flat Interest Rate</h3>
-              
-              <ul class="space-y-3 text-xs text-body">
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-warning font-bold">⚠️</span>
-                  <span><strong>Calculation Method:</strong> Interest charged on original full principal throughout complete loan duration.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-warning font-bold">⚠️</span>
-                  <span><strong>Effective Interest:</strong> Effective interest burden is almost double the advertised flat rate.</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-semantic-warning font-bold">⚠️</span>
-                  <span><strong>Industry Use:</strong> Common in offline consumer durable schemes and short-term NBFC offers.</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Tax Relief Card */}
-        <TaxReliefCard
-          title="Tax Deductions Available on Home Loan EMIs"
-          description="Income Tax Act provisions in India offering tax relief on home loan repayments"
-          provisions={taxProvisions}
-        />
-
-        {/* 5 Practical Ways to Reduce EMI */}
-        <section class="space-y-6">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Optimization Strategies</span>
-            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">5 Practical Ways to Reduce Monthly Loan EMI</h2>
-            <p class="text-body text-sm">Actionable steps to lower your monthly outflow and save cumulative interest</p>
-          </div>
-
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
-              <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">Strategy 01</span>
-              <h3 class="font-heading font-bold text-ink text-base">Increase Down Payment</h3>
-              <p class="text-xs text-body leading-relaxed">
-                Making a higher initial down payment directly reduces principal amount ($P$), lowering monthly EMI. Calculate limits with our <a href="/tools/loans/loan-eligibility-calculator/" class="text-primary hover:underline font-semibold">Loan Eligibility Calculator</a>.
-              </p>
-            </div>
-
-            <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
-              <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">Strategy 02</span>
-              <h3 class="font-heading font-bold text-ink text-base">Extend Loan Tenure</h3>
-              <p class="text-xs text-body leading-relaxed">
-                Spreading principal payments over more months lowers monthly EMI, though it increases total cumulative interest charges over time.
-              </p>
-            </div>
-
-            <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
-              <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">Strategy 03</span>
-              <h3 class="font-heading font-bold text-ink text-base">Negotiate Interest Rate</h3>
-              <p class="text-xs text-body leading-relaxed">
-                A strong CIBIL credit score (750+) qualifies you for concessionary interest rates from prime bank lenders.
-              </p>
-            </div>
-
-            <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all">
-              <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">Strategy 04</span>
-              <h3 class="font-heading font-bold text-ink text-base">Make Partial Prepayments</h3>
-              <p class="text-xs text-body leading-relaxed">
-                Applying annual bonuses toward principal prepayments slashes interest burden. Measure savings with our <a href="/tools/loans/loan-prepayment-calculator/" class="text-primary hover:underline font-semibold">Loan Prepayment Calculator</a>.
-              </p>
-            </div>
-
-            <div class="p-6 bg-canvas border border-hairline rounded-2xl shadow-soft space-y-3 hover:border-primary transition-all sm:col-span-2 lg:col-span-1">
-              <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md inline-block">Strategy 05</span>
-              <h3 class="font-heading font-bold text-ink text-base">Optimize Debt Repayment</h3>
-              <p class="text-xs text-body leading-relaxed">
-                Compare prepayment vs tenure adjustment savings using our <a href="/tools/loans/loan-prepayment-calculator/" class="text-primary hover:underline font-semibold">Prepayment Tool</a> and <a href="/tools/loans/loan-eligibility-calculator/" class="text-primary hover:underline font-semibold">Eligibility Tool</a>.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Common Mistakes Warning Cards */}
-        {data.advancedContent?.commonMistakes && (
-          <section class="bg-amber-500/5 border border-amber-500/20 rounded-3xl p-8 shadow-soft space-y-6">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-semantic-warning/20 text-semantic-warning flex items-center justify-center font-bold text-lg">
-                ⚠️
-              </div>
-              <div>
-                <h3 class="font-heading font-bold text-xl text-ink">Common EMI Mistakes to Avoid</h3>
-                <p class="text-xs text-muted">Critical borrowing oversights that cost borrowers thousands</p>
-              </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-4">
-              {data.advancedContent.commonMistakes.map((mistake: string) => (
-                <div class="p-5 bg-canvas border border-amber-200/80 rounded-2xl flex items-start gap-3 shadow-soft">
-                  <span class="text-semantic-warning font-bold text-base mt-0.5">✕</span>
-                  <p class="text-xs text-body leading-relaxed">{mistake}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Interactive FAQ Accordion */}
-        <section class="bg-canvas border border-hairline rounded-3xl p-8 md:p-10 shadow-soft space-y-8">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Frequently Asked Questions</span>
-            <h2 class="font-heading font-bold text-2xl md:text-3xl text-ink">Loan EMI Calculation FAQs</h2>
-            <p class="text-body text-sm">Answers to common borrower questions about EMI calculations and loan math</p>
-          </div>
-
-          <FAQAccordion faqs={faqsList} client:visible />
-        </section>
-
-        {/* Related Calculator Cards */}
-        <section class="space-y-6">
-          <div class="flex items-center justify-between border-b border-hairline pb-4">
-            <div>
-              <span class="text-xs font-mono font-bold uppercase tracking-wider text-primary">Tool Hub</span>
-              <h2 class="font-heading font-bold text-2xl text-ink">Related Loan Calculators</h2>
-            </div>
-            <a href="/tools/loans/" class="text-xs font-semibold text-primary hover:underline">
-              View All Loan Tools &rarr;
-            </a>
-          </div>
-
-          <RelatedTools currentCategory={data.category} currentSlug={slug} manualRelatedTools={data.relatedTools || []} />
-        </section>
-
-      </div>
-    </div>
-  </div>
-</BaseLayout>
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  taxProvisions={taxProvisions}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+  strategies={strategies}
+>
+  <EmiCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

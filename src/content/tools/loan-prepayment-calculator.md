@@ -36,7 +36,7 @@ calculatorModule: "loans/loan-prepayment-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations follow standard RBI retail debt guidelines and Reducing Balance Annuity trajectory formulations."
   dataSources:
     - "Reserve Bank of India (RBI) Fair Practices Code for Lenders"

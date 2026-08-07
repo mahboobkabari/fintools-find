@@ -36,7 +36,7 @@ calculatorModule: "loans/loan-eligibility-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly enforce Reserve Bank of India (RBI) retail lending guidelines and standard banking FOIR formulations."
   dataSources:
     - "Reserve Bank of India (RBI) Credit Assessment Guidelines"

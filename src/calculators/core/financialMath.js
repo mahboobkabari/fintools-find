@@ -1,6 +1,6 @@
 /**
   Core Financial Math Primitives (TVM - Time Value of Money)
-  Framework-free, pure functional math engine for FinTool.
+  Framework-free, pure functional math engine for Fintools Find.
  */
 
 /**

@@ -1,17 +1,18 @@
 import { useState } from 'preact/hooks';
 
-export default function FAQAccordion({ faqs = [] }) {
+export default function FAQAccordion({ faqs = [], items = [] }) {
   const [openIndex, setOpenIndex] = useState(0);
+  const faqList = (faqs && faqs.length > 0) ? faqs : items;
 
   const toggleFaq = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  if (!faqs || faqs.length === 0) return null;
+  if (!faqList || faqList.length === 0) return null;
 
   return (
     <div class="space-y-4" role="region" aria-label="Frequently Asked Questions Accordion">
-      {faqs.map((faq, index) => {
+      {faqList.map((faq, index) => {
         const isOpen = openIndex === index;
         const answerId = `faq-answer-${index}`;
         const buttonId = `faq-button-${index}`;

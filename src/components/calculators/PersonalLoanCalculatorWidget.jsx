@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { personalLoanCalculatorConfig } from '../../calculators/configs/personal-loan-calculator.config.js';
+import PersonalLoanFlagshipWidget from './primitives/PersonalLoanFlagshipWidget';
 
 export default function PersonalLoanCalculatorWidget() {
-  return <UniversalCalculatorWidget config={personalLoanCalculatorConfig} />;
+  return <PersonalLoanFlagshipWidget />;
 }

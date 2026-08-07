@@ -1,0 +1,15 @@
+---
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+---
+
+<div class="p-4 rounded-2xl bg-canvas border border-hairline shadow-soft flex items-center justify-center flex-wrap gap-1.5 text-xs font-mono font-bold">
+  <span class="text-muted mr-2">A–Z INDEX:</span>
+  {alphabet.map((letter) => (
+    <a
+      href={`#letter-${letter}`}
+      class="w-7 h-7 rounded-lg bg-surface-strong hover:bg-primary hover:text-white border border-hairline flex items-center justify-center transition-colors text-ink"
+    >
+      {letter}
+    </a>
+  ))}
+</div>

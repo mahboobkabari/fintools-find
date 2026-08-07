@@ -37,7 +37,7 @@ calculatorModule: "tax/tds-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute Central Board of Direct Taxes (CBDT) statutory TDS rate provisions under Income Tax Act, 1961."
   dataSources:
     - "Income Tax Department, Government of India (TDS Rate Chart & Section 206AA Rules)"

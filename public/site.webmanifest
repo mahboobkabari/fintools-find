@@ -1,6 +1,6 @@
 {
-  "name": "FinTool — Institutional-Grade Financial Calculators",
-  "short_name": "FinTool",
+  "name": "Fintools Find — Institutional-Grade Financial Calculators",
+  "short_name": "Fintools Find",
   "description": "100% free, client-side financial calculators for loans, investment, tax, and retirement.",
   "start_url": "/",
   "display": "standalone",

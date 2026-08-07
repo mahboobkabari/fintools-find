@@ -1,0 +1,35 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  buttonText: string;
+  buttonUrl: string;
+  badge?: string;
+}
+
+const { title, description, buttonText, buttonUrl, badge = 'Interactive Tool' } = Astro.props;
+---
+
+<div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-canvas to-accent-sky/10 border border-primary/30 shadow-soft space-y-4 my-8">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-pill bg-primary text-white font-mono text-[11px] font-bold uppercase">
+      🚀 {badge}
+    </span>
+    <span class="text-xs font-mono font-bold text-muted bg-surface-strong px-2 py-1 rounded-lg border border-hairline">
+      Instant Calculation
+    </span>
+  </div>
+
+  <div class="space-y-1">
+    <h4 class="text-xl font-bold font-heading text-ink">{title}</h4>
+    <p class="text-xs sm:text-sm text-body leading-relaxed">{description}</p>
+  </div>
+
+  <a
+    href={buttonUrl}
+    class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm transition-all shadow-soft group"
+  >
+    <span>{buttonText}</span>
+    <span class="group-hover:translate-x-1 transition-transform">→</span>
+  </a>
+</div>

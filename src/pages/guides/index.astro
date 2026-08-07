@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ToolLayout from '@components/ToolLayout.astro';
+
+const guides = await getCollection('guides');
+---
+
+<ToolLayout
+  title="Financial Education Guides & Research | Fintools Find"
+  metaDescription="Institutional-grade guides covering loan interest math, tax planning, retirement strategies, and mutual fund compounding."
+  category="guides"
+  categoryName="Financial Education"
+  slug="guides"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <header class="text-center max-w-3xl mx-auto space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-surface-strong border border-hairline text-xs font-mono text-muted">
+        <span>📚</span>
+        <span class="uppercase tracking-wider">Financial Education Library</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-ink leading-tight">
+        Master Your Financial Decisions
+      </h1>
+      <p class="text-xs sm:text-sm text-body leading-relaxed">
+        Explore institutional guides written and reviewed by financial experts, complete with mathematical formulas, worked examples, and decision frameworks.
+      </p>
+    </header>
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      {guides.map((item) => {
+        const slug = item.slug || item.id;
+        return (
+          <a
+            href={`/guides/${slug}/`}
+            class="p-6 bg-canvas hover:bg-surface-soft border border-hairline rounded-3xl space-y-4 transition-all shadow-soft group block"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-primary bg-blue-500/10 px-2.5 py-1 rounded-xl border border-blue-500/20 uppercase">
+                {item.data.category}
+              </span>
+              <span class="text-xs text-muted font-mono">
+                ⏱️ {item.data.readingTime}
+              </span>
+            </div>
+
+            <h2 class="text-lg font-bold font-heading text-ink group-hover:text-primary transition-colors">
+              {item.data.title}
+            </h2>
+
+            <p class="text-xs text-body line-clamp-3">
+              {item.data.metaDescription}
+            </p>
+
+            <div class="pt-2 flex items-center justify-between text-xs font-semibold text-primary border-t border-hairline/60">
+              <span>Read Full Guide</span>
+              <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</ToolLayout>

@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ToolLayout from '@components/ToolLayout.astro';
+
+const comparisons = await getCollection('comparisons');
+---
+
+<ToolLayout
+  title="Financial Head-to-Head Comparisons | Fintools Find"
+  metaDescription="Compare mutual funds, tax regimes, loans, and retirement schemes side-by-side with institutional calculations and expert advice."
+  category="comparisons"
+  categoryName="Financial Comparison"
+  slug="compare"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <header class="text-center max-w-3xl mx-auto space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-surface-strong border border-hairline text-xs font-mono text-muted">
+        <span>⚔️</span>
+        <span class="uppercase tracking-wider">Financial Product Comparisons</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-ink leading-tight">
+        Compare Financial Options Side-by-Side
+      </h1>
+      <p class="text-xs sm:text-sm text-body leading-relaxed">
+        Expert analysis, feature matrices, pros & cons, and mathematical models to help you make optimal financial decisions.
+      </p>
+    </header>
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      {comparisons.map((item) => {
+        const slug = item.slug || item.data.slug || item.id;
+        return (
+          <a
+            href={`/compare/${slug}/`}
+            class="p-6 bg-canvas hover:bg-surface-soft border border-hairline rounded-3xl space-y-3 transition-all shadow-soft group block"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-primary bg-blue-500/10 px-2.5 py-1 rounded-xl border border-blue-500/20">
+                {item.data.category.toUpperCase()}
+              </span>
+              <span class="text-xs text-muted font-mono font-semibold">
+                {item.data.optionA.name} vs {item.data.optionB.name}
+              </span>
+            </div>
+
+            <h2 class="text-lg font-bold font-heading text-ink group-hover:text-primary transition-colors">
+              {item.data.title}
+            </h2>
+
+            <p class="text-xs text-body line-clamp-2">
+              {item.data.metaDescription}
+            </p>
+
+            <div class="pt-2 flex items-center justify-between text-xs font-semibold text-primary">
+              <span>Read Full Verdict ({item.data.winner.name})</span>
+              <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</ToolLayout>

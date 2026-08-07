@@ -1,0 +1,37 @@
+---
+export interface Props {
+  term: string;
+  shortDefinition: string;
+  category: string;
+  synonyms?: string[];
+}
+
+const { term, shortDefinition, category, synonyms } = Astro.props;
+---
+
+<div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-canvas to-accent-sky/10 border-2 border-primary/40 shadow-soft space-y-4">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-primary text-white font-mono text-xs font-bold uppercase">
+      📌 QUICK DEFINITION
+    </span>
+    <span class="text-xs font-mono font-bold text-muted bg-surface-strong px-2.5 py-1 rounded-xl border border-hairline uppercase">
+      {category}
+    </span>
+  </div>
+
+  <div class="space-y-2">
+    <h2 class="text-2xl sm:text-3xl font-heading font-extrabold text-ink leading-tight">
+      What is {term}?
+    </h2>
+    <p class="text-sm sm:text-base text-body leading-relaxed font-semibold">
+      {shortDefinition}
+    </p>
+  </div>
+
+  {synonyms && synonyms.length > 0 && (
+    <div class="pt-2 border-t border-hairline/60 flex items-center gap-2 text-xs text-muted font-mono">
+      <span class="font-bold text-ink">ALSO KNOWN AS:</span>
+      <span>{synonyms.join(', ')}</span>
+    </div>
+  )}
+</div>

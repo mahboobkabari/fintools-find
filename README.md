@@ -1,8 +1,8 @@
-# FinTool — Institutional-Grade Financial Calculators
+# Fintools Find — Institutional-Grade Financial Calculators
 
-FinTool is a high-speed, ad-supported digital platform offering 28 active, interactive financial calculators across **Loans**, **Investment**, **Tax**, and **Retirement**.
+Fintools Find is a high-speed, ad-supported digital platform offering 28 active, interactive financial calculators across **Loans**, **Investment**, **Tax**, and **Retirement**.
 
-Built with **Astro 4.x**, **Preact**, **Tailwind CSS**, and **Vitest**, FinTool guarantees **100% client-side data privacy** where zero user inputs are saved or transmitted to external servers.
+Built with **Astro 4.x**, **Preact**, **Tailwind CSS**, and **Vitest**, Fintools Find guarantees **100% client-side data privacy** where zero user inputs are saved or transmitted to external servers.
 
 ---
 

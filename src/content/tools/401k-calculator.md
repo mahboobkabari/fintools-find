@@ -39,7 +39,7 @@ calculatorModule: "retirement/401k-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute US Internal Revenue Code Section 401(k) compound growth rules and IRS statutory deferral caps."
   dataSources:
     - "Internal Revenue Service (IRS) 401(k) Contribution Limit Notices"

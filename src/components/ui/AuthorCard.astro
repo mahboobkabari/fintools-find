@@ -1,0 +1,42 @@
+---
+export interface Props {
+  author: string;
+  reviewedBy: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  readingTime: string;
+}
+
+const { author, reviewedBy, publishDate, updatedDate, readingTime } = Astro.props;
+
+const formattedDate = (date: Date) =>
+  new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }).format(date);
+---
+
+<div class="p-4 sm:p-5 rounded-2xl bg-surface-strong border border-hairline flex flex-wrap items-center justify-between gap-4 text-xs">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+      ✍️
+    </div>
+    <div>
+      <div class="font-bold text-ink">{author}</div>
+      <div class="text-muted text-[11px]">Written for Fintools Find</div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 border-l border-hairline pl-4">
+    <div class="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-sm">
+      🛡️
+    </div>
+    <div>
+      <div class="font-bold text-emerald-600">Medically & Financially Reviewed</div>
+      <div class="text-muted text-[11px]">Reviewed by {reviewedBy}</div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 text-muted text-[11px] font-mono">
+    <span>🗓️ {formattedDate(updatedDate || publishDate)}</span>
+    <span>•</span>
+    <span>⏱️ {readingTime}</span>
+  </div>
+</div>

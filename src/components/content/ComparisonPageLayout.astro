@@ -1,0 +1,144 @@
+---
+import ToolLayout from '../ToolLayout.astro';
+import WinnerCard from '../ui/WinnerCard';
+import ComparisonMatrix from '../ui/ComparisonMatrix';
+import ProsConsGrid from '../ui/ProsConsGrid';
+import CalculatorCTA from '../ui/CalculatorCTA';
+import FAQAccordion from '../ui/FAQAccordion';
+import RelatedContentGrid from '../ui/RelatedContentGrid.astro';
+import ExploreMoreTools from '../ui/ExploreMoreTools.astro';
+import { getRelatedContent } from '@utils/getRelatedContent.js';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const canonicalUrl = `https://fintool.find/compare/${slug}/`;
+
+const relatedData = await getRelatedContent({
+  type: 'comparison',
+  slug,
+  category: data.category,
+  limit: 4,
+});
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.metaDescription,
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    '@type': 'Organization',
+    name: 'Fintools Find Editorial Team',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Fintools Find',
+  },
+  datePublished: data.publishDate?.toISOString() || new Date().toISOString(),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://fintool.find/' },
+    { '@type': 'ListItem', position: 2, name: 'Comparisons', item: 'https://fintool.find/compare/' },
+    { '@type': 'ListItem', position: 3, name: data.title, item: canonicalUrl },
+  ],
+};
+
+const faqSchema = data.faqs && data.faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faqs.map((faq: any) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+} : null;
+---
+
+<ToolLayout
+  title={data.title}
+  metaDescription={data.metaDescription}
+  category={data.category}
+  categoryName="Financial Comparison"
+  slug={slug}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  {faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-12">
+    {/* 1. HERO HEADER */}
+    <header class="space-y-4 text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-surface-strong border border-hairline text-xs font-mono text-muted">
+        <span>⚔️</span>
+        <span class="uppercase tracking-wider">Financial Head-to-Head Comparison</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-ink leading-tight">
+        {data.title}
+      </h1>
+      <p class="text-sm sm:text-base text-body leading-relaxed">
+        {data.metaDescription}
+      </p>
+    </header>
+
+    {/* 2. QUICK WINNER BANNER */}
+    <WinnerCard
+      winner={data.winner}
+      optionA={data.optionA}
+      optionB={data.optionB}
+      client:visible
+    />
+
+    {/* 3. SIDE-BY-SIDE FEATURE MATRIX */}
+    <ComparisonMatrix
+      matrix={data.matrix}
+      optionA={data.optionA}
+      optionB={data.optionB}
+      client:visible
+    />
+
+    {/* 4. PROS & CONS GRID */}
+    <ProsConsGrid
+      prosCons={data.prosCons}
+      optionA={data.optionA}
+      optionB={data.optionB}
+      client:visible
+    />
+
+    {/* 5. DEEP DIVE MARKDOWN ARTICLE BODY */}
+    <article class="prose prose-slate max-w-none bg-canvas border border-hairline rounded-3xl p-6 sm:p-10 shadow-soft text-body space-y-6">
+      <slot />
+    </article>
+
+    {/* 6. CALCULATOR CALL-TO-ACTION */}
+    <CalculatorCTA
+      optionA={data.optionA}
+      optionB={data.optionB}
+      client:visible
+    />
+
+    {/* 7. FAQ ACCORDION */}
+    {data.faqs && data.faqs.length > 0 && (
+      <div class="bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-6 shadow-soft">
+        <h3 class="text-xl font-bold font-heading text-ink">Frequently Asked Questions</h3>
+        <FAQAccordion faqs={data.faqs} client:visible />
+      </div>
+    )}
+
+    {/* 8. INTELLIGENT KNOWLEDGE GRAPH RECOMMENDATIONS */}
+    <RelatedContentGrid content={relatedData} />
+
+    {/* 9. EXPLORE MORE SILOS (ZERO DEAD ENDS) */}
+    <ExploreMoreTools category={data.category} />
+  </div>
+</ToolLayout>

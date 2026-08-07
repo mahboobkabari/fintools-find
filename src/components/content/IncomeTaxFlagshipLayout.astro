@@ -1,0 +1,148 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import IncomeTaxCalculatorWidget from '../calculators/IncomeTaxCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Salary & Income Assessment', description: 'Consolidate basic salary, allowances, HRA, bonuses, and side income for the financial year.' },
+  { stepNumber: '02', title: 'Regime Evaluation (Old vs. New)', description: 'Compare default New Tax Regime lower slabs against Old Regime with Chapter VI-A deductions.' },
+  { stepNumber: '03', title: 'Deduction Optimization', description: 'Invest in ELSS, PPF, NPS, health insurance, and home loan interest before March 31st deadline.' },
+  { stepNumber: '04', title: 'ITR Filing & Tax Refund', description: 'File ITR-1 / ITR-2 before July 31st deadline to claim excess TDS refunds directly into your bank account.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'First-Time Employees (Entry Level)', description: 'Salaries up to ₹7 Lakhs pay zero income tax under New Tax Regime Section 87A rebate without needing complex investments.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Mid-Career Salaried Professionals', description: 'Evaluate whether ₹1.5L (80C) + ₹50K (NPS) + ₹25K (80D) deductions are enough to beat New Tax Regime lower slabs.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Homeowners with Mortgages', description: 'Claim up to ₹2.0 Lakhs home loan interest deduction under Section 24(b) to slash Old Regime tax outgo.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Senior Executives & HNIs', description: 'Navigate 30% tax brackets, surcharge thresholds above ₹50 Lakhs, and structured tax planning strategies.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Income Tax Calculation Formula (FY 2025-26)',
+  formula: '\\text{Net Tax} = \\sum_{i} \\left( \\text{Taxable Income in Slab}_i \\times \\text{Rate}_i \\right) - \\text{Sec 87A Rebate} + 4\\% \\text{ Cess}',
+  parameters: [
+    { symbol: 'Gross Income', title: 'Gross Annual Salary', description: 'Total annual earnings before deductions or allowances.', colorClass: 'text-primary' },
+    { symbol: 'Std Ded', title: 'Standard Deduction', description: 'Flat statutory deduction (₹75,000 New Regime / ₹50,000 Old Regime).', colorClass: 'text-semantic-success' },
+    { symbol: 'Sec 80C', title: 'Chapter VI-A Deductions', description: 'Investments in ELSS, PPF, EPF, NPS, and Health Insurance under Old Regime.', colorClass: 'text-accent-amber' },
+  ],
+};
+
+const taxProvisions = [
+  { section: 'Section 80C', title: 'Investment Deductions', description: 'ELSS Mutual Funds, PPF, EPF, NPS, Life Insurance, and Principal Repayment.', limitText: '₹1,50,000 / year', colorClass: 'text-emerald-300' },
+  { section: 'Section 24(b)', title: 'Home Loan Interest', description: 'Tax deduction on cumulative home loan interest for self-occupied property.', limitText: '₹2,00,000 / year', colorClass: 'text-amber-300' },
+  { section: 'Section 80D', title: 'Health Insurance Premium', description: 'Medical insurance premiums for self, family, and senior citizen parents.', limitText: '₹75,000 / year', colorClass: 'text-blue-300' },
+  { section: 'Section 80CCD(1B)', title: 'Additional NPS Benefit', description: 'Exclusive additional tax deduction for contributions into National Pension System.', limitText: '₹50,000 / year', colorClass: 'text-purple-300' },
+];
+
+const caseStudies = [
+  {
+    title: '₹8.0 Lakh Salary (New Regime Advantage)',
+    tag: 'Salaried Entry',
+    subtitle: 'Zero Tax Zone',
+    metrics: [
+      { label: 'Standard Deduction (New)', value: '₹75,000' },
+      { label: 'Net Taxable Income', value: '₹7,25,000' },
+      { label: 'New Regime Tax Payable', value: '₹23,400', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Old Regime Tax (Without 80C)', value: '₹67,600', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'New Tax Regime saves ₹44,200 annually without locking up ₹1.5 Lakhs in investments.',
+  },
+  {
+    title: '₹12.0 Lakh Salary (Mid-Career Tradeoff)',
+    tag: 'Mid-Career',
+    subtitle: 'Regime Comparison',
+    metrics: [
+      { label: 'New Regime Tax Payable', value: '₹71,500', colorClass: 'text-primary font-bold' },
+      { label: 'Old Regime Tax (With ₹2.25L Deductions)', value: '₹85,800' },
+      { label: 'New Regime Tax Savings', value: '₹14,300 Saved', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Unless Old Regime deductions exceed ₹3.75 Lakhs, New Tax Regime remains mathematically superior.',
+  },
+  {
+    title: '₹18.0 Lakh Salary (Homeowner Advantage)',
+    tag: 'Mortgage Holder',
+    subtitle: 'Old Regime Victory',
+    metrics: [
+      { label: 'Deductions (80C + 24b + 80D + HRA)', value: '₹5,25,000', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Old Regime Tax Payable', value: '₹1,95,000', colorClass: 'text-semantic-success font-bold' },
+      { label: 'New Regime Tax Payable', value: '₹2,02,800', colorClass: 'text-semantic-warning font-bold' },
+    ],
+    takeaway: 'With high home loan interest (₹2L) and HRA exemptions, Old Regime saves ₹7,800 every year.',
+  },
+  {
+    title: '₹25.0 Lakh Salary (Senior Executive)',
+    tag: 'Senior Pro',
+    subtitle: 'High Earner',
+    metrics: [
+      { label: 'Gross Annual Income', value: '₹25,00,000' },
+      { label: 'New Regime Tax Payable', value: '₹4,21,200', colorClass: 'text-primary font-bold' },
+      { label: 'Old Regime Tax Payable', value: '₹4,44,600' },
+      { label: 'Net Annual Take-Home', value: '₹20,78,800', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'At ₹25L salary, New Regime lower slabs save ₹23,400 unless deductions exceed ₹5.25 Lakhs.',
+  },
+  {
+    title: '₹50.0 Lakh Salary (HNI Tax Planning)',
+    tag: 'HNI Profile',
+    subtitle: 'Surcharge Boundary',
+    metrics: [
+      { label: 'Gross Annual Income', value: '₹50,00,000' },
+      { label: 'New Regime Tax Payable', value: '₹12,01,200', colorClass: 'text-primary font-bold' },
+      { label: 'Effective Tax Rate', value: '24.02%' },
+      { label: 'Monthly Net Take-Home', value: '₹3,16,567 / mo', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'At ₹50 Lakhs, New Tax Regime provides ~₹3.16 Lakhs net monthly in-hand salary with zero surcharge penalty.',
+  },
+];
+
+const comparisonData = {
+  title: 'New Tax Regime vs. Old Tax Regime Comparison',
+  subtitle: 'Understanding structural differences between default lower slabs vs deduction-heavy tax filing',
+  optionA: {
+    badge: 'DEFAULT (RECOMMENDED FOR MOST)',
+    title: 'New Tax Regime (FY 2025-26)',
+    items: [
+      { isPositive: true, text: 'Lower Tax Slabs: Concessionary slab rates (5%, 10%, 15%, 20%, 30%).' },
+      { isPositive: true, text: 'Higher Standard Deduction: Flat ₹75,000 standard deduction for all salaried individuals.' },
+      { isPositive: true, text: 'Zero Investment Hassle: Maximum take-home pay without locking liquidity in 3-5 year tax funds.' },
+    ],
+  },
+  optionB: {
+    badge: 'BEST FOR MORTGAGE HOLDERS',
+    title: 'Old Tax Regime (With Deductions)',
+    items: [
+      { isPositive: false, text: 'Deduction Dependent: Requires high deductions (Section 80C, 24b, 80D, NPS) to beat New Regime.' },
+      { isPositive: false, text: 'Higher Slabs: Steep jump from 5% to 20% slab at ₹5 Lakhs taxable income.' },
+      { isPositive: true, text: 'Tax Freedom: Ideal if you have home loan interest (₹2L) and large HRA exemptions.' },
+    ],
+  },
+};
+
+const strategies = [
+  { number: '01', title: 'Maximize Section 80CCD(1B) NPS', description: 'Invest ₹50,000 in National Pension System (NPS) to claim an exclusive deduction over and above the ₹1.5L 80C limit.' },
+  { number: '02', title: 'Claim Home Loan Interest under Sec 24(b)', description: 'If you have a home loan, claim up to ₹2.0 Lakhs in interest outgo to significantly reduce Old Regime taxable income.' },
+  { number: '03', title: 'Optimize HRA Rent Receipts', description: 'Submit genuine rent receipts and PAN details of your landlord to claim maximum HRA tax exemption under Old Regime.' },
+  { number: '04', title: 'Secure Health Insurance under Sec 80D', description: 'Claim tax deductions up to ₹25,000 for family health insurance and an additional ₹50,000 for senior citizen parents.' },
+  { number: '05', title: 'Choose ELSS Mutual Funds for 80C', description: 'ELSS mutual funds offer the shortest lock-in period (3 years) and equity wealth growth while fulfilling Section 80C.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  taxProvisions={taxProvisions}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+  strategies={strategies}
+>
+  <IncomeTaxCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

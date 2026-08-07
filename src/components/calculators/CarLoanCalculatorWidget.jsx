@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { carLoanCalculatorConfig } from '../../calculators/configs/car-loan-calculator.config.js';
+import CarLoanFlagshipWidget from './primitives/CarLoanFlagshipWidget';
 
 export default function CarLoanCalculatorWidget() {
-  return <UniversalCalculatorWidget config={carLoanCalculatorConfig} />;
+  return <CarLoanFlagshipWidget />;
 }

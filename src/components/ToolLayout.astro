@@ -58,7 +58,7 @@ const {
 } = Astro.props;
 
 const currentCanonical = Astro.url.href;
-const reviewerName = eeat?.reviewedBy || 'FinTool Engineering & Quant Team';
+const reviewerName = eeat?.reviewedBy || 'Fintools Find Engineering & Quant Team';
 const formattedDate = updatedDate
   ? new Date(updatedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   : publishDate

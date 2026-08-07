@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import TopicHubLayout from '@components/content/TopicHubLayout.astro';
+
+export async function getStaticPaths() {
+  const hubs = await getCollection('hubs');
+  return hubs.map((entry) => {
+    const slug = entry.slug || entry.id;
+    return {
+      params: { hubSlug: slug },
+      props: { entry, slug },
+    };
+  });
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data;
+---
+
+<TopicHubLayout data={data} slug={slug}>
+  <Content />
+</TopicHubLayout>

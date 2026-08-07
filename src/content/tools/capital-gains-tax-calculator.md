@@ -38,7 +38,7 @@ calculatorModule: "tax/capital-gains-tax-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute official Central Board of Direct Taxes (CBDT) capital gains provisions under Income Tax Act, 1961 (as amended by Finance Act 2024)."
   dataSources:
     - "Income Tax Department, Government of India (Section 111A & Section 112A Provisions)"

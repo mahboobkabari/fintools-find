@@ -37,7 +37,7 @@ calculatorModule: "tax/take-home-salary-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations model official CBDT tax slabs, standard deduction rules, and EPFO statutory deduction guidelines."
   dataSources:
     - "Income Tax Department, Government of India (FY 2025-26 Tax Slabs)"

@@ -1,0 +1,116 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import HomeLoanCalculatorWidget from '../calculators/HomeLoanCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Down Payment & Booking', description: 'Pay 10%–20% upfront down payment to property developer/seller and secure your home agreement.' },
+  { stepNumber: '02', title: 'Sanction & Disbursal', description: 'Bank verifies legal title, evaluates property value, approves LTV, and disburses net loan principal ($P$).' },
+  { stepNumber: '03', title: 'Monthly EMI & Tax Relief', description: 'Repay fixed monthly EMIs while claiming annual tax deductions under Section 24(b) and Section 80C.' },
+  { stepNumber: '04', title: 'Full Title Ownership', description: 'Upon final installment, bank returns original title deeds (MODT release) for 100% unencumbered ownership.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'First-Time Home Buyers', description: 'Determine exact down payment requirements, monthly EMI commitment, and bank FOIR affordability limits.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Home Upgraders & Sellers', description: 'Evaluate larger property budgets, sale equity reinvestment, and multi-decade interest outgo.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Real Estate Investors', description: 'Calculate total cost of ownership, rental yield coverage, and tax deduction benefits across property portfolios.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'NRI Home Buyers', description: 'Plan Indian property purchases under RBI FEMA guidelines, NRE/NRO account EMI debits, and tax relief.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'The Home Loan Amortization Formula',
+  formula: 'EMI = P \\times r \\times \\left[ \\frac{(1 + r)^n}{(1 + r)^n - 1} \\right] \\quad \\text{where } P = V - DP',
+  parameters: [
+    { symbol: 'V', title: 'Property Purchase Price', description: 'Total agreed market price of the residential property.', colorClass: 'text-primary' },
+    { symbol: 'DP', title: 'Down Payment Amount', description: 'Upfront cash paid by buyer.', colorClass: 'text-semantic-success' },
+    { symbol: 'P', title: 'Net Loan Principal', description: 'Net borrowed amount from lender (P = V - DP).', colorClass: 'text-primary' },
+    { symbol: 'r', title: 'Monthly Interest Rate', description: 'Annual interest rate divided by 12 months (Annual Rate / 12 / 100).', colorClass: 'text-accent-amber' },
+    { symbol: 'n', title: 'Tenure in Months', description: 'Total mortgage repayment duration in months (Years × 12).', colorClass: 'text-accent-sky' },
+  ],
+};
+
+const taxProvisions = [
+  { section: 'Section 24(b)', title: 'Home Loan Interest Deduction', description: 'Claim tax deduction on home loan interest paid during the financial year for self-occupied properties.', limitText: '₹2,00,000 / year', colorClass: 'text-amber-300' },
+  { section: 'Section 80C', title: 'Principal Repayment Deduction', description: 'Claim tax deduction on principal loan repayments made to banks and financial institutions.', limitText: '₹1,50,000 / year', colorClass: 'text-emerald-300' },
+];
+
+const caseStudies = [
+  {
+    title: '₹50 Lakh Property (20% Down Payment)',
+    tag: '20 Yrs @ 8.5%',
+    subtitle: 'Standard Apartment',
+    metrics: [
+      { label: 'Upfront Down Payment (20%)', value: '₹10,00,000', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Loan Principal (P)', value: '₹40,00,000' },
+      { label: 'Monthly Home Loan EMI', value: '₹34,713 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Total Interest Payable', value: '₹43,31,120', colorClass: 'text-semantic-warning font-bold' },
+      { label: 'Total Ownership Outgo', value: '₹96,51,120', colorClass: 'text-ink font-bold' },
+    ],
+    takeaway: 'Total interest (₹43.31L) exceeds original principal (₹40L). Adding 5% extra down payment saves ₹5.41L in interest!',
+  },
+  {
+    title: '₹1.2 Crore Villa (25% Down Payment)',
+    tag: '25 Yrs @ 8.5%',
+    subtitle: 'Executive Villa',
+    metrics: [
+      { label: 'Upfront Down Payment (25%)', value: '₹30,00,000', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Loan Principal (P)', value: '₹90,00,000' },
+      { label: 'Monthly Home Loan EMI', value: '₹72,471 / mo', colorClass: 'text-accent-sky font-bold' },
+      { label: 'Total Interest Payable', value: '₹1,27,41,300', colorClass: 'text-semantic-warning font-bold' },
+      { label: 'Total Ownership Outgo', value: '₹2,55,13,300', colorClass: 'text-ink font-bold' },
+    ],
+    takeaway: 'Over a 25-year duration, total interest payable (₹1.27 Cr) surpasses original property price (₹1.2 Cr).',
+  },
+];
+
+const comparisonData = {
+  title: '15-Year vs. 30-Year Home Loan Comparison',
+  subtitle: 'Evaluating the tradeoff between lower monthly EMI vs massive interest savings',
+  optionA: {
+    badge: 'HIGH SAVINGS OPTION',
+    title: '15-Year Home Loan',
+    items: [
+      { isPositive: true, text: 'Monthly EMI: Slightly higher monthly installment (~20% higher than 30-year EMI).' },
+      { isPositive: true, text: 'Total Interest Paid: Over 60% lower cumulative interest burden over the loan life.' },
+      { isPositive: true, text: 'Equity Building: Build 100% home equity in half the time, unlocking mortgage freedom faster.' },
+    ],
+  },
+  optionB: {
+    badge: 'LOWER MONTHLY EMI',
+    title: '30-Year Home Loan',
+    items: [
+      { isPositive: false, text: 'Monthly EMI: Minimum required monthly EMI outflow for maximum income eligibility.' },
+      { isPositive: false, text: 'Total Interest Paid: Cumulative interest equals 1.5x to 2x the original principal borrowed.' },
+      { isPositive: false, text: 'Prepayment Strategy: Ideal only if you make regular partial prepayments to cut tenure.' },
+    ],
+  },
+};
+
+const strategies = [
+  { number: '01', title: 'Aim for 20%–25% Down Payment', description: 'Paying a higher upfront down payment reduces principal (P), cuts interest outgo, and avoids costly lender risk surcharges.' },
+  { number: '02', title: 'Make 1 Extra EMI Prepayment Annually', description: 'Prepaying 1 extra EMI every year (or 10% principal prepayments) reduces a 20-year home loan tenure by nearly 4 years.' },
+  { number: '03', title: 'Maintain 750+ CIBIL Score', description: 'Top tier credit scores qualify for special interest rate concessions (up to 0.5% lower rate), saving lakhs over multi-decade tenures.' },
+  { number: '04', title: 'Co-Apply with Spouse for Double Tax Relief', description: 'Joint home loans allow co-borrowers to each claim up to ₹2L (Sec 24b) and ₹1.5L (Sec 80C), doubling total household tax savings to ₹7L/year.' },
+  { number: '05', title: 'Include Stamp Duty in TCO Budget', description: 'Always budget 5%–7% for stamp duty, registration, GST, and legal fees to prevent cash crunch during property registration.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  taxProvisions={taxProvisions}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+  strategies={strategies}
+>
+  <HomeLoanCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

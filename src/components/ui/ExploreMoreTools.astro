@@ -1,0 +1,42 @@
+---
+export interface Props {
+  category?: string;
+}
+
+const { category = 'loans' } = Astro.props;
+
+const categories = [
+  { name: 'Loans & EMI', slug: 'loans', icon: '🏦' },
+  { name: 'Investments & SIP', slug: 'investment', icon: '📈' },
+  { name: 'Tax & Income', slug: 'tax', icon: '🧾' },
+  { name: 'Retirement & FIRE', slug: 'retirement', icon: '🌴' },
+];
+---
+
+<div class="p-6 sm:p-8 rounded-3xl bg-surface-strong border border-hairline space-y-4 shadow-soft">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <div>
+      <span class="text-[11px] font-mono font-bold text-muted uppercase tracking-wider block">Zero Dead Ends</span>
+      <h4 class="text-lg font-bold font-heading text-ink">Explore Other Financial Decision Silos</h4>
+    </div>
+    <a href="/tools/" class="text-xs font-mono font-bold text-primary hover:underline">
+      View All 194+ Calculators →
+    </a>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    {categories.map((c) => (
+      <a
+        href={`/tools/${c.slug}/`}
+        class={`p-4 rounded-2xl border text-center transition-all shadow-sm block group ${
+          c.slug === category
+            ? 'bg-primary text-white border-primary'
+            : 'bg-canvas hover:bg-surface-soft border-hairline text-ink'
+        }`}
+      >
+        <span class="text-2xl block mb-1" aria-hidden="true">{c.icon}</span>
+        <span class="text-xs font-bold font-heading block group-hover:scale-105 transition-transform">{c.name}</span>
+      </a>
+    ))}
+  </div>
+</div>

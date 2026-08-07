@@ -1,4 +1,4 @@
-# FinTool Master Product Quality Standard & Release Playbook
+# Fintools Find Master Product Quality Standard & Release Playbook
 
 **Document Version**: 1.0.0  
 **Authority Level**: Highest Internal Authority for Release Gate Approval  
@@ -9,7 +9,7 @@
 
 ## 1. Product Philosophy & Core Tenets
 
-FinTool exists to eliminate financial anxiety and replace it with absolute clarity, delight, and decision confidence.
+Fintools Find exists to eliminate financial anxiety and replace it with absolute clarity, delight, and decision confidence.
 
 ### What Makes a Calculator Feel Premium?
 1. **Instant Response Physics**: Sliders, preset chips, and input fields calculate instantly without network latency or UI lag.

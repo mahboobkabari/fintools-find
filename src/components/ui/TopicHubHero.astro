@@ -1,0 +1,32 @@
+---
+export interface Props {
+  title: string;
+  heroSubtitle: string;
+  category: string;
+}
+
+const { title, heroSubtitle, category } = Astro.props;
+---
+
+<header class="space-y-4 text-center max-w-4xl mx-auto">
+  <div class="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-primary/10 border border-primary/20 text-xs font-mono text-primary font-bold">
+    <span>🌐</span>
+    <span class="uppercase tracking-wider">{category} Topic Authority Hub</span>
+  </div>
+
+  <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-ink leading-tight">
+    {title}
+  </h1>
+
+  <p class="text-sm sm:text-base text-body leading-relaxed max-w-3xl mx-auto">
+    {heroSubtitle}
+  </p>
+
+  <div class="pt-2 flex items-center justify-center gap-4 text-xs font-semibold text-muted flex-wrap">
+    <span class="flex items-center gap-1"><span class="text-emerald-500">✓</span> Institutional Math Engines</span>
+    <span>•</span>
+    <span class="flex items-center gap-1"><span class="text-emerald-500">✓</span> CFP Reviewed Guides</span>
+    <span>•</span>
+    <span class="flex items-center gap-1"><span class="text-emerald-500">✓</span> Side-by-Side Tradeoffs</span>
+  </div>
+</header>

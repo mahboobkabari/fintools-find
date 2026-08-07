@@ -37,7 +37,7 @@ calculatorModule: "retirement/pension-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations execute actuarial annuity payout formulations and insurer guaranteed rate tables."
   dataSources:
     - "Society of Actuaries (SOA) Annuity Valuation & Mortality Tables"

@@ -1,0 +1,33 @@
+---
+export interface Props {
+  terms: Array<{
+    term: string;
+    definition: string;
+  }>;
+}
+
+const { terms } = Astro.props;
+---
+
+{terms && terms.length > 0 && (
+  <div class="p-6 sm:p-8 rounded-3xl bg-surface-strong border border-hairline space-y-5 shadow-soft">
+    <div class="flex items-center justify-between border-b border-hairline pb-4 flex-wrap gap-2">
+      <div>
+        <h3 class="text-xl font-bold font-heading text-ink">Key Financial Terms & Glossary</h3>
+        <p class="text-xs text-muted mt-1">Essential definitions to understand before making financial commitments.</p>
+      </div>
+      <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-xl border border-primary/20">
+        Glossary Preview
+      </span>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {terms.map((item) => (
+        <div class="p-4 rounded-2xl bg-canvas border border-hairline space-y-1.5 shadow-sm">
+          <h4 class="font-bold text-sm font-heading text-primary">{item.term}</h4>
+          <p class="text-xs text-body leading-relaxed">{item.definition}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

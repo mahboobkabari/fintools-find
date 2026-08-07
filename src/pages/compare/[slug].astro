@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import ComparisonPageLayout from '@components/content/ComparisonPageLayout.astro';
+
+export async function getStaticPaths() {
+  const comparisons = await getCollection('comparisons');
+  return comparisons.map((entry) => {
+    const slug = entry.slug || entry.data.slug || entry.id;
+    return {
+      params: { slug },
+      props: { entry, slug },
+    };
+  });
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await entry.render();
+const data = entry.data;
+---
+
+<ComparisonPageLayout data={data} slug={slug}>
+  <Content />
+</ComparisonPageLayout>

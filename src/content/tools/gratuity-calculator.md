@@ -38,7 +38,7 @@ calculatorModule: "retirement/gratuity-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute official Payment of Gratuity Act, 1972 Section 4 formulation and Section 10(10) income tax exemption rules."
   dataSources:
     - "Ministry of Labour & Employment, Government of India (Payment of Gratuity Act Rules)"

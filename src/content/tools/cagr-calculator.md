@@ -30,7 +30,7 @@ calculatorModule: "investment/cagr-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute standard geometric mean CAGR formulations."
   dataSources:
     - "SEBI Performance Metric Regulations"

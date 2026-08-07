@@ -31,7 +31,7 @@ calculatorModule: "investment/swp-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
-  reviewedBy: "FinTool Engineering & Quant Team"
+  reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations simulate monthly unit redemptions while remaining corpus units compound at monthly compounding rates."
   dataSources:
     - "AMFI India Systematic Withdrawal Plan (SWP) Framework"

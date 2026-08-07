@@ -141,24 +141,25 @@ Strict 4px/8px grid system for container margins, paddings, and card gaps:
 
 ## 9. Component Registry & Reusability Rules
 
-### Core Design System Components
-1. **Hero Header Component**: Compact title + pill metadata trust badges.
-2. **One-Tap Scenario Preset Card**: Selectable 1-click preset benchmark cards.
-3. **Interactive Slider & Input Component**: Custom gradient fill track + formatted input box.
-4. **Mega Result Dashboard**: Gradient hero EMI display + 3 companion KPI cards.
-5. **Vector SVG Donut Chart (`EmiDonutChart`)**: Real-time principal vs interest visual ring.
-6. **Prepayment Savings Coach Card**: Intelligent advice displaying interest/tenure saved.
-7. **Affordability Gauge (FOIR Engine)**: SVG circular gauge with Safe/Caution/Stress badges.
-8. **Dynamic Financial Intelligence Cards**: Rate sensitivity, interest multiplier, and tenure tradeoff cards.
-9. **Process Architecture Timeline**: 4-step icon-driven repayment lifecycle.
-10. **Use Case Persona Cards**: Target borrower cards (Home, Car, Personal, Education).
-11. **Worked Case Study Cards**: Side-by-side practical calculation examples.
-12. **Comparison Cards**: Reducing Balance vs Flat Rate comparison panels.
-13. **Formula Component**: Dark LaTeX math block with parameter cards ($P$, $r$, $n$).
-14. **Statutory Tax Relief Callout Cards**: Glassmorphism tax deduction blocks.
-15. **Common Mistakes Warning Cards**: Amber alert blocks.
-16. **WCAG AA FAQ Accordion (`FaqAccordion`)**: Preact accordion with full ARIA bindings.
-17. **Tool Hub Cards (`RelatedTools`)**: Grid of related calculator links.
+### Core Design System Components & Shared Framework
+1. **Declarative Flagship Layout Presenter (`FlagshipLayout.astro`)**: Master Astro layout presenter rendering standard 17-section flagship page hierarchy from configuration.
+2. **Universal Preact URL Sync Hook (`useUrlSync.js`)**: Universal Preact hook for client-side query parameter hydration on mount and real-time state synchronization via `history.replaceState`.
+3. **Synchronized Form Input & Slider (`FormInputNumber.jsx`)**: Universal input control combining numeric field, range slider, gradient track fills, and ARIA bindings.
+4. **Universal Configuration-Driven Result Engine (`ResultDashboard.jsx`)**: Mega KPI display + companion metric grid driven entirely by configuration objects (`label`, `value`, `subtitle`, `trend`, `format`).
+5. **Universal Comparison Framework (`ComparisonCard.jsx`)**: 2-column or 3-column side-by-side scenario comparison card supporting winner highlights and percentage delta badges.
+6. **Universal Cost & Financial Breakdown Card (`CostBreakdownCard.jsx`)**: Itemized financial outlay/component breakdown card with progress fill tracks and percentage share indicators.
+7. **Vector SVG Donut Chart (`ResultDonutChart.jsx`)**: Real-time principal vs interest visual ring.
+8. **One-Tap Scenario Preset Card (`ScenarioPresetCards.jsx`)**: Selectable 1-click preset benchmark cards.
+9. **Financial Health & FOIR Gauge (`FinancialHealthGauge.jsx`)**: Circular SVG debt commitment gauge with Safe/Caution/Stress badges.
+10. **Universal Recommendation Engine (`RecommendationCard.jsx`)**: Intelligent advice card rendering structured recommendation objects (`title`, `description`, `metrics`, `savingsAmount`).
+11. **Universal Insight Engine (`InsightCard.jsx`)**: Financial intelligence and multiplier cards rendering structured math engine insight arrays.
+12. **Share Actions Component (`ShareActions.jsx`)**: Parameter-encoded URL clipboard copy and calculator reset action buttons with toast feedback.
+13. **Process Architecture Timeline (`TimelineSection.astro`)**: 4-step icon-driven repayment/investment lifecycle.
+14. **Use Case Persona Grid (`PersonaGrid.astro`)**: Target borrower & investor persona cards.
+15. **Mathematical Engine Formula (`FormulaCard.astro`)**: LaTeX math block with parameter cards ($P$, $r$, $n$, $V$, $DP$).
+16. **Statutory Tax Relief Callout (`TaxReliefCard.astro`)**: Glassmorphism tax deduction callout blocks (Section 80C / 24b).
+17. **WCAG AA FAQ Accordion (`FAQAccordion.jsx`)**: Interactive Preact accordion with full ARIA bindings.
+18. **Tool Hub Cards (`RelatedTools.astro`)**: Grid of related calculator links.
 
 ---
 
@@ -173,9 +174,11 @@ Strict 4px/8px grid system for container margins, paddings, and card gaps:
 
 ## 11. Strict Naming Conventions
 
-- **Component Filenames**: PascalCase (e.g. `EmiFlagshipWidget.jsx`, `EmiDonutChart.jsx`).
+- **Component Filenames**: PascalCase (e.g. `EmiFlagshipWidget.jsx`, `FormInputNumber.jsx`).
 - **CSS Utility Classes**: Tailwind semantic classes (`bg-canvas`, `border-hairline`, `text-ink`, `text-body`, `text-muted`).
 - **Folder Organization**:
+  - `src/components/ui/` — Universal shared UI components reusable across 10+ calculators.
+  - `src/components/hooks/` — Universal Preact hooks for URL sync and client state.
   - `src/components/calculators/primitives/` — Reusable interactive Preact widgets & charts.
   - `src/components/content/` — Flagship Astro page layout presenters.
   - `src/calculators/core/` — Pure JavaScript mathematical calculation engines.
@@ -184,6 +187,9 @@ Strict 4px/8px grid system for container margins, paddings, and card gaps:
 
 ## 12. Permanent Governance Rules
 
-1. **Mandatory Reuse First**: Before creating any new component for future calculators, developers MUST inspect `DESIGN_SYSTEM.md` and reuse existing primitive components (`FormInputNumber`, `EmiDonutChart`, `FaqAccordion`, `AmortizationTable`).
-2. **Zero Formula & Math Modifications**: Calculation engines must remain decoupled from presentation components.
-3. **Strict Quality Gate**: Every new calculator adoption must pass `astro check`, `vitest run`, and `astro build` with 0 errors.
+1. **The 10-Calculator Reusability Rule**: Every component in `src/components/ui/` or `src/components/hooks/` MUST be generic and realistically reusable by at least 10 future calculators. Calculator-specific code must stay inside local feature widgets.
+2. **Decoupled Financial Reasoning**: Math engines under `src/calculators/` generate pure data, structured recommendations, and insights. UI components only present data without mixing calculation logic.
+3. **Mandatory Reuse First**: Before building any new component for future calculators (#4 to #194), developers MUST inspect `DESIGN_SYSTEM.md` and reuse existing shared primitives (`FormInputNumber`, `ResultDashboard`, `ComparisonCard`, `CostBreakdownCard`, `useUrlSync`).
+4. **Zero Formula & Math Modifications**: Calculation engines must remain decoupled from presentation components.
+5. **Strict Quality Gate**: Every new calculator adoption must pass `vitest run` and `npm run build` with 0 errors.
+

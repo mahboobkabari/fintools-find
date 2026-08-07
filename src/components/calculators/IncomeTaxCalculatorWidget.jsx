@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { incomeTaxCalculatorConfig } from '../../calculators/configs/income-tax-calculator.config.js';
+import IncomeTaxFlagshipWidget from './primitives/IncomeTaxFlagshipWidget';
 
 export default function IncomeTaxCalculatorWidget() {
-  return <UniversalCalculatorWidget config={incomeTaxCalculatorConfig} />;
+  return <IncomeTaxFlagshipWidget />;
 }
