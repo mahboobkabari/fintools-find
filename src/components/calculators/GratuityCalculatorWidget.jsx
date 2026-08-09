@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { gratuityCalculatorConfig } from '../../calculators/configs/gratuity-calculator.config.js';
+import GratuityFlagshipWidget from './primitives/GratuityFlagshipWidget';
 
-export default function GratuityCalculatorWidget() {
-  return <UniversalCalculatorWidget config={gratuityCalculatorConfig} />;
+export default function GratuityCalculatorWidget(props) {
+  return <GratuityFlagshipWidget {...props} />;
 }

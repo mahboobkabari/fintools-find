@@ -1,0 +1,99 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import FireCalculatorWidget from '../calculators/FireCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Aggressive Accumulation Phase', description: 'Maintain high savings rate (50%+) into index funds, equity mutual funds, and EPF to build core capital.' },
+  { stepNumber: '02', title: 'Coast FIRE Milestone', description: 'Reach the lump-sum tipping point where existing investments passively grow to standard retirement target without additional savings.' },
+  { stepNumber: '03', title: 'Financial Independence Day', description: 'Accumulate target FIRE corpus (25x to 33x future annual expenses) and achieve voluntary employment freedom.' },
+  { stepNumber: '04', title: 'Post-FIRE SWP Drawdown Strategy', description: 'Initiate 3.5%–4.0% Systematic Withdrawal Plan (SWP) with 3-year cash bucket buffer for sequence-of-returns protection.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Early FIRE Seekers (Age 25–35)', description: 'Targeting retirement by age 40–45. Maximizing monthly savings rate to compress 30 years of wealth accumulation into 15 years.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Coast FIRE Achievers', description: 'Building a core lump-sum in their 20s or 30s so compound growth handles age-60 retirement, freeing them to pursue lower-stress careers.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Lean FIRE Minimalists', description: 'Optimizing for frugal living (75% expenses) to reach financial independence rapidly on a smaller target corpus.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Fat FIRE & Barista FIRE Planners', description: 'Building a luxury cushion (150% expenses) or transitioning into part-time/side-gig consulting to supplement monthly withdrawals.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Inflation-Adjusted FIRE Corpus & SWR Formula',
+  formula: 'F_{\\text{corpus}} = \\frac{E_{\\text{current}} \\times (1 + i)^y}{\\text{SWR}} = E_{\\text{future}} \\times \\left(\\frac{100}{\\text{SWR}}\\right)',
+  parameters: [
+    { symbol: 'F_corpus', title: 'Target FIRE Corpus', description: 'Total capital nest egg required to trigger financial independence.', colorClass: 'text-primary' },
+    { symbol: 'E_current', title: 'Current Annual Expense', description: 'Baseline annual living expenses today (Monthly Expenses × 12).', colorClass: 'text-accent-amber' },
+    { symbol: 'i', title: 'Inflation Rate', description: 'Expected annual CPI inflation rate (% p.a., default 6%).', colorClass: 'text-accent-sky' },
+    { symbol: 'y', title: 'Years to FIRE', description: 'Target FIRE Age minus Current Age (Years).', colorClass: 'text-semantic-success' },
+    { symbol: 'SWR', title: 'Safe Withdrawal Rate', description: 'Annual withdrawal rate (% p.a., 4.0% SWR = 25x multiplier).', colorClass: 'text-purple-600' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Age 30 Professional (₹60k/mo Expenses Targeting FIRE at 45)',
+    tag: '15 Yrs Accumulation',
+    subtitle: 'Standard FIRE Strategy',
+    metrics: [
+      { label: 'Target FIRE Age', value: '45 Years' },
+      { label: 'Future Monthly Expense (Age 45)', value: '₹1,43,793 / mo' },
+      { label: 'Standard FIRE Corpus Required', value: '₹4.31 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Lean FIRE Corpus (75%)', value: '₹3.23 Crores', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Saving ₹40,000/month from age 30 alongside an existing ₹10 Lakh corpus reaches Standard FIRE by age 45.',
+  },
+  {
+    title: 'Age 28 Coast FIRE Strategist (₹50k/mo Expenses)',
+    tag: 'Coast FIRE Tipping Point',
+    subtitle: 'Passive Compounding',
+    metrics: [
+      { label: 'Current Existing Corpus', value: '₹25.0 Lakhs' },
+      { label: 'Coast FIRE Target Today', value: '₹21.4 Lakhs', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Age 60 Projected Corpus', value: '₹7.18 Crores' },
+      { label: 'Future Monthly SIP Needed', value: '₹0 / mo (Coast Status Achieved!)', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Accumulating ₹25 Lakhs by age 28 allows passive compounding to cover retirement at age 60 without further SIP contributions.',
+  },
+];
+
+const comparisonData = {
+  title: 'Standard FIRE (100% Lifestyle) vs. Lean FIRE (75% Minimalist) Comparison',
+  subtitle: 'Evaluating the tradeoff between rapid early retirement and lifestyle expense cushion',
+  optionA: {
+    badge: 'RAPID EXECUTION',
+    title: 'Lean FIRE (75% Expenses)',
+    items: [
+      { isPositive: true, text: '25% Smaller Corpus Needed: Requires only 18.75x future annual expenses.' },
+      { isPositive: true, text: '3-5 Years Faster FIRE Date: Achieves financial independence significantly earlier.' },
+      { isPositive: false, text: 'Minimalist Cushion: Requires disciplined frugal spending during post-retirement years.' },
+    ],
+  },
+  optionB: {
+    badge: 'BALANCED BENCHMARK',
+    title: 'Standard FIRE (100% Expenses)',
+    items: [
+      { isPositive: true, text: 'Full Lifestyle Cover: Maintains 100% of baseline living standards and upgrades.' },
+      { isPositive: true, text: 'Safety Margin: Higher buffer against inflation and unexpected medical spending.' },
+      { isPositive: false, text: 'Larger Corpus Target: Requires 25x future annual expenses (4.0% SWR).' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <FireCalculatorWidget client:visible />
+</FlagshipLayout>

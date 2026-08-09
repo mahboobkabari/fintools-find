@@ -1,0 +1,155 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import SwpCalculatorWidget from '../calculators/SwpCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Lump-Sum Corpus Capital Allocation',
+    description: 'Invest your initial capital corpus (e.g. ₹50 Lakhs to ₹2 Crores) into a well-diversified equity, hybrid, or debt mutual fund scheme.',
+  },
+  {
+    stepNumber: '02',
+    title: 'SWP Monthly Cash Payout Setup',
+    description: 'Set up an automated monthly Systematic Withdrawal Plan (SWP) payout date to receive regular income directly into your bank account.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Tax-Efficient Unit Redemption',
+    description: 'Mutual fund units are redeemed proportionately. Only the capital gains portion is taxed under Finance Act 2024 rules (12.5% LTCG u/s 112A).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Continuous Portfolio Growth & Monitoring',
+    description: 'Your unredeemed balance continues compounding in the market, extending portfolio longevity and offsetting annual inflation.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Retirees & Pensioners',
+    description: 'Replacing monthly salary with predictable, regular income streams from accumulated mutual fund wealth.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'FIRE Community & Early Retirees',
+    description: 'Executing sustainable 3% to 4% withdrawal rate strategies across 25 to 35-year retirement horizons.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'High-Net-Worth Individuals (HNIs)',
+    description: 'Generating tax-efficient monthly income without triggering high income tax slab rates associated with FD interest.',
+    bgClass: 'bg-sky-50',
+    textClass: 'text-accent-sky',
+  },
+  {
+    title: 'Conservative Income Seekers',
+    description: 'Setting up fixed monthly payouts from debt-oriented hybrid funds for capital preservation and volatility protection.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'SWP Monthly Compounding & Payout Formula',
+  formula: 'B_m = \\left( B_{m-1} \\times \\left(1 + \\frac{R}{12 \\times 100}\\right) \\right) - W_m',
+  parameters: [
+    {
+      symbol: 'B_{m-1}',
+      title: 'Opening Monthly Balance',
+      description: 'Remaining mutual fund portfolio corpus at the start of month m.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'R',
+      title: 'Annual Return Rate',
+      description: 'Expected annual investment return percentage (% p.a.).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'W_m',
+      title: 'Monthly Withdrawal Payout',
+      description: 'Cash amount withdrawn into bank account (fixed or inflation-adjusted).',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: 'B_m',
+      title: 'Closing Monthly Balance',
+      description: 'Net portfolio balance after monthly compounding growth and payout deduction.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Retiree Case Study: ₹1.0 Crore Corpus (₹50,000/mo Payout, 10% Return)',
+    tag: 'Sustainable Income',
+    subtitle: 'Standard SWP Plan',
+    metrics: [
+      { label: 'Initial Investment Corpus', value: '₹1.00 Crore', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Cash Withdrawal', value: '₹50,000 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Total Withdrawn over 10 Years', value: '₹60.0 Lakhs' },
+      { label: 'Projected Remaining Corpus (Yr 10)', value: '₹1.37 Crores', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Because a 10% annual return generates ~₹10 Lakhs in annual interest while withdrawals total ₹6 Lakhs/year, the portfolio grows to ₹1.37 Crores even after paying ₹60 Lakhs in monthly income!',
+  },
+  {
+    title: 'Early Retirement Case Study: ₹1.5 Crore Corpus (6% Inflation Protection)',
+    tag: 'Inflation-Adjusted',
+    subtitle: 'FIRE Strategy',
+    metrics: [
+      { label: 'Initial Investment Corpus', value: '₹1.50 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Initial Monthly Withdrawal (Yr 1)', value: '₹60,000 / mo' },
+      { label: 'Step-Up Monthly Withdrawal (Yr 10)', value: '₹1.01 Lakhs / mo', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Projected Longevity Horizon', value: '>30 Years', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Enabling a 6% annual inflation step-up increases monthly income from ₹60,000 to ₹1,01,366 by Year 10, protecting real purchasing power throughout retirement.',
+  },
+];
+
+const comparisonData = {
+  title: 'Mutual Fund SWP vs. Bank Fixed Deposit (FD) Monthly Interest',
+  subtitle: 'Comparing cash flow efficiency, taxation, and long-term capital sustainability',
+  optionA: {
+    badge: 'TAX EFFICIENT & GROWING',
+    title: 'Mutual Fund SWP',
+    items: [
+      { isPositive: true, text: 'Superior Tax Efficiency: Taxed only on profit component of redeemed units (12.5% LTCG u/s 112A).' },
+      { isPositive: true, text: 'Capital Growth Potential: Unredeemed balance continues compounding in market instruments.' },
+      { isPositive: true, text: 'Zero TDS: No Tax Deducted at Source (TDS) on domestic resident SWP redemptions.' },
+    ],
+  },
+  optionB: {
+    badge: 'SLAB TAXED & FIXED',
+    title: 'Bank FD Monthly Interest',
+    items: [
+      { isPositive: false, text: '100% Taxable: Entire monthly interest payout taxed as normal income at slab rates (up to 30%+).' },
+      { isPositive: false, text: 'Capital Erosion: Fixed principal value suffers purchasing power loss due to inflation.' },
+      { isPositive: false, text: 'Mandatory TDS: Banks automatically deduct 10% TDS if annual interest exceeds threshold.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <SwpCalculatorWidget client:visible />
+</FlagshipLayout>

@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { stepUpSipCalculatorConfig } from '../../calculators/configs/step-up-sip-calculator.config.js';
+import StepUpSipFlagshipWidget from './primitives/StepUpSipFlagshipWidget';
 
-export default function StepUpSipCalculatorWidget() {
-  return <UniversalCalculatorWidget config={stepUpSipCalculatorConfig} />;
+export default function StepUpSipCalculatorWidget(props) {
+  return <StepUpSipFlagshipWidget {...props} />;
 }

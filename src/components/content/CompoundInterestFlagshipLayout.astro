@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CompoundInterestCalculatorWidget from '../calculators/CompoundInterestCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Initial Principal Investment',
+    description: 'Enter your starting lump sum deposit amount (e.g., ₹1,00,000 or $10,000).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Specify Additional Monthly Contribution',
+    description: 'Add regular monthly deposits to accelerate compound growth over time.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Choose Interest Rate & Compounding Frequency',
+    description: 'Select annual nominal interest rate and compounding frequency (Daily, Monthly, Quarterly, Semi-Annually, or Annually).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Analyze Final Corpus, EAR & Real Value',
+    description: 'Instantly view your accumulated maturity corpus, Effective Annual Rate (EAR / APY), and inflation-adjusted real purchasing power.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Long-Term Investors & Wealth Accumulators',
+    description: 'Investors modeling exponential compound growth across multi-year wealth building horizons.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Bank Fixed Deposit & Savings Account Depositors',
+    description: 'Savers comparing nominal bank rates against true Effective Annual Rates (EAR) across daily/quarterly compounding.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'SIP & Mutual Fund Investors',
+    description: 'Systematic investors evaluating the compounding snowball effect of combining lump sums with recurring monthly deposits.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Financial Planning & Education Seekers',
+    description: 'Students, analysts, and planners studying the mathematical mechanics of compound interest formulas.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Multi-Frequency Compound Interest & EAR Formulas',
+  formula: 'A = P \\left(1 + \\frac{r}{n}\\right)^{n t} + PMT \\left[ \\frac{\\left(1 + \\frac{r}{n}\\right)^{n t} - 1}{\\left(1 + \\frac{r}{n}\\right)^{n/12} - 1} \\right], \\quad \\text{EAR} = \\left(1 + \\frac{r}{n}\\right)^n - 1',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Initial Principal Investment',
+      description: 'Starting lump sum deposit amount at Year 0.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'PMT',
+      title: 'Additional Monthly Deposit',
+      description: 'Recurring monthly contribution added every month.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'n',
+      title: 'Compounding Frequency per Year',
+      description: 'Number of times interest compounds per year (Daily: 365, Monthly: 12, Quarterly: 4, Semi-Annual: 2, Annual: 1).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{EAR}',
+      title: 'Effective Annual Rate (APY)',
+      description: 'The true effective annual yield realized after accounting for intra-year compounding frequencies.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Lumpsum + Monthly SIP (₹1 Lakh + ₹5,000/mo @ 12% p.a., 10 Yrs)',
+    tag: 'Wealth Accelerator Scenario',
+    subtitle: 'Standard 10-Year Equity Compounding',
+    metrics: [
+      { label: 'Initial Principal', value: '₹100,000', colorClass: 'text-primary font-bold' },
+      { label: 'Total Deposits Paid', value: '₹600,000', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Total Invested Capital', value: '₹700,000', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Final Accumulated Corpus', value: '₹1,440,940', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Combining an initial principal of ₹1,00,000 with a monthly contribution of ₹5,000 at 12% p.a. over 10 years turns a total invested capital of ₹7,00,000 into a final corpus of ₹14,40,940 (generating ₹7,40,940 in pure compound interest).',
+  },
+  {
+    title: 'Benchmark Case Study: Compounding Frequency Impact (₹5 Lakhs @ 10% p.a., 10 Yrs)',
+    tag: 'Compounding Frequency Benchmark',
+    subtitle: 'Annual vs Monthly vs Daily Compounding',
+    metrics: [
+      { label: 'Annual Compounding (1/yr)', value: '₹1,296,871', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Quarterly Compounding (4/yr)', value: '₹1,342,532', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Monthly Compounding (12/yr)', value: '₹1,353,521', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Daily Compounding (365/yr)', value: '₹1,358,955', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Higher compounding frequencies generate higher returns due to continuous interest-on-interest. Daily compounding yields ₹62,084 extra over annual compounding on a ₹5 Lakh principal over 10 years.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <CompoundInterestCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

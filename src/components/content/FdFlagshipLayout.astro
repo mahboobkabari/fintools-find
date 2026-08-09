@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import FdCalculatorWidget from '../calculators/FdCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Principal Deposit & Select Payout Frequency',
+    description: 'Specify your initial principal deposit amount and choose between Cumulative (quarterly compounding) or Periodic (Monthly/Quarterly income payout).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Interest Rate & Audit Senior Citizen Bonus',
+    description: 'Enter your bank FD interest rate and toggle Senior Citizen status for an instant +0.50% p.a. rate boost.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Section 194A Statutory TDS Tax Deductions',
+    description: 'Review statutory TDS threshold limits (₹40,000 general / ₹50,000 senior citizen cap) and verify 10% vs 20% PAN rates.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Evaluate Net Post-Tax Yield & Accumulation Schedule',
+    description: 'Review year-by-year maturity growth, net yield after your marginal income tax slab, and side-by-side scenario matrix.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Risk-Averse Fixed-Income Savers',
+    description: 'Individuals seeking guaranteed capital protection and predictable fixed-rate returns backed by bank deposit insurance.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Senior Citizen Investors',
+    description: 'Retirees leveraging the +0.50% rate bonus and higher ₹50,000 Section 194A TDS exemption threshold.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+  {
+    title: 'Monthly Cash-Flow Seekers',
+    description: 'Investors structuring monthly or quarterly interest payouts to supplement regular living expenses.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Section 80C Tax Optimizers',
+    description: 'Taxpayers locking funds in 5-year tax-saver fixed deposits to claim up to ₹1.5 Lakhs tax deduction.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Fixed Deposit Compounding & TDS Formulas',
+  formula: 'A = P \\left(1 + \\frac{r/100}{4}\\right)^{4t}, \\quad \\text{TDS} = \\begin{cases} \\text{Interest} \\times 10\\%, & \\text{if Interest} > \\text{Threshold} \\text{ (with PAN)} \\\\ \\text{Interest} \\times 20\\%, & \\text{if Interest} > \\text{Threshold} \\text{ (without PAN)} \\end{cases}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Principal Deposit Amount',
+      description: 'Initial lump sum funds invested into the fixed deposit.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Annual Interest Rate (% p.a.)',
+      description: 'Base bank FD rate (+0.50% for senior citizens).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 't',
+      title: 'Deposit Tenure (Years)',
+      description: 'Investment duration in years or converted months/days.',
+      colorClass: 'text-blue-600',
+    },
+    {
+      symbol: '\\text{Threshold}',
+      title: 'Section 194A TDS Limit',
+      description: 'Statutory threshold (₹40,000 for general public / ₹50,000 for senior citizens).',
+      colorClass: 'text-semantic-warning',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹5,000,000 Senior Citizen Deposit (3-Year @ 7.5% p.a.)',
+    tag: 'Senior Citizen FD',
+    subtitle: 'Maximized Interest Yield with Senior Bonus',
+    metrics: [
+      { label: 'Principal Deposit', value: '₹500,000', colorClass: 'text-primary font-bold' },
+      { label: 'Effective Rate', value: '7.50% p.a.', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Cumulative Interest', value: '₹124,858', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Maturity Value', value: '₹624,858', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Senior citizen bonus (+0.50%) generates an additional ₹12,000+ in interest earnings while taking advantage of the higher ₹50,000 TDS exemption threshold.',
+  },
+  {
+    title: 'Benchmark Case Study: ₹1,000,000 Monthly Income Deposit (3-Year @ 7.0% p.a.)',
+    tag: 'Monthly Income FD',
+    subtitle: 'Guaranteed Cash Flow Payout',
+    metrics: [
+      { label: 'Principal Deposit', value: '₹1,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Interest Payout', value: '₹5,833/mo', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Total 3-Year Interest', value: '₹210,000', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Maturity Principal', value: '₹1,000,000', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Monthly income payout provides ₹5,833 in predictable monthly cash flow without eroding the original ₹10,000,000 principal balance.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <FdCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

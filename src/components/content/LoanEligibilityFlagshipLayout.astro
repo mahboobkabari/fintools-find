@@ -1,0 +1,155 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import LoanEligibilityCalculatorWidget from '../calculators/LoanEligibilityCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Income & Co-Applicant Financial Profiling',
+    description: 'Input primary gross monthly salary along with optional co-applicant (spouse/parent) income to establish total household borrowing base.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Existing EMI Obligation Audit',
+    description: 'Account for current ongoing monthly EMIs (car loans, credit cards, personal loans) that reduce your net monthly borrowing headroom.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Lender FOIR & Statutory LTV Underwriting Check',
+    description: 'Apply illustrative lender Fixed Obligation to Income Ratio (FOIR 40%–60%) and statutory RBI Loan-to-Value (LTV 75%–90%) ceilings.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Decision Capacity & Repayment Health Matrix',
+    description: 'Evaluate estimated maximum loan principal, available EMI capacity, multi-tenure tradeoffs (10Y to 30Y), and borrowing health scores.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'First-Time Home Buyers',
+    description: 'Calculating maximum home loan borrowing limit before property hunting and avoiding hard credit inquiry loan rejections.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Joint Household Applicants',
+    description: 'Pooling spouse or parent income to significantly expand borrowing power for higher-value residential real estate.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Salaried Personal Loan Applicants',
+    description: 'Determining unsecured borrowing capacity for emergency or debt consolidation needs within 1 to 5-year repayment limits.',
+    bgClass: 'bg-sky-50',
+    textClass: 'text-accent-sky',
+  },
+  {
+    title: 'Debt Prepayment Strategists',
+    description: 'Analyzing how prepaying high-cost existing EMIs unlocks maximum new loan eligibility without increasing overall debt burden.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Loan Eligibility Reverse-PMT Present Value Formula',
+  formula: 'P_{max} = E_{avail} \\times \\left[ \\frac{(1 + r_m)^N - 1}{r_m (1 + r_m)^N} \\right]',
+  parameters: [
+    {
+      symbol: 'E_{avail}',
+      title: 'Available Monthly EMI Capacity',
+      description: '(Total Monthly Income × Assumed FOIR %) - Existing Monthly EMIs.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r_m',
+      title: 'Effective Monthly Interest Rate',
+      description: '(Base Annual Rate + Credit Profile Markup) / 12 / 100.',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'N',
+      title: 'Total Loan Tenure in Months',
+      description: 'Tenure in Years × 12 (capped by loan category limits).',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: 'P_{max}',
+      title: 'Estimated Maximum Loan Principal',
+      description: 'Maximum principal loan amount achievable given monthly EMI capacity.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Single Salaried Applicant: ₹1.0 Lakh/mo Income (₹10,000 Existing EMI)',
+    tag: 'Standard Home Loan',
+    subtitle: '50% FOIR Benchmark',
+    metrics: [
+      { label: 'Primary Gross Monthly Income', value: '₹1,00,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Max Obligation Allowed (50% FOIR)', value: '₹50,000 / mo' },
+      { label: 'Available EMI Capacity', value: '₹40,000 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Estimated Max Home Loan (20Y @ 8.5%)', value: '₹46.08 Lakhs', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'With ₹10,000 existing EMIs, the available EMI capacity is ₹40,000/mo, qualifying for an estimated ₹46.08 Lakhs Home Loan over 20 years.',
+  },
+  {
+    title: 'Joint Household Applicant: ₹1.8 Lakhs Combined Income (+₹60k Co-Applicant)',
+    tag: 'Co-Applicant Power',
+    subtitle: 'Joint Loan Strategy',
+    metrics: [
+      { label: 'Combined Monthly Gross Income', value: '₹1,80,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Max Obligation Allowed (50% FOIR)', value: '₹90,000 / mo' },
+      { label: 'Available EMI Capacity', value: '₹75,000 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Estimated Max Home Loan (25Y @ 8.5%)', value: '₹93.58 Lakhs', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Pooling co-applicant income increases borrowing capacity from ₹51.8 Lakhs to ₹93.58 Lakhs, enabling access to premium residential property.',
+  },
+];
+
+const comparisonData = {
+  title: 'Institutional Loan Engine vs. Generic Rule-of-Thumb Estimators',
+  subtitle: 'Why multi-factor underwriting parameters provide realistic borrowing insights',
+  optionA: {
+    badge: 'INSTITUTIONAL PRECISION',
+    title: 'Fintools Institutional Engine',
+    items: [
+      { isPositive: true, text: 'Considers FOIR obligations, existing EMIs, and co-applicant income pooling.' },
+      { isPositive: true, text: 'Incorporates statutory RBI LTV ceilings (90% for ≤₹30L, 80% for ₹30L-₹75L, 75% for >₹75L).' },
+      { isPositive: true, text: 'Models loan-specific category caps (Home 30Y, Personal 5Y, Car 7Y).' },
+    ],
+  },
+  optionB: {
+    badge: 'OVERSIMPLIFIED ESTIMATE',
+    title: 'Generic 50x Salary Multiplier',
+    items: [
+      { isPositive: false, text: 'Ignores existing monthly EMIs and credit card debt commitments.' },
+      { isPositive: false, text: 'Fails to account for statutory RBI LTV caps on property values.' },
+      { isPositive: false, text: 'Applies fixed multiplier regardless of interest rate changes or loan tenure.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <LoanEligibilityCalculatorWidget client:visible />
+</FlagshipLayout>

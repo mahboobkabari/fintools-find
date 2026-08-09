@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import HomeAffordabilityCalculatorWidget from '../calculators/HomeAffordabilityCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Monthly Household Income & Debt Obligations',
+    description: 'Specify your gross pre-tax monthly income and existing monthly EMI commitments across all borrowers.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Specify Available Down Payment Cash',
+    description: 'Enter total liquid savings set aside for home purchase down payment to determine your LTV borrowing ceiling.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Select Lender Underwriting Preset',
+    description: 'Toggle between Conservative (28/36 DTI), Standard (30/45 DTI), and Aggressive (35/50 DTI) bank limits.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Maximum Home Price & Ownership Costs',
+    description: 'Review your maximum affordable home purchase price, binding constraint alert, closing costs, and monthly ownership schedule.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'First-Time Home Buyers',
+    description: 'Individuals evaluating their home purchasing power before contacting realtors or initiating home loan applications.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Upgrading Homeowners',
+    description: 'Families planning to sell an existing property and upgrade to a larger home with a higher down payment.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Double-Income Households',
+    description: 'Couples pooling joint income to maximize home loan borrowing limits while managing existing auto or personal loans.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Prudent Financial Planners',
+    description: 'Buyers benchmarking conservative vs aggressive DTI scenarios to avoid becoming house poor.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Home Affordability & Lender DTI Formulas',
+  formula: 'EMI_{\\text{avail}} = \\min\\left(\\text{Income} \\times \\text{FrontEnd\\%}, \\; (\\text{Income} \\times \\text{BackEnd\\%}) - \\text{Debts}\\right), \\quad Price_{\\text{max}} = \\min\\left(P_{\\text{loan}} + \\text{DownPayment}, \\; \\frac{\\text{DownPayment}}{1 - \\text{LTV}_{\\text{cap}}}\\right)',
+  parameters: [
+    {
+      symbol: 'EMI_{\\text{avail}}',
+      title: 'Available Monthly EMI Capacity',
+      description: 'Maximum allowable home loan EMI after front-end and back-end DTI caps.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'P_{\\text{loan}}',
+      title: 'Max Borrowing Capacity',
+      description: 'Present value of annuity for available monthly EMI over tenure at interest rate r.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{LTV}_{\\text{cap}}',
+      title: 'RBI Tiered LTV Limit',
+      description: 'Statutory ceiling (90% for <=30L, 80% for 30L-75L, 75% for >75L).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'Cash_{\\text{upfront}}',
+      title: 'Total Upfront Cash Required',
+      description: 'Sum of required down payment and estimated closing costs/stamp duty.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹150,000 Monthly Income (₹20,000 Existing EMIs, ₹10 Lakhs Down Payment)',
+    tag: 'Standard Income Benchmark',
+    subtitle: 'Standard Lender Underwriting (30/45 DTI)',
+    metrics: [
+      { label: 'Gross Monthly Income', value: '₹150,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Available EMI Capacity', value: '₹42,000 / mo', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Max Borrowing Capacity', value: '₹48.3 Lakhs', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Max Affordable Home Price', value: '₹58.3 Lakhs', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'With a ₹150,000 monthly income and ₹20,000 existing EMIs, the buyer can afford a home up to ₹58.3 Lakhs with ₹10 Lakhs down payment. Front-end DTI (28% = ₹42,000) is the binding constraint.',
+  },
+  {
+    title: 'Benchmark Case Study: High Income with Debt Constraint (₹300,000 Income, ₹80,000 Existing EMIs)',
+    tag: 'High Debt Constraint',
+    subtitle: 'Back-End FOIR Binding Scenario',
+    metrics: [
+      { label: 'Gross Monthly Income', value: '₹300,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Existing Monthly EMIs', value: '₹80,000 / mo', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Available Home EMI', value: '₹55,000 / mo', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Max Affordable Home Price', value: '₹78.2 Lakhs', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'High existing debt (₹80,000) restricts back-end FOIR available EMI to ₹55,000 (45% of ₹300,000 = ₹135,000 minus ₹80,000), making existing debt the primary binding constraint on borrowing power.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <HomeAffordabilityCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

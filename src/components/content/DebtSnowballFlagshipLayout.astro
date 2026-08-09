@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DebtSnowballCalculatorWidget from '../calculators/DebtSnowballCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter All Current Debts & Balances',
+    description: 'List your credit cards, personal loans, auto loans, and store balances with current outstanding amounts and interest rates.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Minimum Monthly Payments',
+    description: 'Input the required minimum monthly payment for each debt to establish your baseline payoff schedule.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Allocate Additional Monthly Payment Budget',
+    description: 'Specify any extra monthly cash flow budget to accelerate repayment and unlock rollover power.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compare Snowball vs Avalanche Savings',
+    description: 'Review total debt-free months, interest dollars saved, and target debt elimination sequence.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Credit Card Debtors',
+    description: 'Individuals carrying multiple high-interest credit card balances looking to eliminate debt fastest.',
+    bgClass: 'bg-rose-50',
+    textClass: 'text-rose-600',
+  },
+  {
+    title: 'Multiple Loan Borrowers',
+    description: 'Borrowers juggling personal loans, auto financing, and consumer credit with a fixed monthly debt budget.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Psychological Momentum Seekers',
+    description: 'People who want rapid early wins by paying off smaller debts first to stay motivated throughout repayment.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Mathematical Optimizers',
+    description: 'Financial planners maximizing interest savings by targeting the highest annual percentage rate (APR) debts first.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+];
+
+const formulaDetails = {
+  title: 'Multi-Debt Repayment & Rollover Formulas',
+  formula: 'P_{\\text{pool}} = P_{\\text{extra}} + \\sum \\text{FreedMinPayments}, \\quad B_{i, m} = B_{i, m-1} \\times \\left(1 + \\frac{r_i}{1200}\\right) - p_{i, m} - p_{\\text{extra}, i}',
+  parameters: [
+    {
+      symbol: 'P_{\\text{pool}}',
+      title: 'Monthly Extra Payment Pool',
+      description: 'Sum of user extra payment budget and freed minimum payments from fully paid debts.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r_i',
+      title: 'Debt APR (% p.a.)',
+      description: 'Annual Percentage Rate applied to debt i divided by 12 for monthly interest accrual.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Avalanche Target}',
+      title: 'Highest Rate First',
+      description: 'Directs extra payment pool to debt with max APR to minimize total interest paid.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Snowball Target}',
+      title: 'Lowest Balance First',
+      description: 'Directs extra payment pool to debt with min balance for fast account elimination.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹2.5 Lakhs Total Multi-Card Debt (₹5,000 Extra Payment)',
+    tag: 'Credit Card Benchmark',
+    subtitle: 'Debt Avalanche vs Minimum Payments Only',
+    metrics: [
+      { label: 'Total Initial Debt', value: '₹250,000 across 3 cards', colorClass: 'text-primary font-bold' },
+      { label: 'Minimum Only Payoff', value: '78 Months (₹1.8L Interest)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Avalanche Payoff', value: '24 Months (₹45k Interest)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Total Interest Saved', value: '₹135,000 (54 Months Saved)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Allocating ₹5,000 extra per month using Debt Avalanche eliminates ₹2.5 Lakhs in credit card debt 4.5 years earlier and saves ₹135,000 in interest compared to paying minimums.',
+  },
+  {
+    title: 'Benchmark Case Study: Snowball vs Avalanche Interest Tradeoff (₹1.5 Lakhs Balance)',
+    tag: 'Behavioral Tradeoff',
+    subtitle: 'Momentum vs Pure Interest Optimization',
+    metrics: [
+      { label: 'Snowball Payoff Time', value: '22 Months', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Avalanche Payoff Time', value: '21 Months', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Interest Difference', value: '₹3,200 Difference', colorClass: 'text-purple-600 font-bold' },
+      { label: 'First Card Paid Off', value: 'Month 3 (Snowball) vs Month 8 (Avalanche)', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'For minor interest differences (₹3,200), Debt Snowball delivers its first paid-off account in Month 3 compared to Month 8 in Avalanche, offering high psychological momentum.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <DebtSnowballCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

@@ -1,0 +1,137 @@
+import { calculateRdCalculator } from '../savings/rd-calculator.js';
+
+export const RD_CONFIG = {
+  id: 'rd-calculator',
+  title: 'Recurring Deposit (RD) Calculator',
+  category: 'Deposit & Savings Calculators',
+  categorySlug: 'savings',
+  defaultMonthlyInstallment: 10000,
+  defaultRate: 7.0,
+  defaultTenureYears: 3,
+
+  presets: [
+    {
+      id: 'standard_1y_10k',
+      title: '📈 Standard 1-Year RD (₹10,000/month @ 7.0%)',
+      description: 'Disciplined 1-year monthly recurring deposit with quarterly bank compounding.',
+      values: {
+        monthlyInstallment: 10000,
+        rate: 7.0,
+        tenure: 1,
+        tenureType: 'years',
+        isSeniorCitizen: false,
+        hasPan: true,
+        currency: 'INR',
+      },
+    },
+    {
+      id: 'senior_citizen_3y_20k',
+      title: '👴 Senior Citizen 3-Year RD (₹20,000/month @ 7.5%)',
+      description: '3-year senior citizen deposit with +0.50% bonus rate and ₹50,000 Section 194A TDS threshold.',
+      values: {
+        monthlyInstallment: 20000,
+        rate: 7.0,
+        tenure: 3,
+        tenureType: 'years',
+        isSeniorCitizen: true,
+        hasPan: true,
+        currency: 'INR',
+      },
+    },
+    {
+      id: 'short_term_6m',
+      title: '⚡ Short-Term 6-Month RD (₹25,000/month @ 6.5%)',
+      description: 'Short-term savings deposit for emergency funds or upcoming planned expenses.',
+      values: {
+        monthlyInstallment: 25000,
+        rate: 6.5,
+        tenure: 6,
+        tenureType: 'months',
+        isSeniorCitizen: false,
+        hasPan: true,
+        currency: 'INR',
+      },
+    },
+    {
+      id: 'long_term_5y_5k',
+      title: '🛡️ Long-Term 5-Year RD (₹5,000/month @ 7.25%)',
+      description: '5-year systematic savings accumulating a guaranteed lump-sum maturity corpus.',
+      values: {
+        monthlyInstallment: 5000,
+        rate: 7.25,
+        tenure: 5,
+        tenureType: 'years',
+        isSeniorCitizen: false,
+        hasPan: true,
+        currency: 'INR',
+      },
+    },
+  ],
+
+  benchmarks: {
+    standardBankRdRate: 7.0,
+    postOfficeRdRate: 6.7,
+    seniorCitizenBonus: 0.50,
+    sec194aGeneralThreshold: 40000,
+    sec194aSeniorThreshold: 50000,
+    sec206aaTdsRateNoPan: 20,
+    sec194aTdsRateWithPan: 10,
+    expectedSipReturnBenchmark: 12.0,
+  },
+};
+
+export const rdCalculatorConfig = {
+  ...RD_CONFIG,
+  currency: 'INR',
+  currencySymbol: '₹',
+  calculateFn: calculateRdCalculator,
+  primaryResult: {
+    key: 'maturityValue',
+    label: 'Guaranteed Maturity Value',
+  },
+  ratioBarItems: [
+    { key: 'totalDeposits', label: 'Total Installments Paid', colorClass: 'bg-primary' },
+    { key: 'totalInterest', label: 'Total Interest Earned', colorClass: 'bg-semantic-up' },
+  ],
+  summaryItems: [
+    { key: 'totalDeposits', label: 'Total Installments Paid' },
+    { key: 'totalInterest', label: 'Total Guaranteed Interest Earned', class: 'text-semantic-up' },
+    { key: 'estimatedTdsAmount', label: 'Estimated Section 194A TDS Tax', class: 'text-semantic-down' },
+    { key: 'maturityValue', label: 'Gross Maturity Value', isTotal: true },
+  ],
+  inputs: [
+    {
+      id: 'monthlyInstallment',
+      type: 'number',
+      label: 'Monthly Installment (₹)',
+      min: 500,
+      max: 1000000,
+      step: 500,
+      prefix: '₹',
+      minLabel: '₹500',
+      maxLabel: '₹10L',
+      default: 10000,
+    },
+    {
+      id: 'rate',
+      type: 'number',
+      label: 'Interest Rate (% p.a.)',
+      min: 1,
+      max: 20,
+      step: 0.1,
+      suffix: '%',
+      minLabel: '1%',
+      maxLabel: '20%',
+      default: 7.0,
+    },
+    {
+      id: 'tenure',
+      type: 'tenure',
+      label: 'Deposit Tenure',
+      maxYears: 10,
+      maxMonths: 120,
+      default: 3,
+    },
+  ],
+  hasAmortizationTable: false,
+};

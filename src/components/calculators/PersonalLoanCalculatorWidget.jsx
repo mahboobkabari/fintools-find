@@ -1,5 +1,5 @@
 import PersonalLoanFlagshipWidget from './primitives/PersonalLoanFlagshipWidget';
 
-export default function PersonalLoanCalculatorWidget() {
-  return <PersonalLoanFlagshipWidget />;
+export default function PersonalLoanCalculatorWidget(props) {
+  return <PersonalLoanFlagshipWidget {...props} />;
 }

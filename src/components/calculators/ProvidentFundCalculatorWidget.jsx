@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { providentFundCalculatorConfig } from '../../calculators/configs/provident-fund-calculator.config.js';
+import ProvidentFundFlagshipWidget from './primitives/ProvidentFundFlagshipWidget';
 
-export default function ProvidentFundCalculatorWidget() {
-  return <UniversalCalculatorWidget config={providentFundCalculatorConfig} />;
+export default function ProvidentFundCalculatorWidget(props) {
+  return <ProvidentFundFlagshipWidget {...props} />;
 }

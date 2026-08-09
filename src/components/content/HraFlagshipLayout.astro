@@ -1,0 +1,86 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import HraCalculatorWidget from '../calculators/HraCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Lease Agreement & Rent Receipts', description: 'Execute a formal lease agreement with your landlord and maintain monthly bank transaction records.' },
+  { stepNumber: '02', title: 'Employer Form 12BB Declaration', description: 'Declare estimated annual rent paid and landlord details on Form 12BB to your HR payroll team.' },
+  { stepNumber: '03', title: 'Rule 2A Exemption Application', description: 'Employer computes Section 10(13A) exemption and reduces monthly TDS withholding from your paycheck.' },
+  { stepNumber: '04', title: 'Form 16 & ITR Filing', description: 'Verify exempt HRA reported in Part B of Form 16 and file ITR-1 under the Old Tax Regime.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Salaried Renters in Metro Cities', description: 'Employees living in Delhi, Mumbai, Kolkata, or Chennai claiming up to 50% of Basic Salary under Section 10(13A) Rule 2A.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Employees Paying Rent to Parents', description: 'Salaried individuals residing in parental property who pay rent via bank transfers and declare rental income in parents\' ITR.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Tech Hub Professionals (Non-Metro)', description: 'Renters in Bengaluru, Hyderabad, Pune, Gurugram, or Noida subject to the statutory 40% Basic Salary ceiling.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Taxpayers Evaluating Tax Regimes', description: 'Salaried earners comparing Old Tax Regime HRA savings against New Tax Regime lower slab rates.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'HRA Tax Exemption Formula (Section 10(13A) Rule 2A)',
+  formula: '\\text{Exempt HRA} = \\min \\begin{cases} \\text{Actual HRA Received} \\\\ \\text{Rent Paid} - (10\\% \\times (\\text{Basic} + \\text{DA})) \\\\ 50\\% \\text{ or } 40\\% \\text{ of } (\\text{Basic} + \\text{DA}) \\end{cases}',
+  parameters: [
+    { symbol: 'Actual HRA', title: 'HRA Allowance Received', description: 'Total annual House Rent Allowance component provided by employer in salary structure.', colorClass: 'text-primary' },
+    { symbol: 'Rent - 10%', title: 'Rent Excess Threshold', description: 'Actual rent paid minus 10% of Basic Salary + Dearness Allowance (DA).', colorClass: 'text-accent-sky' },
+    { symbol: '50% / 40%', title: 'City Location Ceiling', description: '50% of Basic+DA for Metro cities (Delhi, Mumbai, Kolkata, Chennai); 40% for Non-Metro cities.', colorClass: 'text-semantic-success' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark ₹12.0 Lakh CTC (Metro City - ₹25k/mo Rent)',
+    tag: 'Metro Renter',
+    subtitle: '100% Exemption Achieved',
+    metrics: [
+      { label: 'Annual Basic Salary', value: '₹6,00,000' },
+      { label: 'Annual HRA Received', value: '₹2,40,000' },
+      { label: 'Annual Rent Paid (₹25k/mo)', value: '₹3,00,000' },
+      { label: 'Rent Paid minus 10% Basic', value: '₹2,40,000' },
+      { label: 'Statutory Tax-Exempt HRA', value: '₹2,40,000', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Taxable HRA Amount', value: '₹0', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Under Rule 2A, the entire ₹2,40,000 HRA received is tax-exempt, saving ₹74,880 in annual income tax.',
+  },
+  {
+    title: '₹8.0 Lakh CTC (Non-Metro City - ₹18k/mo Rent)',
+    tag: 'Non-Metro Renter',
+    subtitle: '40% Basic Cap Applied',
+    metrics: [
+      { label: 'Annual Basic Salary', value: '₹4,00,000' },
+      { label: 'Annual HRA Received', value: '₹1,60,000' },
+      { label: 'Annual Rent Paid (₹18k/mo)', value: '₹2,16,000' },
+      { label: 'Rent Paid minus 10% Basic', value: '₹1,76,000' },
+      { label: '40% Non-Metro Basic Cap', value: '₹1,60,000', colorClass: 'text-primary font-bold' },
+      { label: 'Statutory Tax-Exempt HRA', value: '₹1,60,000', colorClass: 'text-emerald-500 font-extrabold' },
+    ],
+    takeaway: 'The 40% Non-Metro ceiling limits exemption to ₹1,60,000, making 100% of HRA tax-free.',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Maintain Legitimate Rent Receipts & Bank Proofs', description: 'Ensure rent is paid via online bank transfer and obtain signed rent receipts for HR verification.' },
+  { number: '02', title: 'Provide Landlord PAN for Rent > ₹1 Lakh/year', description: 'If annual rent exceeds ₹1,00,000, submitting landlord PAN is mandatory under CBDT guidelines.' },
+  { number: '03', title: 'Evaluate Old vs New Tax Regime Annually', description: 'Verify whether your total Old Regime deductions (HRA + 80C + 80D) beat New Regime lower slabs.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <HraCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

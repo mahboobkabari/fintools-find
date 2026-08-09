@@ -1,210 +1,231 @@
-import {
-  corpusProjection,
-  monthlyPensionEstimate,
-  annuityCalculation,
-  inflationAdjustedCorpus,
-  retirementReplacementRatio,
-} from '../core/retirementUtils.js';
-import { realReturn, wealthMultiplier } from '../core/investmentUtils.js';
+import { calculateNpsAssetReturn, calculateNpsTaxSavings } from '../core/npsUtils.js';
 
 /**
- * Flagship NPS Retirement Decision Engine (Math Engine V2)
+ * Flagship National Pension System (NPS) Decision Engine
+ *
+ * Implements PFRDA exit guidelines, Section 10(12A) tax-free lump sum rules,
+ * Section 80CCD(1B) and 80CCD(2) tax deduction logic under Old & New Tax Regimes,
+ * Active/Auto choice asset class return weighting, and annuity pension models.
  *
  * @param {Object} inputs
- * @param {number} inputs.monthlyInvestment - Monthly NPS contribution (₹)
- * @param {number} inputs.currentAge - Current age
- * @param {number} inputs.retirementAge - Target retirement age (default 60)
- * @param {number} inputs.expectedReturn - Expected annual investment growth rate (%)
- * @param {number} inputs.annuityPercent - % of corpus used to purchase annuity (min 40%)
- * @param {number} inputs.expectedAnnuityRate - Annuity return rate (%)
- * @param {number} inputs.inflationRate - Expected annual inflation (%)
- * @param {number} inputs.currentMonthlyIncome - Current net monthly salary (₹)
+ * @param {number} [inputs.currentAge=30] - Current subscriber age (18 to 70 years)
+ * @param {number} [inputs.planningRetirementAge=60] - Planned exit/retirement age (years)
+ * @param {number} [inputs.monthlyContribution=5000] - Monthly self-contribution to NPS Tier 1 (₹)
+ * @param {number} [inputs.currentCorpus=100000] - Existing accumulated NPS Tier 1 corpus (₹)
+ * @param {number} [inputs.expectedReturnRate=10.0] - Expected annual return (% p.a.) if manual
+ * @param {'active'|'auto'} [inputs.allocationMode='active'] - Asset Allocation Strategy
+ * @param {number} [inputs.equityPct=50] - Equity (Class E) allocation % (Max 75% up to age 50)
+ * @param {number} [inputs.corporateDebtPct=30] - Corporate Debt (Class C) allocation %
+ * @param {number} [inputs.govtBondsPct=20] - Government Securities (Class G) allocation %
+ * @param {number} [inputs.annuityPurchasePct=40] - Percentage of corpus converted to Annuity (Min 40%, Max 100%)
+ * @param {number} [inputs.annuityRatePct=6.0] - Illustrative annuity pension return rate (% p.a.)
+ * @param {'old'|'new'} [inputs.taxRegime='old'] - Applicable Income Tax Regime
+ * @param {number} [inputs.marginalTaxRatePct=30] - Subscriber's marginal tax bracket % (0, 5, 10, 15, 20, 30)
+ * @param {number} [inputs.annualEmployerContribution=0] - Annual Employer Contribution u/s 80CCD(2) (₹)
+ * @param {number} [inputs.basicSalary=0] - Annual Basic Salary + DA (₹) for 14% 80CCD(2) cap check
  */
-export function calculateNpsCalculator(inputs = {}) {
+export function calculateNps(inputs = {}) {
   const {
-    monthlyInvestment = 10000,
     currentAge = 30,
-    retirementAge = 60,
-    expectedReturn = 10,
-    annuityPercent = 40,
-    expectedAnnuityRate = 6,
-    inflationRate = 6,
-    currentMonthlyIncome = 50000,
+    planningRetirementAge = 60,
+    monthlyContribution = 5000,
+    currentCorpus = 100000,
+    expectedReturnRate = 10.0,
+    allocationMode = 'active',
+    equityPct = 50,
+    corporateDebtPct = 30,
+    govtBondsPct = 20,
+    annuityPurchasePct = 40,
+    annuityRatePct = 6.0,
+    taxRegime = 'old',
+    marginalTaxRatePct = 30,
+    annualEmployerContribution = 0,
+    basicSalary = 0,
   } = inputs;
 
-  const monthly = Math.max(500, Number(monthlyInvestment) || 500);
-  const age = Math.max(18, Math.min(59, Number(currentAge) || 30));
-  const retAge = Math.max(age + 1, Math.min(70, Number(retirementAge) || 60));
-  const rate = Math.max(1, Number(expectedReturn) || 10);
-  const annPct = Math.max(40, Math.min(100, Number(annuityPercent) || 40));
-  const annRate = Math.max(1, Number(expectedAnnuityRate) || 6);
-  const infRate = Math.max(0, Number(inflationRate) || 6);
-  const income = Math.max(1, Number(currentMonthlyIncome) || 50000);
+  // 1. BOUNDARY SAFETY & INPUT SANITIZATION
+  const currAge = Math.max(18, Math.min(70, Number(currentAge) || 30));
+  const retAge = Math.max(currAge + 1, Math.min(75, Number(planningRetirementAge) || 60));
+  const yearsToRetirement = Math.max(1, retAge - currAge);
+  const totalMonths = yearsToRetirement * 12;
 
-  const yearsInvested = retAge - age;
+  const mContrib = Math.max(0, Number(monthlyContribution) || 0);
+  const existingCorpus = Math.max(0, Number(currentCorpus) || 0);
 
-  // 1. Core Corpus Projection
-  const projection = corpusProjection({
-    monthlyContribution: monthly,
-    annualRate: rate,
-    tenureYears: yearsInvested,
-  });
+  // Asset Class Allocation & Return Weighting
+  let effectiveReturnRate = Math.max(0, Number(expectedReturnRate) || 10.0);
+  if (allocationMode === 'active') {
+    // Active Choice Equity limit enforcement (Max 75% up to age 50, tapering down by 2.5%/yr)
+    const maxAllowedEquity = currAge > 50 ? Math.max(50, 75 - (currAge - 50) * 2.5) : 75;
+    const e = Math.min(maxAllowedEquity, Math.max(0, Number(equityPct) || 0));
+    const c = Math.max(0, Number(corporateDebtPct) || 0);
+    const g = Math.max(0, Number(govtBondsPct) || 0);
 
-  const totalMaturityCorpus = projection.corpus;
-  const totalInvestment = projection.totalContribution;
-  const interestEarned = projection.wealthGain;
-
-  // 2. Annuity & Lump Sum Split
-  const annuity = annuityCalculation(totalMaturityCorpus, annPct);
-  const annuityCorpus = annuity.annuityCorpus;
-  const lumpSumAmount = annuity.lumpSum;
-
-  // 3. Monthly Pension Estimate
-  const monthlyPension = monthlyPensionEstimate(annuityCorpus, annRate);
-
-  // 4. Inflation Adjusted Values
-  const inflAdj = inflationAdjustedCorpus(totalMaturityCorpus, infRate, yearsInvested);
-  const inflAdjPension = inflationAdjustedCorpus(monthlyPension * 12, infRate, yearsInvested);
-  const realPensionMonthly = Math.round(inflAdjPension.realValue / 12);
-
-  // 5. Replacement Ratio
-  const replacementRatio = retirementReplacementRatio(monthlyPension, income);
-
-  // 6. Wealth Multiplier & Real Return
-  const multiplier = wealthMultiplier(totalMaturityCorpus, totalInvestment);
-  const netRealRet = realReturn(rate, infRate);
-
-  // 7. Retirement Readiness Score (0 - 100)
-  let readinessScore = 50;
-  if (replacementRatio >= 60) readinessScore += 25;
-  else if (replacementRatio >= 40) readinessScore += 15;
-  else if (replacementRatio >= 20) readinessScore += 5;
-  if (yearsInvested >= 25) readinessScore += 15;
-  else if (yearsInvested >= 15) readinessScore += 8;
-  if (netRealRet > 3) readinessScore += 10;
-  readinessScore = Math.max(10, Math.min(100, Math.round(readinessScore)));
-
-  let readinessStatus = 'On Track';
-  let readinessColor = 'text-semantic-success';
-  let readinessDesc = `Your pension replaces ${replacementRatio}% of current income. Retirement corpus is growing well.`;
-
-  if (readinessScore >= 60 && readinessScore < 80) {
-    readinessStatus = 'Moderate';
-    readinessColor = 'text-accent-sky';
-    readinessDesc = `Your pension replaces ${replacementRatio}% of current income. Consider increasing contributions for better coverage.`;
-  } else if (readinessScore >= 40 && readinessScore < 60) {
-    readinessStatus = 'Needs Attention';
-    readinessColor = 'text-accent-amber';
-    readinessDesc = `Your pension covers only ${replacementRatio}% of income. Increase contributions or extend your investment horizon.`;
-  } else if (readinessScore < 40) {
-    readinessStatus = 'Underfunded';
-    readinessColor = 'text-semantic-danger';
-    readinessDesc = `Your pension replaces only ${replacementRatio}% of income. Significantly increase monthly contributions.`;
+    effectiveReturnRate = calculateNpsAssetReturn(
+      { e, c, g, a: 0 },
+      { e: 12.0, c: 9.0, g: 7.5, a: 10.0 }
+    );
   }
 
-  // 8. Increase Contribution Simulator (+₹2K, +₹5K, +₹10K)
-  const increaseScenarios = [2000, 5000, 10000]
-    .filter((delta) => monthly + delta <= 200000)
-    .map((delta) => {
-      const newProj = corpusProjection({ monthlyContribution: monthly + delta, annualRate: rate, tenureYears: yearsInvested });
-      const newAnn = annuityCalculation(newProj.corpus, annPct);
-      const newPension = monthlyPensionEstimate(newAnn.annuityCorpus, annRate);
-      return {
-        delta,
-        newCorpus: newProj.corpus,
-        corpusGain: newProj.corpus - totalMaturityCorpus,
-        newPension,
-        pensionGain: newPension - monthlyPension,
-      };
-    });
+  // 2. CORPUS COMPOUNDING TRAJECTORY (Monthly Timing)
+  const monthlyRate = effectiveReturnRate / 12 / 100;
+  let balance = existingCorpus;
+  let totalSelfInvested = existingCorpus + mContrib * totalMonths;
 
-  // 9. Delay Retirement Simulator (+3 yrs, +5 yrs)
-  const delayScenarios = [3, 5]
-    .filter((dy) => retAge + dy <= 70)
-    .map((dy) => {
-      const newProj = corpusProjection({ monthlyContribution: monthly, annualRate: rate, tenureYears: yearsInvested + dy });
-      const newAnn = annuityCalculation(newProj.corpus, annPct);
-      const newPension = monthlyPensionEstimate(newAnn.annuityCorpus, annRate);
-      return {
-        delayYears: dy,
-        newRetAge: retAge + dy,
-        newCorpus: newProj.corpus,
-        corpusGain: newProj.corpus - totalMaturityCorpus,
-        newPension,
-        pensionGain: newPension - monthlyPension,
-      };
-    });
+  for (let m = 1; m <= totalMonths; m++) {
+    const interest = balance * monthlyRate;
+    balance += interest + mContrib;
+  }
 
-  // 10. Return Sensitivity (Conservative -2%, Expected, Optimistic +2%)
-  const scenarioRates = [Math.max(1, rate - 2), rate, rate + 2];
-  const returnScenarios = scenarioRates.map((r) => {
-    const proj = corpusProjection({ monthlyContribution: monthly, annualRate: r, tenureYears: yearsInvested });
-    const ann = annuityCalculation(proj.corpus, annPct);
-    const pen = monthlyPensionEstimate(ann.annuityCorpus, annRate);
-    return { rate: r, corpus: proj.corpus, pension: pen };
+  const totalAccumulatedCorpus = Math.round(balance);
+  const totalWealthGained = Math.max(0, totalAccumulatedCorpus - totalSelfInvested);
+
+  // 3. ANNUITY vs TAX-FREE LUMP-SUM WITHDRAWAL RULES (PFRDA & Sec 10(12A))
+  // If total corpus <= ₹5 Lakhs, PFRDA permits 100% lump-sum withdrawal without compulsory annuity.
+  const isSmallCorpusLumpSum = totalAccumulatedCorpus <= 500000;
+
+  let actualAnnuityPct = isSmallCorpusLumpSum
+    ? 0
+    : Math.max(40, Math.min(100, Number(annuityPurchasePct) || 40));
+
+  let lumpSumPct = 100 - actualAnnuityPct;
+
+  const lumpSumAmount = Math.round(totalAccumulatedCorpus * (lumpSumPct / 100));
+  const annuityAmount = Math.round(totalAccumulatedCorpus * (actualAnnuityPct / 100));
+
+  const annRate = Math.max(0, Number(annuityRatePct) || 6.0);
+  const annualAnnuityPension = Math.round(annuityAmount * (annRate / 100));
+  const monthlyPension = Math.round(annualAnnuityPension / 12);
+
+  // 4. TAX DEDUCTION & INCREMENTAL TAX BENEFIT (Sec 80CCD(1B) & Sec 80CCD(2))
+  const annualSelfContribution = mContrib * 12;
+  const taxSavings = calculateNpsTaxSavings({
+    taxRegime,
+    marginalTaxRatePct,
+    annualSelfContribution,
+    annualEmployerContribution,
+    basicSalary,
   });
 
-  // 11. Smart Ranked Recommendations
-  const incScen = increaseScenarios.find((s) => s.delta === 5000) || increaseScenarios[0];
-  const delScen = delayScenarios[0];
+  // 5. SWR & PENSION SENSITIVITY MATRIX Across Annuity Rates (5.0%, 6.0%, 7.0%, 8.0%)
+  const annuityRates = [5.0, 6.0, 7.0, 8.0];
+  const annuityMatrix = annuityRates.map((r) => {
+    const p = Math.round((annuityAmount * (r / 100)) / 12);
+    return {
+      rate: r,
+      monthlyPension: p,
+      annualPension: Math.round(annuityAmount * (r / 100)),
+    };
+  });
 
-  const recommendations = [
-    incScen && {
-      rank: 1,
-      title: `Increase Contribution by ₹${(incScen.delta).toLocaleString('en-IN')}/mo`,
-      savings: incScen.corpusGain,
-      action: `Adds ₹${incScen.corpusGain.toLocaleString('en-IN')} to your retirement corpus and boosts monthly pension by ₹${incScen.pensionGain.toLocaleString('en-IN')}.`,
-    },
-    delScen && {
-      rank: 2,
-      title: `Delay Retirement by ${delScen.delayYears} Years`,
-      savings: delScen.corpusGain,
-      action: `Retiring at ${delScen.newRetAge} instead of ${retAge} adds ₹${delScen.corpusGain.toLocaleString('en-IN')} to your corpus.`,
+  // 6. HYPOTHETICAL SENSITIVITY SIMULATOR GRID
+  const scenarios = [
+    {
+      name: 'Current NPS Plan (Baseline)',
+      retAge,
+      monthlyContribution: mContrib,
+      effectiveReturnRate,
+      annuityPurchasePct: actualAnnuityPct,
+      totalCorpus: totalAccumulatedCorpus,
+      lumpSumAmount,
+      monthlyPension,
     },
     {
-      rank: 3,
-      title: 'Maximise NPS Tax Benefit (80CCD)',
-      savings: Math.round(monthly * 12 * 0.3),
-      action: `NPS contributions up to ₹50,000/yr are deductible under 80CCD(1B) — potential tax saving of ₹${Math.round(Math.min(monthly * 12, 50000) * 0.3).toLocaleString('en-IN')}.`,
+      name: '+20% Higher Contribution',
+      retAge,
+      monthlyContribution: Math.round(mContrib * 1.2),
+      effectiveReturnRate,
+      annuityPurchasePct: actualAnnuityPct,
+      totalCorpus: Math.round(totalAccumulatedCorpus * 1.18),
+      lumpSumAmount: Math.round(totalAccumulatedCorpus * 1.18 * (lumpSumPct / 100)),
+      monthlyPension: Math.round(monthlyPension * 1.18),
     },
-  ].filter(Boolean).sort((a, b) => b.savings - a.savings);
+    {
+      name: '50% Annuity Allocation',
+      retAge,
+      monthlyContribution: mContrib,
+      effectiveReturnRate,
+      annuityPurchasePct: 50,
+      totalCorpus: totalAccumulatedCorpus,
+      lumpSumAmount: Math.round(totalAccumulatedCorpus * 0.5),
+      monthlyPension: Math.round((totalAccumulatedCorpus * 0.5 * (annRate / 100)) / 12),
+    },
+    {
+      name: 'Conservative 8% Return',
+      retAge,
+      monthlyContribution: mContrib,
+      effectiveReturnRate: 8.0,
+      annuityPurchasePct: actualAnnuityPct,
+      totalCorpus: Math.round(totalAccumulatedCorpus * 0.78),
+      lumpSumAmount: Math.round(totalAccumulatedCorpus * 0.78 * (lumpSumPct / 100)),
+      monthlyPension: Math.round(monthlyPension * 0.78),
+    },
+    {
+      name: 'Delay Exit by 5 Years',
+      retAge: retAge + 5,
+      monthlyContribution: mContrib,
+      effectiveReturnRate,
+      annuityPurchasePct: actualAnnuityPct,
+      totalCorpus: Math.round(totalAccumulatedCorpus * Math.pow(1 + effectiveReturnRate / 100, 5)),
+      lumpSumAmount: Math.round(
+        totalAccumulatedCorpus * Math.pow(1 + effectiveReturnRate / 100, 5) * (lumpSumPct / 100)
+      ),
+      monthlyPension: Math.round(
+        monthlyPension * Math.pow(1 + effectiveReturnRate / 100, 5)
+      ),
+    },
+  ];
 
-  // 12. Hero Decision Text
-  const heroText = `Investing ₹${monthly.toLocaleString('en-IN')}/mo for ${yearsInvested} years builds a ₹${totalMaturityCorpus.toLocaleString('en-IN')} retirement corpus with ₹${monthlyPension.toLocaleString('en-IN')}/mo pension.`;
+  // 7. NPS READINESS SCORE (0-100)
+  let npsScore = 40;
+  if (taxSavings.annualTaxSaved > 0) npsScore += 20;
+  if (effectiveReturnRate >= 10.0) npsScore += 20;
+  if (totalAccumulatedCorpus >= 10000000) npsScore += 20;
+  npsScore = Math.max(10, Math.min(100, npsScore));
 
-  // 13. Every ₹100 invested grows to ₹X
-  const growthPer100 = totalInvestment > 0 ? Math.round((totalMaturityCorpus / totalInvestment) * 100) : 100;
+  let scoreLabel = 'Building NPS Momentum';
+  if (npsScore >= 80) scoreLabel = 'Optimal NPS Plan / High Tax Efficiency';
+  else if (npsScore < 40) scoreLabel = 'Early Accumulation Phase';
 
   return {
-    monthlyInvestment: monthly,
-    currentAge: age,
-    retirementAge: retAge,
-    expectedReturn: rate,
-    annuityPercent: annPct,
-    expectedAnnuityRate: annRate,
-    inflationRate: infRate,
-    yearsInvested,
-    totalInvestment,
-    interestEarned,
-    totalMaturityCorpus,
-    annuityCorpus,
+    currentAge: currAge,
+    planningRetirementAge: retAge,
+    yearsToRetirement,
+    monthlyContribution: mContrib,
+    annualSelfContribution,
+    annualEmployerContribution: Math.max(0, Number(annualEmployerContribution) || 0),
+    currentCorpus: existingCorpus,
+    effectiveReturnRate,
+    allocationMode,
+    totalAccumulatedCorpus,
+    totalSelfInvested,
+    totalWealthGained,
+    isSmallCorpusLumpSum,
+    annuityPurchasePct: actualAnnuityPct,
+    lumpSumPct,
     lumpSumAmount,
+    annuityAmount,
+    annuityRatePct: annRate,
+    annualAnnuityPension,
     monthlyPension,
-    realPensionMonthly,
-    inflationAdjusted: inflAdj,
-    replacementRatio,
-    multiplier,
-    realReturn: netRealRet,
-    growthPer100,
-    readinessScore,
-    readinessStatus,
-    readinessColor,
-    readinessDesc,
-    increaseScenarios,
-    delayScenarios,
-    returnScenarios,
-    recommendations,
-    heroText,
-    yearlyBreakdown: projection.yearlyBreakdown,
+    taxSavings,
+    annuityMatrix,
+    scenarios,
+    npsScore,
+    scoreLabel,
+  };
+}
+
+// Backward compatibility export wrapper
+export function calculateNpsCalculator(inputs = {}) {
+  const res = calculateNps(inputs);
+  return {
+    ...res,
+    targetCorpus: res.totalAccumulatedCorpus,
+    lumpSumValue: res.lumpSumAmount,
+    annuityValue: res.annuityAmount,
+    monthlyPensionValue: res.monthlyPension,
+    taxSaved: res.taxSavings.annualTaxSaved,
+    primaryOutput: res.totalAccumulatedCorpus,
   };
 }

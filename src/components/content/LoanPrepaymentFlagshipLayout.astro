@@ -1,0 +1,84 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import LoanPrepaymentCalculatorWidget from '@components/calculators/LoanPrepaymentCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Principal Reduction', description: 'Prepaying loan principal directly reduces outstanding debt balance, lowering cumulative interest charges for all remaining months.' },
+  { stepNumber: '02', title: 'Strategy Selection (Option A vs B)', description: 'Select Option A (Tenure Reduction) to maximize interest savings or Option B (EMI Reduction) to lower monthly outgo.' },
+  { stepNumber: '03', title: 'Prepayment Execution', description: 'Execute lump-sum or recurring prepayments, verifying penalty charges (0% for floating home loans).' },
+  { stepNumber: '04', title: 'Debt Freedom & Savings Realization', description: 'Enjoy early loan payoff or lower monthly EMI commitments while preserving 6 months of emergency reserves.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Home Loan Borrowers', description: 'Borrowers with 15-30 year mortgages seeking to clear debt years early and save lakhs in interest outgo.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Annual Bonus Recipients', description: 'Salaried professionals deploying work bonuses, appraisal incentives, or tax refunds toward principal reduction.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'High-Rate Debt Holders', description: 'Borrowers with 12-18% personal loans looking to extinguish high-cost debt rapidly.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Budget-Constrained Families', description: 'Families using Option B (EMI Reduction) to lower monthly obligations and improve household cash flow.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Loan Prepayment & Amortization Formulas',
+  formula: 'I_m = B_{m-1} \\times \\left( \\frac{r}{1200} \\right), \\quad \\text{Revised EMI} = B_{\\text{post}} \\times \\left[ \\frac{r(1+r)^{N_{\\text{rem}}}}{(1+r)^{N_{\\text{rem}}} - 1} \\right]',
+  parameters: [
+    { symbol: 'Option A (Tenure)', title: 'Tenure Reduction Mode', description: 'Keeps EMI constant and shortens payoff duration, yielding maximum cumulative compounding interest savings.', colorClass: 'text-primary' },
+    { symbol: 'Option B (EMI)', title: 'EMI Reduction Mode', description: 'Keeps remaining tenure constant and lowers monthly EMI obligation, providing immediate budget relief.', colorClass: 'text-accent-sky' },
+    { symbol: 'Net Benefit (₹)', title: 'Net Financial Benefit', description: 'Gross interest saved minus user-supplied prepayment penalty fees.', colorClass: 'text-semantic-success' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: '₹20 Lakh Home Loan @ 8.5% over 20 Years (Option A – Tenure Reduction)',
+    tag: 'Tenure Reduction',
+    subtitle: 'Maximum Interest Savings',
+    metrics: [
+      { label: 'Original Principal', value: '₹20,00,000' },
+      { label: 'Prepayment Amount', value: '₹2,00,000 at Month 12' },
+      { label: 'Original EMI', value: '₹17,356' },
+      { label: 'New Payoff Tenure', value: '192 Months (48 Months Saved!)', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Net Interest Saved', value: '₹6,41,272', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Prepaying ₹2 Lakhs in Year 1 while keeping EMI constant makes the borrower debt-free 4 years earlier and saves over ₹6.4 Lakhs in interest.',
+  },
+  {
+    title: '₹20 Lakh Home Loan @ 8.5% over 20 Years (Option B – EMI Reduction)',
+    tag: 'EMI Reduction',
+    subtitle: 'Monthly Budget Relief',
+    metrics: [
+      { label: 'Original Principal', value: '₹20,00,000' },
+      { label: 'Prepayment Amount', value: '₹2,00,000 at Month 12' },
+      { label: 'Revised Monthly EMI', value: '₹15,586 (₹1,770/mo Saved)', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Remaining Tenure', value: '228 Months (Unchanged)' },
+      { label: 'Net Interest Saved', value: '₹2,03,787', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Option B lowers monthly EMI outgo by ₹1,770/mo for immediate household budget relief, saving ₹2.03 Lakhs in interest.',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Choose Option A for Maximum Savings', description: 'Keeping your EMI constant after a prepayment accelerates principal compounding and yields the highest interest savings.' },
+  { number: '02', title: 'Prepay Early in Loan Tenure', description: 'Prepaying during the first 5 years of a 20-year loan saves significantly more interest because early EMIs consist primarily of interest.' },
+  { number: '03', title: 'Maintain Emergency Reserves', description: 'Ensure you retain at least 6 months of living expenses in an accessible emergency account before making large lump-sum prepayments.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <LoanPrepaymentCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

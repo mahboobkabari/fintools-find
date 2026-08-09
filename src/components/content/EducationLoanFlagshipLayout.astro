@@ -1,0 +1,155 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import EducationLoanCalculatorWidget from '../calculators/EducationLoanCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'University Admission & Loan Disbursal',
+    description: 'Secure admission to an accredited university in India or abroad and get tuition fees disbursed directly to the institution.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Study-Period Moratorium Phase',
+    description: 'Enjoy principal EMI holiday during course years plus grace period. Choose whether to pay simple interest monthly or defer it.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Graduation & Career Transition',
+    description: 'Complete degree requirements and transition into employment or professional career as grace period concludes.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Post-Graduation EMI & Sec 80E Tax Savings',
+    description: 'Begin monthly EMI repayments while claiming 100% uncapped Section 80E interest tax deductions for up to 8 years.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Domestic Higher Education Students',
+    description: 'Students pursuing B.Tech, MBBS, Law, or MBA degrees in Indian universities (IITs, NITs, AIIMS, IIMs).',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Overseas Study Aspirants',
+    description: 'Students funding Masters or STEM programs in the US, UK, Canada, Australia, or Europe with higher loan tickets.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Executive & Working Professionals',
+    description: 'Professionals taking education loans for executive MBAs or specialized upskilling while budgeting post-course EMIs.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Parent Co-Borrowers & Tax Payers',
+    description: 'Parents acting as co-borrowers who claim Section 80E interest tax deductions under their own income tax returns.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Two-Phase Education Loan Moratorium & EMI Formulas',
+  formula: 'I_{\\text{mor}} = P \\times \\left(\\frac{R}{100}\\right) \\times t_{\\text{mor}}, \\quad \\text{EMI} = P_{\\text{repay}} \\times r \\times \\frac{(1+r)^n}{(1+r)^n - 1}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Borrowed Loan Principal',
+      description: 'Total education loan amount disbursed for tuition and living expenses.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 't_{\\text{mor}}',
+      title: 'Moratorium Duration (Years)',
+      description: 'Course study years plus post-graduation grace period.',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'I_{\\text{mor}}',
+      title: 'Moratorium Simple Interest',
+      description: 'Simple interest accrued during course years ($P \\times R \\times t_{\\text{mor}}$).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'P_{\\text{repay}}',
+      title: 'Principal at Repayment Start',
+      description: '$P + I_{\\text{mor}}$ (if deferred/capitalized) or $P$ (if simple interest paid monthly).',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹10 Lakhs B.Tech Loan (4Y Moratorium @ 9.5% Rate over 10 Years)',
+    tag: 'Deferred Moratorium',
+    subtitle: 'Standard Capitalized Repayment',
+    metrics: [
+      { label: 'Borrowed Loan Principal', value: '₹10,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Moratorium Interest Accrued (4Y)', value: '₹3,80,000', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Principal at Repayment Start', value: '₹13,80,000' },
+      { label: 'Post-Graduation Monthly EMI', value: '₹17,857 / mo', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Deferring simple interest during a 4-year degree increases the repayment principal to ₹13.80 Lakhs, yielding a monthly EMI of ₹17,857 for 10 years.',
+  },
+  {
+    title: 'Smart Borrower Case Study: Pay Interest Monthly during Study Years (₹10L Loan @ 9.5%)',
+    tag: 'Interest Paid Monthly',
+    subtitle: 'Massive Savings Strategy',
+    metrics: [
+      { label: 'Monthly Interest during Course', value: '₹7,917 / mo', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Principal at Repayment Start', value: '₹10,00,000 (No Interest Added)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Post-Graduation Monthly EMI', value: '₹12,940 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Monthly EMI Savings Post-Graduation', value: '₹4,917 / mo Less', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Paying ₹7,917/month simple interest during study years prevents ₹3.8 Lakhs from compounding into principal, reducing your post-graduation EMI by ₹4,917/month!',
+  },
+];
+
+const comparisonData = {
+  title: 'Pay Interest Monthly during Study vs. Deferred Capitalized Interest',
+  subtitle: 'Comparing monthly cash flow burden, principal balance at graduation, and long-term interest cost',
+  optionA: {
+    badge: 'SMART BORROWER SAVINGS',
+    title: 'Pay Simple Interest Monthly during Course',
+    items: [
+      { isPositive: true, text: 'Lower Post-Graduation EMI: Reduces monthly EMI after graduation by 25% to 30%.' },
+      { isPositive: true, text: 'Prevents Interest Capitalization: Stops moratorium interest from compounding into your principal balance.' },
+      { isPositive: true, text: 'Overall Interest Savings: Saves ₹3.0 to ₹6.0 Lakhs in total repayment outgo.' },
+    ],
+  },
+  optionB: {
+    badge: 'DEFERRED CONVENIENCE',
+    title: 'Deferred Interest (Capitalized at Graduation)',
+    items: [
+      { isPositive: false, text: 'Zero Payments during Course: No cash flow burden while studying full-time.' },
+      { isPositive: false, text: 'Higher Repayment Principal: Accrued study interest gets added to principal when EMI starts.' },
+      { isPositive: false, text: 'Higher Monthly EMI: Requires significantly higher monthly salary allocation post-graduation.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <EducationLoanCalculatorWidget client:visible />
+</FlagshipLayout>

@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import FdVsDebtFundCalculatorWidget from '../calculators/FdVsDebtFundCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Investment Principal & Horizon',
+    description: 'Specify your lump sum investment amount (e.g. ₹5 Lakhs) and your intended holding tenure in years.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Your Income Tax Slab Rate',
+    description: 'Select your applicable marginal tax slab rate (0%, 10%, 15%, 20%, 30%, 40%) under the relevant tax regime.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Specify Expected Return Rates',
+    description: 'Set expected annual interest rates for Bank Fixed Deposit, Debt Mutual Fund, and Equity Arbitrage Fund.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compare Post-Tax Maturity & Tax Drag',
+    description: 'Instantly view which asset yields the highest post-tax maturity value, effective post-tax CAGR, and lower tax drag.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'High Net Worth Individuals (HNIs)',
+    description: 'Investors in the 30% tax slab seeking tax-efficient fixed income alternatives to traditional bank deposits.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Senior Citizens & Retirees',
+    description: 'Retirees evaluating senior citizen Bank FD rates against debt funds for capital preservation and post-tax yield.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Corporate Treasury & Business Owners',
+    description: 'Businesses deploying surplus cash in short-term fixed income instruments with optimal tax efficiency.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Retail Mutual Fund Investors',
+    description: 'Mutual fund investors analyzing the post-tax impact of Section 50AA Finance Act 2023 amendments on debt funds.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Post-Tax Fixed Income Formulas',
+  formula: '\\text{Maturity}_{\\text{PostTax}} = P + \\text{Gain}_{\\text{Gross}} \\times (1 - t_{\\text{effective}}), \\quad r_{\\text{PostTax}} = \\left(\\frac{\\text{Maturity}_{\\text{PostTax}}}{P}\\right)^{1/n} - 1',
+  parameters: [
+    {
+      symbol: 'A_{\\text{FD}}',
+      title: 'Bank FD Gross Maturity',
+      description: 'Quarterly compound interest equation: A = P(1 + r/4)^(4n).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 't_{\\text{effective}}',
+      title: 'Effective Slab Tax Rate',
+      description: 'User tax slab rate plus 4% Health & Education Cess.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'Sec 50AA',
+      title: 'Debt Fund Redemption Tax',
+      description: 'Specified debt funds taxed at slab rate upon redemption (Tax Deferral benefit during tenure).',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'Sec 112A',
+      title: 'Arbitrage Equity LTCG',
+      description: 'Equity arbitrage funds taxed at 12.5% LTCG (>1 Yr) above ₹1.25 Lakh exemption limit.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: 30% Tax Slab Investor (₹5 Lakhs Deposit, 3-Year Horizon)',
+    tag: '30% Slab Benchmark',
+    subtitle: 'Post-Tax Fixed Income Comparison',
+    metrics: [
+      { label: 'Deposit Principal', value: '₹5,000,000 / ₹5 Lakhs', colorClass: 'text-primary font-bold' },
+      { label: 'Bank FD Post-Tax', value: '₹5.79 Lakhs (5.03% CAGR)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Debt Fund Post-Tax', value: '₹5.83 Lakhs (5.28% CAGR)', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Arbitrage Fund Post-Tax', value: '₹6.09 Lakhs (6.80% CAGR)', colorClass: 'text-purple-600 font-extrabold' },
+    ],
+    takeaway: 'For a 30% tax slab investor, Arbitrage Funds yield the highest post-tax maturity (₹6.09 Lakhs) because LTCG gains below ₹1.25 Lakhs are tax-free under Section 112A. Debt Mutual Funds outperform Bank FDs (₹5.83L vs ₹5.79L) due to tax deferral compounding.',
+  },
+  {
+    title: 'Benchmark Case Study: Senior Citizen 15% Tax Slab (₹10 Lakhs Deposit @ 7.75% FD)',
+    tag: 'Senior Citizen Benchmark',
+    subtitle: 'High FD Interest Advantage',
+    metrics: [
+      { label: 'FD Return Rate', value: '7.75% p.a.', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Tax Slab Rate', value: '15.0%', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Winning Option', value: 'BANK FD WINS', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Post-Tax FD Maturity', value: '₹13.25 Lakhs', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'For senior citizens in lower tax slabs (15%), higher senior citizen Bank FD interest rates (7.75%) generate superior post-tax returns compared to standard debt funds.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <FdVsDebtFundCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

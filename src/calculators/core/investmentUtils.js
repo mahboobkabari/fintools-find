@@ -141,3 +141,76 @@ export function delayInvestmentCost({ principal = 100000, expectedRate = 12, ten
     wealthCostOfWaiting,
   };
 }
+
+/**
+ * Pure Compound Annual Growth Rate (CAGR) Core Calculation
+ * Formula: CAGR = ((Final Value / Initial Value) ^ (1 / Years)) - 1
+ */
+export function calculateCagrCore({ initialValue = 100000, finalValue = 250000, tenureYears = 5 } = {}) {
+  const initial = Number(initialValue) || 0;
+  const final = Number(finalValue) || 0;
+  const years = Math.max(0.0833, Number(tenureYears) || 1); // min 1 month (0.0833 years)
+
+  if (initial <= 0 || years <= 0) {
+    return {
+      cagrPct: 0,
+      absoluteGain: 0,
+      absoluteGrowthPct: 0,
+      wealthMultiplier: 0,
+      isValid: false,
+    };
+  }
+
+  const absoluteGain = final - initial;
+  const absoluteGrowthPct = (absoluteGain / initial) * 100;
+  const wealthMultiplier = Number((final / initial).toFixed(2));
+
+  let cagrPct = 0;
+  if (final > 0) {
+    cagrPct = (Math.pow(final / initial, 1 / years) - 1) * 100;
+  } else if (final === 0) {
+    cagrPct = -100;
+  } else {
+    // Loss scenario when final < 0 (unusual in asset valuation, but handled safely)
+    cagrPct = -100;
+  }
+
+  return {
+    cagrPct: Number(cagrPct.toFixed(2)),
+    absoluteGain,
+    absoluteGrowthPct: Number(absoluteGrowthPct.toFixed(2)),
+    wealthMultiplier,
+    isValid: true,
+  };
+}
+
+/**
+ * Calculate Target Final Value given Initial Investment and Target CAGR %
+ * Formula: Final Value = Initial Value * (1 + CAGR)^Years
+ */
+export function calculateTargetFinalValue({ initialValue = 100000, targetCagrPct = 12, tenureYears = 5 } = {}) {
+  const initial = Math.max(0, Number(initialValue) || 0);
+  const r = Math.max(-100, Number(targetCagrPct) || 0) / 100;
+  const years = Math.max(0.0833, Number(tenureYears) || 1);
+
+  const finalValue = Math.round(initial * Math.pow(1 + r, years));
+  const absoluteGain = Math.max(0, finalValue - initial);
+
+  return { finalValue, absoluteGain };
+}
+
+/**
+ * Calculate Required Initial Investment given Target Final Value and Target CAGR %
+ * Formula: Initial Value = Final Value / (1 + CAGR)^Years
+ */
+export function calculateRequiredInitial({ finalValue = 250000, targetCagrPct = 12, tenureYears = 5 } = {}) {
+  const final = Math.max(0, Number(finalValue) || 0);
+  const r = Math.max(-100, Number(targetCagrPct) || 0) / 100;
+  const years = Math.max(0.0833, Number(tenureYears) || 1);
+
+  if (1 + r <= 0) return { requiredInitial: 0 };
+
+  const requiredInitial = Math.round(final / Math.pow(1 + r, years));
+  return { requiredInitial };
+}
+

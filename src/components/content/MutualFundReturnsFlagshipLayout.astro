@@ -1,0 +1,88 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import MutualFundReturnsCalculatorWidget from '../calculators/MutualFundReturnsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Financial Goal & Risk Profiling', description: 'Define investment horizon (5, 10, or 20 years) and select appropriate asset allocation (Equity, Debt, Hybrid).' },
+  { stepNumber: '02', title: 'Direct Growth Scheme Selection', description: 'Select Direct Growth plans to save ~0.75% in annual Total Expense Ratio (TER), maximizing compounding returns.' },
+  { stepNumber: '03', title: 'Systematic Investment & Rebalancing', description: 'Execute automated monthly SIPs or lump-sum contributions while maintaining annual portfolio asset rebalancing.' },
+  { stepNumber: '04', title: 'Tax-Efficient Redemption Planning', description: 'Plan unit redemptions past the exit-load period and utilize the ₹1.25 Lakh annual equity LTCG exemption.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Monthly SIP Investors', description: 'Wealth builders setting up automated monthly SIP contributions to calculate future maturity corpus and XIRR returns.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Lumpsum Wealth Compounders', description: 'Investors deploying single lump-sum amounts to forecast 10-year compounding growth and CAGR rates.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Direct Plan Savers', description: 'Smart investors calculating the lakhs saved by choosing Direct Growth plans over distributor Regular plans.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Benchmark Portfolio Comparers', description: 'Investors comparing fund performance against Nifty 50, Bank FD, Gold, and Inflation benchmarks.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Mutual Fund Return Formulas (CAGR & XIRR)',
+  formula: '\\text{Maturity Value (Lumpsum)} = P \\times (1 + r)^Y, \\quad \\text{Maturity Value (SIP)} = P \\times \\left[ \\frac{(1+i)^N - 1}{i} \\right] \\times (1 + i)',
+  parameters: [
+    { symbol: 'CAGR (%)', title: 'Compounded Annual Growth Rate', description: 'Geometric annualized return suitable for single initial lump-sum investments.', colorClass: 'text-primary' },
+    { symbol: 'XIRR (%)', title: 'Extended Internal Rate of Return', description: 'Money-weighted annualized return suitable for recurring monthly SIP cash flows.', colorClass: 'text-accent-sky' },
+    { symbol: 'Absolute Return (%)', title: 'Total Capital Growth', description: 'Percentage ratio of net profit generated relative to total capital invested.', colorClass: 'text-semantic-success' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: '₹5,000 Monthly SIP over 10 Years @ 12% Expected Return',
+    tag: 'Systematic Investment',
+    subtitle: 'Money-Weighted XIRR Compounding',
+    metrics: [
+      { label: 'Monthly Contribution', value: '₹5,000' },
+      { label: 'Total Invested (120 Months)', value: '₹6,00,000' },
+      { label: 'Maturity Corpus', value: '₹11,61,695', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Est. Net Profit', value: '₹5,61,695', colorClass: 'text-primary font-bold' },
+      { label: 'Annualized XIRR Return', value: '12.68%', colorClass: 'text-accent-sky font-bold' },
+      { label: 'Absolute Return', value: '+93.62%' },
+      { label: 'Wealth Multiplier', value: '1.94x' },
+    ],
+    takeaway: 'Investing ₹5,000 monthly builds a ₹11.61 Lakh corpus over 10 years, creating ₹5.61 Lakhs in net wealth.',
+  },
+  {
+    title: '₹1,00,000 One-Time Lumpsum over 10 Years @ 12% Expected Return',
+    tag: 'Lumpsum Investment',
+    subtitle: 'Pure CAGR Compounding',
+    metrics: [
+      { label: 'Initial Principal', value: '₹1,00,000' },
+      { label: 'Holding Period', value: '10 Years' },
+      { label: 'Maturity Corpus', value: '₹3,10,585', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Est. Net Profit', value: '₹2,10,585', colorClass: 'text-primary font-bold' },
+      { label: 'CAGR Rate', value: '12.00%', colorClass: 'text-accent-sky font-bold' },
+      { label: 'Absolute Return', value: '+210.595%' },
+      { label: 'Wealth Multiplier', value: '3.11x' },
+    ],
+    takeaway: 'A one-time ₹1 Lakh lump-sum investment more than triples to ₹3.10 Lakhs over 10 years at 12% CAGR.',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Choose Direct Growth Plans', description: 'Direct plans bypass distributor commissions, reducing expense ratio by ~0.75% p.a. and adding lakhs to long-term wealth.' },
+  { number: '02', title: 'Differentiate CAGR vs XIRR', description: 'Use CAGR for single lump-sum investments and XIRR for recurring monthly SIPs to evaluate returns accurately.' },
+  { number: '03', title: 'Account for Cost-of-Living Inflation', description: 'Evaluate future corpus in real purchasing power terms to ensure your portfolio beats ~6% annual CPI inflation.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <MutualFundReturnsCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

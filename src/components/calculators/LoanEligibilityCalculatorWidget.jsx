@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { loanEligibilityCalculatorConfig } from '../../calculators/configs/loan-eligibility-calculator.config.js';
+import LoanEligibilityFlagshipWidget from './primitives/LoanEligibilityFlagshipWidget';
 
-export default function LoanEligibilityCalculatorWidget() {
-  return <UniversalCalculatorWidget config={loanEligibilityCalculatorConfig} />;
+export default function LoanEligibilityCalculatorWidget(props) {
+  return <LoanEligibilityFlagshipWidget {...props} />;
 }

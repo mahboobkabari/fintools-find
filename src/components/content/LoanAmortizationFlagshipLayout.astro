@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import LoanAmortizationCalculatorWidget from '../calculators/LoanAmortizationCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Principal, Rate & Tenure',
+    description: 'Input your total loan balance, annual interest rate (p.a.), and overall repayment tenure in years or months.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Simulate Optional Extra Prepayments',
+    description: 'Test monthly recurring extra payments or annual lump sums to evaluate interest savings and accelerated payoff.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Review Monthly & Yearly Amortization Schedule',
+    description: 'Inspect exact month-by-month and year-by-year principal vs interest payment splits and declining balance trajectory.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Export CSV Schedule & Audit Tax Deductions',
+    description: 'Download the complete CSV repayment schedule and review Section 24b and Section 80C tax deduction limits.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Mortgage & Home Buyers',
+    description: 'Homeowners tracking 15-year or 30-year mortgage repayment schedules, interest front-loading, and tax benefits.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Debt Prepayment Optimizers',
+    description: 'Borrowers testing recurring extra payments to shorten loan tenure and save lakhs in cumulative interest outgo.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Auto & Personal Loan Servicers',
+    description: 'Car buyers and personal loan borrowers tracking exact principal balance reduction month by month.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Financial Planners & Auditors',
+    description: 'Advisors downloading complete CSV schedules to model debt restructuring, balance transfers, and refinancing.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Loan Amortization & Monthly Repayment Formulas',
+  formula: '\\text{EMI} = P \\times \\frac{r(1+r)^n}{(1+r)^n - 1}, \\quad I_m = B_{m-1} \\times r, \\quad P_m = \\text{EMI} - I_m',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Principal Loan Balance',
+      description: 'Total borrowed loan amount or remaining balance.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Monthly Interest Rate',
+      description: 'Annual interest rate divided by 12 months ($r = R / 1200$).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'I_m',
+      title: 'Monthly Interest Portion',
+      description: 'Interest component calculated on opening balance ($B_{m-1} \\times r$).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'P_m',
+      title: 'Monthly Principal Portion',
+      description: 'Principal component reducing outstanding loan balance.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹25 Lakhs Home Loan (8.5% Rate over 15 Years)',
+    tag: 'Home Loan Schedule',
+    subtitle: 'Standard vs Prepayment Comparison',
+    metrics: [
+      { label: 'Loan Principal Amount', value: '₹25,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Base EMI', value: '₹24,617/mo', colorClass: 'text-slate-900 font-bold' },
+      { label: 'Baseline Interest Outgo', value: '₹19,31,080', colorClass: 'text-rose-600 font-bold' },
+      { label: 'With +₹3,000/mo Extra Prepayment', value: 'Saves ₹4,25,000+ Interest', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Adding just ₹3,000 extra per month cuts your home loan payoff timeline by 3.2 years and saves over ₹4.25 Lakhs in cumulative interest outgo.',
+  },
+  {
+    title: 'Benchmark Case Study: $300,000 US Mortgage (6.5% Fixed Rate over 30 Years)',
+    tag: 'US Mortgage Schedule',
+    subtitle: 'Interest Front-Loading Analysis',
+    metrics: [
+      { label: 'Mortgage Balance', value: '$300,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Mortgage EMI', value: '$1,896/mo', colorClass: 'text-slate-900 font-bold' },
+      { label: 'Total 30-Year Interest', value: '$382,633', colorClass: 'text-rose-600 font-bold' },
+      { label: 'With $200/mo Extra Prepayment', value: 'Saves $78,000+ Interest', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Because 30-year mortgages are heavily interest-frontloaded, modest early principal prepayments yield massive interest savings and reduce overall mortgage duration.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <LoanAmortizationCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

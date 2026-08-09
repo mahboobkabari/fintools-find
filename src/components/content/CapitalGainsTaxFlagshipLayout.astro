@@ -1,0 +1,89 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CapitalGainsTaxCalculatorWidget from '../calculators/CapitalGainsTaxCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Asset Acquisition & Purchase Record', description: 'Maintain original purchase contract, invoice, or demat cum broker statement establishing initial cost basis.' },
+  { stepNumber: '02', title: 'Holding Period Verification', description: 'Verify holding duration (>12 months for equity; >24 months for real estate, gold, unlisted shares).' },
+  { stepNumber: '03', title: 'Transfer Expenses & Cost Basis Audit', description: 'Deduct brokerage fees, stamp duty, transaction charges, and cost of improvement from gross sale price.' },
+  { stepNumber: '04', title: 'Section 112A Exemption & ITR Filing', description: 'Apply annual ₹1.25 Lakh Section 112A exemption for equity LTCG and report Schedule CG on ITR-2 / ITR-3.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Equity & Mutual Fund Investors', description: 'Investors calculating STCG (20%) or LTCG (12.5% with ₹1.25L Sec 112A exemption) before rebalancing portfolios.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Real Estate Property Sellers', description: 'Homeowners and land sellers computing post-Budget 2024 12.5% LTCG tax liabilities on property sales.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Gold & ETF Investors', description: 'Precious metal sellers calculating 12.5% LTCG or STCG slab rates on physical gold, digital gold, and gold ETFs.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Unlisted Equity & ESOP Holders', description: 'Startup employees and private equity shareholders computing short-term and long-term tax on unlisted shares.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Capital Gains Tax Formulas (FY 2025-26 / AY 2026-27)',
+  formula: '\\text{Total Tax Payable} = \\left( \\max(0, \\text{Net Gain} - \\text{Sec 112A Exemption}) \\times \\frac{\\text{Tax Rate \\%}}{100} \\right) \\times 1.04',
+  parameters: [
+    { symbol: 'Net Capital Gain', title: 'Net Realized Profit', description: 'Gross Sale Consideration minus Transfer Expenses minus Purchase & Improvement Costs.', colorClass: 'text-primary' },
+    { symbol: 'Sec 112A Exemption', title: 'Annual Equity Exemption', description: '₹1,25,000 annual tax-free threshold granted on listed equity & equity MF long-term gains.', colorClass: 'text-accent-sky' },
+    { symbol: '4% Cess', title: 'Health & Education Cess', description: 'Statutory 4% surcharge levied on base capital gains tax liability across all asset classes.', colorClass: 'text-semantic-success' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Equity Mutual Fund LTCG (₹1.5 Lakh Gain in 18 Months)',
+    tag: 'Equity Investment',
+    subtitle: 'Section 112A Exemption Applied',
+    metrics: [
+      { label: 'Original Purchase Cost', value: '₹1,00,000' },
+      { label: 'Gross Sale Price (18 Mo)', value: '₹2,50,000' },
+      { label: 'Net Capital Gain', value: '₹1,50,000' },
+      { label: 'Sec 112A Exemption', value: '₹1,25,000', colorClass: 'text-emerald-500 font-bold' },
+      { label: 'Net Taxable Gain', value: '₹25,000' },
+      { label: 'Total Tax Payable (12.5% + 4% Cess)', value: '₹3,250', colorClass: 'text-semantic-danger font-extrabold' },
+      { label: 'Net Profit Kept', value: '₹1,46,750', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Out of ₹1.5 Lakhs in realized profits, you pay only ₹3,250 in total tax thanks to the ₹1.25 Lakh Section 112A exemption.',
+  },
+  {
+    title: 'Real Estate Property LTCG (₹25 Lakh Gain in 36 Months)',
+    tag: 'Real Estate',
+    subtitle: '12.5% Rate Without Indexation',
+    metrics: [
+      { label: 'Original Property Cost', value: '₹50,00,000' },
+      { label: 'Gross Sale Price (36 Mo)', value: '₹75,00,000' },
+      { label: 'Net Capital Gain', value: '₹25,00,000' },
+      { label: 'Applicable LTCG Rate', value: '12.5%', colorClass: 'text-primary font-bold' },
+      { label: 'Base Tax (12.5% of ₹25L)', value: '₹3,12,500' },
+      { label: 'Health & Education Cess (4%)', value: '₹12,500' },
+      { label: 'Total Tax Payable', value: '₹3,25,000', colorClass: 'text-semantic-danger font-extrabold' },
+      { label: 'Net Proceeds Retained', value: '₹71,75,000', colorClass: 'text-emerald-500 font-bold' },
+    ],
+    takeaway: 'Under Budget 2024 post-July 23, 2024 rules, real estate LTCG is taxed at 12.5% without indexation.',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Harvest Equity LTCG Tax-Free Annually', description: 'Redeem and reinvest equity mutual fund gains up to ₹1.25 Lakhs every financial year before March 31 to reset cost basis tax-free.' },
+  { number: '02', title: 'Set Off Short-Term & Long-Term Capital Losses', description: 'Offset short-term losses against both STCG and LTCG under Section 70/71 to minimize total taxable income.' },
+  { number: '03', title: 'Deduct Brokerage, Fees & Renovation Costs', description: 'Ensure transfer expenses (brokerage, stamp duty) and home improvement costs are deducted from sale proceeds.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CapitalGainsTaxCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

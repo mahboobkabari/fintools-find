@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import XirrCalculatorWidget from '../calculators/XirrCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Investment Cash Outflows (-)',
+    description: 'Add your purchase dates and amounts using negative values (e.g. -₹1,00,000 for initial deposit or SIPs).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Redemption / Current Portfolio Inflow (+)',
+    description: 'Add your redemption or current net asset portfolio valuation on the target date using a positive value.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Add Intermediate Cash Flows (Top-ups or Partial Redemptions)',
+    description: 'Easily add multi-transaction top-ups or dividend/partial withdrawal cash flows.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Annualized XIRR & Benchmark Insights',
+    description: 'Instantly view your exact Extended Internal Rate of Return (XIRR % p.a.) and compare it to simple CAGR.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Mutual Fund SIP Investors',
+    description: 'Investors analyzing true annualized returns across monthly SIP deposits, step-up contributions, and current portfolio value.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Direct Equity & Stock Traders',
+    description: 'Traders evaluating multi-tranche stock purchases, dividend payouts, and final portfolio valuations.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Real Estate & Private Equity Investors',
+    description: 'Property owners calculating returns across purchase price, periodic rental income, and property sale proceeds.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Financial Analysts & Wealth Managers',
+    description: 'Wealth advisors needing exact Newton-Raphson XIRR precision for client portfolio performance reporting.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Extended Internal Rate of Return (XIRR) Equation',
+  formula: '\\sum_{i=1}^{N} \\frac{C_i}{(1 + \\text{XIRR})^{\\frac{d_i - d_1}{365.25}}} = 0',
+  parameters: [
+    {
+      symbol: 'C_i',
+      title: 'Cash Flow Amount at Date i',
+      description: 'Transaction amount (negative for investment deposit, positive for redemption or valuation).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'd_i - d_1',
+      title: 'Days Elapsed from Start Date',
+      description: 'Exact day difference between transaction date d_i and initial cash flow date d_1.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '365.25',
+      title: 'Annualization Day-Count Fraction',
+      description: 'Standard year fraction incorporating leap-year precision.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'XIRR',
+      title: 'Annualized Internal Rate of Return',
+      description: 'Solved numerically using Newton-Raphson iteration so Net Present Value equals zero.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: 1-Year Lumpsum Investment (-₹1 Lakh to +₹1.10 Lakhs)',
+    tag: 'Standard 1-Year Benchmark',
+    subtitle: '10% Exact Annualized XIRR',
+    metrics: [
+      { label: 'Initial Investment (2024-01-01)', value: '-₹100,000', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Valuation (2025-01-01)', value: '+₹110,000', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Absolute Profit', value: '₹10,000', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Annualized XIRR', value: '10.0% p.a.', colorClass: 'text-indigo-600 font-bold' },
+    ],
+    takeaway: 'For a simple 1-year investment with a single outflow and single inflow, XIRR equals 10.0% p.a., matching simple CAGR exactly.',
+  },
+  {
+    title: 'Benchmark Case Study: Lumpsum + Top-up + Valuation (-₹100k, -₹50k, +₹180k)',
+    tag: 'Multi-Transaction Cash Flow',
+    subtitle: 'Irregular Investment Performance',
+    metrics: [
+      { label: 'Total Invested Capital', value: '₹150,000', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Current Valuation', value: '₹180,000', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Net Profit', value: '₹30,000', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Annualized XIRR', value: '12.33% p.a.', colorClass: 'text-purple-600 font-bold' },
+    ],
+    takeaway: 'Because the ₹50,000 top-up was deposited 1 year after the initial ₹100,000, XIRR accurately factors in the shorter holding time of the second tranche, yielding an annualized return of 12.33% p.a.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <XirrCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

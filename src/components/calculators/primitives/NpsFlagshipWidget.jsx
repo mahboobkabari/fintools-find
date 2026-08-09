@@ -1,430 +1,457 @@
-import { useState, useMemo } from 'preact/hooks';
-import { calculateNpsCalculator } from '../../../calculators/retirement/nps-calculator.js';
-import { formatCurrency } from '@utils/formatters.js';
-import { useUrlSync } from '../../hooks/useUrlSync.js';
-
-// Reusable Shared UI Library Components
-import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
-import ResultDashboard from '../../ui/ResultDashboard';
-import ResultDonutChart from '../../ui/ResultDonutChart';
-import CostBreakdownCard from '../../ui/CostBreakdownCard';
-import FinancialHealthGauge from '../../ui/FinancialHealthGauge';
-import RecommendationCard from '../../ui/RecommendationCard';
-import InsightCard from '../../ui/InsightCard';
-import ShareActions from '../../ui/ShareActions';
+import { useMemo } from 'preact/hooks';
+import { calculateNps } from '@calculators/retirement/nps-calculator';
 import FormInputNumber from './FormInputNumber';
-import AmortizationTable from './AmortizationTable';
+import ResultDashboard from '../../ui/ResultDashboard';
+import FinancialHealthGauge from '../../ui/FinancialHealthGauge';
+import ResultDonutChart from '../../ui/ResultDonutChart';
+import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
+import ShareActions from '../../ui/ShareActions';
+import { formatCurrency } from '@utils/formatters';
+import { useUrlSync } from '../../hooks/useUrlSync';
 
-const DEFAULT_NPS_STATE = {
-  monthlyInvestment: 10000,
-  currentAge: 30,
-  retirementAge: 60,
-  expectedReturn: 10,
-  annuityPercent: 40,
-  expectedAnnuityRate: 6,
-  inflationRate: 6,
-  currentMonthlyIncome: 50000,
-};
-
-const NPS_PARAM_MAP = {
-  monthlyInvestment: 'sip',
-  currentAge: 'age',
-  retirementAge: 'ret',
-  expectedReturn: 'rate',
-  annuityPercent: 'ann',
-  expectedAnnuityRate: 'annr',
-  inflationRate: 'inf',
-  currentMonthlyIncome: 'inc',
-};
-
-export default function NpsFlagshipWidget() {
-  const [params, setParam, resetUrlState] = useUrlSync(DEFAULT_NPS_STATE, NPS_PARAM_MAP);
-  const {
-    monthlyInvestment, currentAge, retirementAge, expectedReturn,
-    annuityPercent, expectedAnnuityRate, inflationRate, currentMonthlyIncome,
-  } = params;
-
-  const [activePreset, setActivePreset] = useState(null);
-  const [copiedToast, setCopiedToast] = useState(false);
-
-  // Career Profile Presets
-  const presets = [
-    { id: 'early', label: 'Early Career', icon: '🎓', monthlyInvestment: 5000, currentAge: 25, retirementAge: 60, expectedReturn: 10, desc: 'Age 25, ₹5K/mo' },
-    { id: 'mid', label: 'Mid Career', icon: '💼', monthlyInvestment: 15000, currentAge: 35, retirementAge: 60, expectedReturn: 10, desc: 'Age 35, ₹15K/mo' },
-    { id: 'late', label: 'Late Career', icon: '🏦', monthlyInvestment: 30000, currentAge: 45, retirementAge: 60, expectedReturn: 8, desc: 'Age 45, ₹30K/mo' },
-    { id: 'aggressive', label: 'Aggressive Investor', icon: '🚀', monthlyInvestment: 20000, currentAge: 28, retirementAge: 60, expectedReturn: 12, desc: 'High Equity' },
-    { id: 'maxTax', label: 'Max Tax Benefit', icon: '🛡️', monthlyInvestment: 4167, currentAge: 30, retirementAge: 60, expectedReturn: 10, desc: '₹50K/yr 80CCD(1B)' },
-  ];
-
-  const applyPreset = (p) => {
-    setActivePreset(p.id);
-    setParam('monthlyInvestment', p.monthlyInvestment);
-    setParam('currentAge', p.currentAge);
-    setParam('retirementAge', p.retirementAge);
-    setParam('expectedReturn', p.expectedReturn);
+export default function NpsFlagshipWidget({ initialValues = {} }) {
+  const defaultState = {
+    currentAge: 30,
+    planningRetirementAge: 60,
+    monthlyContribution: 5000,
+    currentCorpus: 100000,
+    expectedReturnRate: 10.0,
+    allocationMode: 'active',
+    equityPct: 50,
+    corporateDebtPct: 30,
+    govtBondsPct: 20,
+    annuityPurchasePct: 40,
+    annuityRatePct: 6.0,
+    taxRegime: 'old',
+    marginalTaxRatePct: 30,
+    annualEmployerContribution: 0,
+    basicSalary: 0,
+    ...initialValues,
   };
 
-  // Perform calculation
+  const [state, updateState] = useUrlSync(defaultState);
+
   const results = useMemo(() => {
-    return calculateNpsCalculator({
-      monthlyInvestment,
-      currentAge,
-      retirementAge,
-      expectedReturn,
-      annuityPercent,
-      expectedAnnuityRate,
-      inflationRate,
-      currentMonthlyIncome,
-    });
-  }, [monthlyInvestment, currentAge, retirementAge, expectedReturn, annuityPercent, expectedAnnuityRate, inflationRate, currentMonthlyIncome]);
+    return calculateNps(state);
+  }, [state]);
 
-  const handleCopyLink = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      setCopiedToast(true);
-      setTimeout(() => setCopiedToast(false), 2500);
-    }
-  };
-
-  const handleReset = () => {
-    setActivePreset(null);
-    resetUrlState();
-  };
-
-  // Cost breakdown items for Corpus Composition
-  const corpusItems = [
-    { label: 'Your Total Contributions', amount: results.totalInvestment, colorClass: 'bg-primary', desc: 'Total monthly NPS contributions over investment period.' },
-    { label: 'Wealth Created (Returns)', amount: results.interestEarned, colorClass: 'bg-emerald-500', desc: 'Investment returns compounded over time.' },
-  ];
-
-  // Withdrawal breakdown items
-  const withdrawalItems = [
-    { label: 'Tax-Free Lump Sum Withdrawal', amount: results.lumpSumAmount, colorClass: 'bg-primary', desc: `${100 - annuityPercent}% of corpus withdrawn as lump sum.` },
-    { label: 'Annuity Purchase (Pension Fund)', amount: results.annuityCorpus, colorClass: 'bg-accent-amber', desc: `${annuityPercent}% of corpus used to purchase a pension annuity.` },
+  const presets = [
+    {
+      id: 'max_tax_saver',
+      title: 'Max Tax Saver (Sec 80CCD 1B)',
+      description: '₹50,000/yr self-contribution saving ₹15,600/yr tax under Old Regime.',
+      values: {
+        currentAge: 30,
+        planningRetirementAge: 60,
+        monthlyContribution: 4167, // ₹50k/yr
+        currentCorpus: 50000,
+        taxRegime: 'old',
+        marginalTaxRatePct: 30,
+        allocationMode: 'active',
+        equityPct: 50,
+        corporateDebtPct: 30,
+        govtBondsPct: 20,
+        annuityPurchasePct: 40,
+      },
+    },
+    {
+      id: 'young_starter',
+      title: 'Young Salaried Starter (Age 25)',
+      description: '35-year compounding runway with ₹5,000/mo SIP.',
+      values: {
+        currentAge: 25,
+        planningRetirementAge: 60,
+        monthlyContribution: 5000,
+        currentCorpus: 25000,
+        taxRegime: 'old',
+        marginalTaxRatePct: 20,
+        allocationMode: 'active',
+        equityPct: 75,
+        corporateDebtPct: 15,
+        govtBondsPct: 10,
+        annuityPurchasePct: 40,
+      },
+    },
+    {
+      id: 'aggressive_equity',
+      title: 'Aggressive Equity LC75 Choice',
+      description: 'Maximum 75% equity allocation targeting 11.5% long-term returns.',
+      values: {
+        currentAge: 28,
+        planningRetirementAge: 60,
+        monthlyContribution: 8000,
+        currentCorpus: 150000,
+        taxRegime: 'old',
+        marginalTaxRatePct: 30,
+        allocationMode: 'active',
+        equityPct: 75,
+        corporateDebtPct: 15,
+        govtBondsPct: 10,
+        annuityPurchasePct: 40,
+      },
+    },
+    {
+      id: 'corporate_nps_new',
+      title: 'Corporate NPS (New Tax Regime)',
+      description: '14% employer match u/s 80CCD(2) deductible under New Tax Regime.',
+      values: {
+        currentAge: 35,
+        planningRetirementAge: 60,
+        monthlyContribution: 5000,
+        currentCorpus: 300000,
+        taxRegime: 'new',
+        marginalTaxRatePct: 30,
+        annualEmployerContribution: 140000,
+        basicSalary: 1000000,
+        annuityPurchasePct: 40,
+      },
+    },
   ];
 
   return (
-    <div class="space-y-10">
-      {/* 1. Presets */}
-      <ScenarioPresetCards presets={presets} activePreset={activePreset} onSelect={applyPreset} label="Select Retirement Profile Preset" />
-
-      {/* 2. HERO DECISION BANNER */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-canvas to-emerald-500/10 border-2 border-primary/40 shadow-soft space-y-3">
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-primary text-white font-mono text-xs font-bold uppercase">
-            🏆 RETIREMENT READINESS VERDICT
-          </span>
-          <span class={`text-xs font-mono font-bold px-2.5 py-1 rounded-xl border border-hairline ${results.readinessColor}`}>
-            Score: {results.readinessScore}/100 ({results.readinessStatus})
-          </span>
+    <div className="space-y-8">
+      {/* 1. Hero Decision Question Banner */}
+      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl border border-indigo-700/40">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-semibold rounded-full border border-blue-500/30 mb-3">
+              ⚡ Institutional NPS Decision Engine
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              How much tax will NPS save me today, and what monthly pension will I receive at age 60?
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl">
+              Calculate your total NPS Tier 1 nest egg at age 60, 60% tax-free lump-sum withdrawal, monthly annuity pension stream, and Section 80CCD(1B) / 80CCD(2) tax savings.
+            </p>
+          </div>
+          <div className="bg-blue-800/40 border border-blue-500/40 p-4 rounded-xl text-center min-w-[200px]">
+            <span className="text-xs uppercase tracking-wider text-blue-300 font-bold block">
+              Estimated Tax Saved Today
+            </span>
+            <span className="text-3xl font-black text-emerald-400 mt-1 block">
+              {formatCurrency(results.taxSavings.annualTaxSaved)}/yr
+            </span>
+            <span className="text-xs text-blue-200 mt-1 block">
+              ({results.taxSavings.taxRegime === 'old' ? 'Old Tax Regime u/s 80CCD 1B' : 'New Regime Employer 80CCD 2'})
+            </span>
+          </div>
         </div>
-
-        <h2 class="text-xl sm:text-2xl font-heading font-extrabold text-ink leading-tight">
-          {results.heroText}
-        </h2>
-        <p class="text-xs sm:text-sm text-body leading-relaxed">
-          {results.readinessDesc}
-        </p>
       </div>
 
-      {/* 3. Interactive Calculator Workspace */}
-      <div class="grid lg:grid-cols-12 gap-8 items-start">
-        {/* Left Panel: Inputs */}
-        <div class="lg:col-span-6 bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-6 shadow-soft">
-          <div class="flex items-center justify-between border-b border-hairline pb-4">
-            <h3 class="text-xl font-bold font-heading text-ink">NPS Investment Parameters</h3>
-            <ShareActions onShare={handleCopyLink} onReset={handleReset} copiedToast={copiedToast} />
-          </div>
+      {/* 2. Smart Presets */}
+      <ScenarioPresetCards
+        presets={presets}
+        activePresetId={null}
+        onSelectPreset={(p) => {
+          Object.entries(p.values).forEach(([k, v]) => updateState(k, v));
+        }}
+      />
 
-          <FormInputNumber
-            id="nps-monthly"
-            label="Monthly NPS Contribution (₹)"
-            value={monthlyInvestment}
-            min={500}
-            max={200000}
-            step={500}
-            prefix="₹"
-            minLabel="₹500"
-            maxLabel="₹2 Lakhs"
-            onChange={(v) => setParam('monthlyInvestment', v)}
-          />
+      {/* 3. Inputs Section */}
+      <div className="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 space-y-6">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-3">
+          1. Subscriber & Contribution Parameters
+        </h3>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormInputNumber
-            id="current-age"
+            id="currentAge"
             label="Current Age (Years)"
-            value={currentAge}
+            value={state.currentAge}
+            onChange={(val) => updateState('currentAge', val)}
             min={18}
-            max={59}
-            step={1}
-            suffix=" Years"
-            minLabel="18 Yrs"
-            maxLabel="59 Yrs"
-            onChange={(v) => setParam('currentAge', v)}
-          />
-
-          <FormInputNumber
-            id="retirement-age"
-            label="Target Retirement Age"
-            value={retirementAge}
-            min={Math.max(currentAge + 1, 40)}
             max={70}
             step={1}
-            suffix=" Years"
-            minLabel="40 Yrs"
-            maxLabel="70 Yrs"
-            onChange={(v) => setParam('retirementAge', v)}
           />
-
           <FormInputNumber
-            id="expected-return"
-            label="Expected Annual Return (%)"
-            value={expectedReturn}
-            min={4}
-            max={16}
-            step={0.5}
-            suffix="%"
-            minLabel="4%"
-            maxLabel="16%"
-            onChange={(v) => setParam('expectedReturn', v)}
+            id="planningRetirementAge"
+            label="Planned Exit / Retirement Age"
+            value={state.planningRetirementAge}
+            onChange={(val) => updateState('planningRetirementAge', val)}
+            min={state.currentAge + 1}
+            max={75}
+            step={1}
           />
-
           <FormInputNumber
-            id="annuity-percent"
-            label="Annuity Purchase (% of Corpus)"
-            value={annuityPercent}
-            min={40}
-            max={100}
-            step={5}
-            suffix="%"
-            minLabel="40% Min"
-            maxLabel="100%"
-            onChange={(v) => setParam('annuityPercent', v)}
+            id="monthlyContribution"
+            label="Monthly Self-Contribution (₹/mo)"
+            value={state.monthlyContribution}
+            onChange={(val) => updateState('monthlyContribution', val)}
+            min={500}
+            max={500000}
+            step={500}
           />
-
           <FormInputNumber
-            id="annuity-rate"
-            label="Expected Annuity Return (%)"
-            value={expectedAnnuityRate}
-            min={3}
-            max={10}
-            step={0.5}
-            suffix="%"
-            minLabel="3%"
-            maxLabel="10%"
-            onChange={(v) => setParam('expectedAnnuityRate', v)}
-          />
-
-          <FormInputNumber
-            id="nps-inflation"
-            label="Expected Inflation Rate (%)"
-            value={inflationRate}
+            id="currentCorpus"
+            label="Existing Accumulated NPS Corpus (₹)"
+            value={state.currentCorpus}
+            onChange={(val) => updateState('currentCorpus', val)}
             min={0}
-            max={12}
-            step={0.5}
-            suffix="%"
-            minLabel="0%"
-            maxLabel="12%"
-            onChange={(v) => setParam('inflationRate', v)}
-          />
-
-          <FormInputNumber
-            id="monthly-income"
-            label="Current Net Monthly Income (₹)"
-            value={currentMonthlyIncome}
-            min={10000}
-            max={1000000}
-            step={5000}
-            prefix="₹"
-            minLabel="₹10,000"
-            maxLabel="₹10 Lakhs"
-            onChange={(v) => setParam('currentMonthlyIncome', v)}
+            max={50000000}
+            step={10000}
           />
         </div>
 
-        {/* Right Panel: Output Dashboard & Charts */}
-        <div class="lg:col-span-6 space-y-6">
-          <ResultDashboard
-            primaryLabel="Estimated Monthly Pension"
-            primaryValue={formatCurrency(results.monthlyPension)}
-            secondaryItems={[
-              { label: 'Retirement Corpus', value: formatCurrency(results.totalMaturityCorpus) },
-              { label: 'Total Contributions', value: formatCurrency(results.totalInvestment) },
-              { label: 'Tax-Free Lump Sum', value: formatCurrency(results.lumpSumAmount) },
-              { label: 'Pension Replaces', value: `${results.replacementRatio}% of Income` },
-            ]}
-          />
+        {/* Tax Regime & Deduction Settings */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+          <h4 className="text-md font-bold text-slate-900 dark:text-white">
+            2. Tax Regime & Income Deduction Settings
+          </h4>
 
-          <ResultDonutChart
-            title="Contributions vs Wealth Growth"
-            centerValue={formatCurrency(results.totalMaturityCorpus)}
-            centerSubtext="Retirement Corpus"
-            segments={[
-              { label: 'Your Contributions', amount: results.totalInvestment, colorClass: 'bg-primary' },
-              { label: 'Investment Returns', amount: results.interestEarned, colorClass: 'bg-emerald-500' },
-            ]}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Selected Income Tax Regime
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => updateState('taxRegime', 'old')}
+                  className={`p-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
+                    state.taxRegime === 'old'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                      : 'bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+                  }`}
+                >
+                  Old Tax Regime (Sec 80CCD 1B Eligible)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateState('taxRegime', 'new')}
+                  className={`p-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
+                    state.taxRegime === 'new'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                      : 'bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+                  }`}
+                >
+                  New Tax Regime (Sec 80CCD 2 Eligible)
+                </button>
+              </div>
+            </div>
 
-          <FinancialHealthGauge
-            title="Retirement Readiness Score"
-            score={results.readinessScore}
-            statusLabel={results.readinessStatus}
-            description={results.readinessDesc}
-          />
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Marginal Income Tax Bracket %
+              </label>
+              <select
+                value={state.marginalTaxRatePct}
+                onChange={(e) => updateState('marginalTaxRatePct', Number(e.target.value))}
+                className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white font-semibold"
+              >
+                <option value={0}>0% (Tax Exempt)</option>
+                <option value={5}>5% Slab</option>
+                <option value={10}>10% Slab</option>
+                <option value={15}>15% Slab</option>
+                <option value={20}>20% Slab</option>
+                <option value={30}>30% Slab</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Asset Class Allocation Sliders */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-md font-bold text-slate-900 dark:text-white">
+              3. Asset Class Allocation & Return Weighting
+            </h4>
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full">
+              Weighted Expected Return: {results.effectiveReturnRate}% p.a.
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <FormInputNumber
+              id="equityPct"
+              label="Equity (Class E) % [Max 75%]"
+              value={state.equityPct}
+              onChange={(val) => updateState('equityPct', val)}
+              min={0}
+              max={75}
+              step={5}
+            />
+            <FormInputNumber
+              id="corporateDebtPct"
+              label="Corporate Debt (Class C) %"
+              value={state.corporateDebtPct}
+              onChange={(val) => updateState('corporateDebtPct', val)}
+              min={0}
+              max={100}
+              step={5}
+            />
+            <FormInputNumber
+              id="govtBondsPct"
+              label="Govt Securities (Class G) %"
+              value={state.govtBondsPct}
+              onChange={(val) => updateState('govtBondsPct', val)}
+              min={0}
+              max={100}
+              step={5}
+            />
+          </div>
+        </div>
+
+        {/* Annuity Purchase & Pension Settings */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+          <h4 className="text-md font-bold text-slate-900 dark:text-white">
+            4. Annuity Purchase & Lifetime Pension Conversion
+          </h4>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormInputNumber
+              id="annuityPurchasePct"
+              label="Annuity Conversion % [Min 40%, Max 100%]"
+              value={state.annuityPurchasePct}
+              onChange={(val) => updateState('annuityPurchasePct', val)}
+              min={40}
+              max={100}
+              step={5}
+            />
+            <FormInputNumber
+              id="annuityRatePct"
+              label="Illustrative Annuity Return Rate (% p.a.)"
+              value={state.annuityRatePct}
+              onChange={(val) => updateState('annuityRatePct', val)}
+              min={3.0}
+              max={10.0}
+              step={0.5}
+            />
+          </div>
         </div>
       </div>
 
-      {/* 4. GROWTH PER ₹100 INVESTED */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-surface-strong border border-hairline space-y-4 shadow-soft">
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <div>
-            <span class="text-xs font-mono font-bold text-muted uppercase tracking-wider block">Compounding Power</span>
-            <h4 class="text-lg font-bold font-heading text-ink">Every ₹100 You Invest Grows To</h4>
-          </div>
-          <span class="text-2xl font-bold font-mono text-emerald-600">₹{results.growthPer100}</span>
+      {/* 4. Primary Results Dashboard */}
+      <ResultDashboard
+        primaryLabel="Total NPS Nest Egg at Age 60"
+        primaryValue={formatCurrency(results.totalAccumulatedCorpus)}
+        secondaryItems={[
+          {
+            label: 'Estimated Monthly Pension',
+            value: `${formatCurrency(results.monthlyPension)}/mo`,
+          },
+          {
+            label: '60% Tax-Free Lump-Sum',
+            value: formatCurrency(results.lumpSumAmount),
+          },
+          {
+            label: '40% Mandatory Annuity Value',
+            value: formatCurrency(results.annuityAmount),
+          },
+          {
+            label: 'Annual Tax Saved Today',
+            value: formatCurrency(results.taxSavings.annualTaxSaved),
+          },
+        ]}
+      />
+
+      {/* 5. Health Gauge & Donut Breakdown */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FinancialHealthGauge
+          score={results.npsScore}
+          label={results.scoreLabel}
+          description={`Weighted Return: ${results.effectiveReturnRate}% p.a. | Tax Saved: ${formatCurrency(results.taxSavings.annualTaxSaved)}/yr`}
+        />
+        <ResultDonutChart
+          title="NPS Maturity Allocation at Age 60"
+          items={[
+            {
+              label: `${results.lumpSumPct}% Tax-Free Lump-Sum`,
+              value: results.lumpSumAmount,
+              color: '#10B981',
+            },
+            {
+              label: `${results.annuityPurchasePct}% Mandatory Annuity`,
+              value: results.annuityAmount,
+              color: '#3B82F6',
+            },
+          ]}
+        />
+      </div>
+
+      {/* 6. Annuity Pension Rate Matrix */}
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h4 className="text-md font-bold text-slate-900 dark:text-white mb-4">
+          Annuity Pension Rate Sensitivity Matrix
+        </h4>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-slate-700 dark:text-slate-200">
+            <thead className="text-xs uppercase bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+              <tr>
+                <th className="px-4 py-3">Annuity Return Rate</th>
+                <th className="px-4 py-3">Monthly Pension</th>
+                <th className="px-4 py-3">Annual Pension</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.annuityMatrix.map((item) => (
+                <tr
+                  key={item.rate}
+                  className={`border-b dark:border-slate-700 ${
+                    item.rate === state.annuityRatePct ? 'bg-blue-50 dark:bg-blue-900/20 font-bold' : ''
+                  }`}
+                >
+                  <td className="px-4 py-3 font-semibold">{item.rate}% p.a.</td>
+                  <td className="px-4 py-3 text-blue-600 dark:text-blue-400 font-bold">
+                    {formatCurrency(item.monthlyPension)}/mo
+                  </td>
+                  <td className="px-4 py-3">{formatCurrency(item.annualPension)}/yr</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <p class="text-xs sm:text-sm text-body leading-relaxed">
-          For every <strong>₹100</strong> contributed to NPS, you accumulate approximately <strong>₹{results.growthPer100}</strong> by retirement at age {retirementAge} ({results.yearsInvested} years, {expectedReturn}% p.a.).
+      </div>
+
+      {/* 7. 5-Hypothetical Scenario Simulator Grid */}
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h4 className="text-md font-bold text-slate-900 dark:text-white mb-4">
+          5-Hypothetical NPS Scenario Simulator
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {results.scenarios.map((sc, idx) => (
+            <div
+              key={idx}
+              className={`p-4 rounded-xl border ${
+                idx === 0
+                  ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20'
+                  : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
+              }`}
+            >
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                {sc.name}
+              </span>
+              <div className="text-lg font-black text-slate-900 dark:text-white mt-1">
+                {formatCurrency(sc.totalCorpus)}
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-2">
+                Monthly Pension: <strong className="text-blue-600 dark:text-blue-400">{formatCurrency(sc.monthlyPension)}/mo</strong>
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Lump-Sum: {formatCurrency(sc.lumpSumAmount)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 8. Disclaimers & Safety Notice */}
+      <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+        <p className="font-semibold text-slate-700 dark:text-slate-300">
+          ⚠️ Regulatory & Planning Disclosures:
+        </p>
+        <p>
+          • PFRDA Guidelines: At age 60, maximum 60% lump-sum is tax-free u/s 10(12A). Minimum 40% must be converted to an annuity unless total corpus is ≤ ₹5 Lakhs.
+        </p>
+        <p>
+          • Income Tax Act: Section 80CCD(1B) extra ₹50,000 deduction is available ONLY under the Old Tax Regime. Section 80CCD(2) employer contribution (up to 14%) is available under BOTH Old and New Tax Regimes.
+        </p>
+        <p>
+          • Asset returns and annuity pension figures are illustrative assumptions, not guaranteed returns promised by PFRDA.
         </p>
       </div>
 
-      {/* 5. INCREASE CONTRIBUTION SIMULATOR */}
-      {results.increaseScenarios.length > 0 && (
-        <div class="p-6 sm:p-8 rounded-3xl bg-canvas border border-hairline space-y-4 shadow-soft">
-          <div class="flex items-center gap-2 text-primary font-bold font-heading text-lg">
-            <span>📈</span>
-            <h3>"Increase Contribution" Simulator</h3>
-          </div>
-          <div class="grid sm:grid-cols-3 gap-3">
-            {results.increaseScenarios.map((sc) => (
-              <button
-                key={sc.delta}
-                type="button"
-                onClick={() => setParam('monthlyInvestment', monthlyInvestment + sc.delta)}
-                class="p-4 rounded-2xl bg-surface-strong hover:bg-surface-soft border border-hairline text-left transition-all space-y-2 group"
-              >
-                <span class="text-xs font-mono font-bold text-primary block uppercase">+₹{(sc.delta).toLocaleString('en-IN')}/mo</span>
-                <span class="text-sm font-bold font-mono text-ink block">
-                  Corpus: {formatCurrency(sc.newCorpus)}
-                </span>
-                <span class="text-xs font-mono text-semantic-success block font-bold">
-                  +₹{sc.pensionGain.toLocaleString('en-IN')}/mo Pension
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 6. DELAY RETIREMENT SIMULATOR */}
-      {results.delayScenarios.length > 0 && (
-        <div class="p-6 sm:p-8 rounded-3xl bg-emerald-500/5 border border-emerald-500/20 space-y-4 shadow-soft">
-          <div class="flex items-center gap-2 text-semantic-success font-bold font-heading text-lg">
-            <span>⏳</span>
-            <h3>"Delay Retirement" Wealth Simulator</h3>
-          </div>
-          <div class="grid sm:grid-cols-2 gap-4 font-mono">
-            {results.delayScenarios.map((sc) => (
-              <div key={sc.delayYears} class="p-4 bg-canvas rounded-2xl border border-hairline space-y-2">
-                <span class="text-xs text-muted font-bold block uppercase">Retire at {sc.newRetAge} (+{sc.delayYears} Yrs)</span>
-                <span class="text-lg font-bold text-ink block">{formatCurrency(sc.newCorpus)}</span>
-                <span class="text-xs text-semantic-success font-bold block">
-                  +{formatCurrency(sc.corpusGain)} Corpus | +{formatCurrency(sc.pensionGain)}/mo Pension
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 7. RETURN SENSITIVITY SCENARIO COMPARISON */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-canvas border border-hairline space-y-4 shadow-soft font-mono">
-        <div class="flex items-center justify-between">
-          <h4 class="text-base font-bold font-heading text-ink">Market Return Sensitivity</h4>
-          <span class="text-xs text-muted">±2% Scenario Range</span>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-4">
-          {results.returnScenarios.map((sc, idx) => {
-            const labels = ['Conservative', 'Expected', 'Optimistic'];
-            const styles = [
-              'bg-surface-strong border-hairline',
-              'bg-primary/10 border-primary/40 border-2',
-              'bg-emerald-500/10 border-emerald-500/30',
-            ];
-            const textStyles = ['text-ink', 'text-primary', 'text-semantic-success'];
-            return (
-              <div key={sc.rate} class={`p-4 rounded-2xl border ${styles[idx]} space-y-1 text-center`}>
-                <span class={`text-xs ${textStyles[idx]} font-bold block uppercase`}>{labels[idx]} ({sc.rate}%)</span>
-                <span class={`text-lg font-bold ${textStyles[idx]}`}>{formatCurrency(sc.corpus)}</span>
-                <span class={`text-[11px] ${textStyles[idx]} block`}>Pension: {formatCurrency(sc.pension)}/mo</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 8. CORPUS COMPOSITION BREAKDOWN */}
-      <CostBreakdownCard
-        title="Retirement Corpus Composition"
-        subtitle={`Total corpus: ${formatCurrency(results.totalMaturityCorpus)}`}
-        items={corpusItems}
-      />
-
-      {/* 9. WITHDRAWAL SPLIT BREAKDOWN */}
-      <CostBreakdownCard
-        title="NPS Withdrawal & Annuity Split"
-        subtitle={`${100 - annuityPercent}% Lump Sum | ${annuityPercent}% Annuity Pension Fund`}
-        items={withdrawalItems}
-      />
-
-      {/* 10. SMART RECOMMENDATIONS */}
-      <RecommendationCard recommendations={results.recommendations} />
-
-      {/* 11. KEY FINANCIAL INSIGHTS */}
-      <div class="grid sm:grid-cols-2 gap-4">
-        <InsightCard
-          title="Real Pension (After Inflation)"
-          value={formatCurrency(results.realPensionMonthly)}
-          subtitle={`Today's purchasing power of ₹${results.monthlyPension.toLocaleString('en-IN')}/mo pension.`}
-          badgeText="Inflation Adjusted"
-          badgeColorClass="bg-accent-amber"
-        />
-        <InsightCard
-          title="Income Replacement Ratio"
-          value={`${results.replacementRatio}%`}
-          subtitle={`Pension covers ${results.replacementRatio}% of your ₹${currentMonthlyIncome.toLocaleString('en-IN')}/mo income.`}
-          badgeText="Pension Adequacy"
-          badgeColorClass="bg-primary"
-        />
-      </div>
-
-      {/* 12. DECISION SUMMARY CARD (SCREENSHOT FRIENDLY) */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-surface-strong to-canvas border-2 border-hairline shadow-soft space-y-4">
-        <div class="flex items-center justify-between border-b border-hairline pb-3">
-          <span class="text-xs font-mono font-bold text-primary uppercase tracking-wider">📸 NPS RETIREMENT DECISION SUMMARY</span>
-          <span class="text-xs text-muted font-mono">{results.yearsInvested} Year Plan</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center font-mono">
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Retirement Corpus</span>
-            <span class="text-base font-bold text-ink">{formatCurrency(results.totalMaturityCorpus)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Monthly Pension</span>
-            <span class="text-base font-bold text-semantic-success">{formatCurrency(results.monthlyPension)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Lump Sum</span>
-            <span class="text-base font-bold text-primary">{formatCurrency(results.lumpSumAmount)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Readiness</span>
-            <span class={`text-base font-bold ${results.readinessColor}`}>{results.readinessScore}/100</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 13. YEARLY GROWTH SCHEDULE TABLE */}
-      <AmortizationTable schedule={results.yearlyBreakdown} />
+      {/* 9. Share Actions */}
+      <ShareActions title="Flagship NPS Calculator - Fintools Find" />
     </div>
   );
 }

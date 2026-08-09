@@ -1,381 +1,512 @@
-import { useState, useMemo } from 'preact/hooks';
-import { calculateCarLoan } from '../../../calculators/loans/car-loan-calculator.js';
-import { formatCurrency } from '@utils/formatters.js';
-import { useUrlSync } from '../../hooks/useUrlSync.js';
-
-// Reusable Shared UI Library Components
-import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
-import ResultDashboard from '../../ui/ResultDashboard';
-import ResultDonutChart from '../../ui/ResultDonutChart';
-import CostBreakdownCard from '../../ui/CostBreakdownCard';
-import FinancialHealthGauge from '../../ui/FinancialHealthGauge';
-import RecommendationCard from '../../ui/RecommendationCard';
-import InsightCard from '../../ui/InsightCard';
-import ShareActions from '../../ui/ShareActions';
+import { useMemo } from 'preact/hooks';
+import { calculateCarLoan } from '@calculators/loans/car-loan-calculator';
+import { CAR_LOAN_CONFIG } from '@calculators/configs/carLoanConfig';
 import FormInputNumber from './FormInputNumber';
-import FormSelect from './FormSelect';
+import ResultDashboard from '../../ui/ResultDashboard';
+import FinancialHealthGauge from '../../ui/FinancialHealthGauge';
+import ResultDonutChart from '../../ui/ResultDonutChart';
+import ScenarioPresetCards from '../../ui/ScenarioPresetCards';
+import ShareActions from '../../ui/ShareActions';
 import AmortizationTable from './AmortizationTable';
+import { formatCurrency } from '@utils/formatters';
+import { useUrlSync } from '../../hooks/useUrlSync';
 
-const DEFAULT_CAR_STATE = {
-  vehiclePrice: 1200000,
-  downPaymentPct: 20,
-  rate: 9.0,
-  tenure: 5,
-  monthlyIncome: 100000,
-  fuelType: 'petrol',
-  annualKm: 12000,
-};
-
-const CAR_PARAM_MAP = {
-  vehiclePrice: 'price',
-  downPaymentPct: 'dp',
-  rate: 'rate',
-  tenure: 'yr',
-  monthlyIncome: 'inc',
-  fuelType: 'fuel',
-  annualKm: 'km',
-};
-
-export default function CarLoanFlagshipWidget() {
-  const [params, setParam, resetUrlState] = useUrlSync(DEFAULT_CAR_STATE, CAR_PARAM_MAP);
-  const { vehiclePrice, downPaymentPct, rate, tenure, monthlyIncome, fuelType, annualKm } = params;
-
-  const [activePreset, setActivePreset] = useState(null);
-  const [copiedToast, setCopiedToast] = useState(false);
-
-  // Preset Vehicle Profiles
-  const presets = [
-    { id: 'hatchback', label: 'Entry Hatchback', icon: '🚗', vehiclePrice: 600000, downPaymentPct: 15, rate: 9.0, tenure: 5, desc: '₹6L On-Road Price' },
-    { id: 'suv', label: 'Compact SUV', icon: '🚙', vehiclePrice: 1200000, downPaymentPct: 20, rate: 8.8, tenure: 5, desc: '₹12L On-Road Price' },
-    { id: 'sedan', label: 'Premium Sedan', icon: '🏎️', vehiclePrice: 2500000, downPaymentPct: 25, rate: 8.6, tenure: 5, desc: '₹25L Executive Sedan' },
-    { id: 'luxury', label: 'Luxury SUV', icon: '👑', vehiclePrice: 5000000, downPaymentPct: 30, rate: 8.5, tenure: 5, desc: '₹50L Flagship SUV' },
-  ];
-
-  const applyPreset = (p) => {
-    setActivePreset(p.id);
-    setParam('vehiclePrice', p.vehiclePrice);
-    setParam('downPaymentPct', p.downPaymentPct);
-    setParam('rate', p.rate);
-    setParam('tenure', p.tenure);
+export default function CarLoanFlagshipWidget({ initialValues = {} }) {
+  const defaultState = {
+    vehiclePrice: 1200000,
+    downPaymentPct: 20,
+    rate: CAR_LOAN_CONFIG.defaultInterestRate,
+    tenure: 5,
+    monthlyIncome: 100000,
+    fuelType: 'petrol', // 'petrol' | 'diesel' | 'hybrid' | 'ev'
+    annualKm: 12000,
+    processingFeePct: 1,
+    marginalTaxRate: 30,
+    isSec80EEBEligible: false,
+    calculationMode: 'forward', // 'forward' | 'reverse_emi'
+    targetEmi: 20000,
+    inflationRate: 6,
+    ...initialValues,
   };
 
-  // Perform full calculation
+  const [state, updateState] = useUrlSync(defaultState);
+
   const results = useMemo(() => {
-    return calculateCarLoan({
-      vehiclePrice,
-      downPaymentPct,
-      rate,
-      tenure,
-      monthlyIncome,
-      fuelType,
-      annualKm,
-    });
-  }, [vehiclePrice, downPaymentPct, rate, tenure, monthlyIncome, fuelType, annualKm]);
+    return calculateCarLoan(state);
+  }, [state]);
 
-  const handleCopyLink = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      setCopiedToast(true);
-      setTimeout(() => setCopiedToast(false), 2500);
-    }
-  };
-
-  const handleReset = () => {
-    setActivePreset(null);
-    resetUrlState();
-  };
-
-  // Cost breakdown items for 5-Year True Cost of Ownership
-  const ownershipItems = [
-    { label: 'Vehicle On-Road Price', amount: results.vehiclePrice, colorClass: 'bg-primary', desc: 'Ex-showroom + initial taxes.' },
-    { label: 'Total Loan Interest (5-Yr)', amount: results.totalInterest, colorClass: 'bg-semantic-warning', desc: 'Finance charges over tenure.' },
-    { label: 'Registration & RTO Tax', amount: results.registrationFee, colorClass: 'bg-accent-sky', desc: 'One-time state RTO charges.' },
-    { label: 'Estimated 5-Yr Fuel Costs', amount: results.fuel5Yr, colorClass: 'bg-accent-amber', desc: `${fuelType.toUpperCase()} fuel running cost.` },
-    { label: 'Estimated 5-Yr Insurance', amount: results.insurance5Yr, colorClass: 'bg-emerald-500', desc: 'Comprehensive vehicle insurance.' },
-    { label: 'Estimated 5-Yr Maintenance', amount: results.maintenance5Yr, colorClass: 'bg-surface-strong', desc: 'Scheduled servicing & repairs.' },
-    { label: 'Bank Processing Fees', amount: results.processingFee, colorClass: 'bg-rose-400', desc: 'Upfront loan documentation fee.' },
-  ];
+  const presets = CAR_LOAN_CONFIG.presets;
 
   return (
-    <div class="space-y-10">
-      {/* 1. Presets */}
-      <ScenarioPresetCards presets={presets} activePreset={activePreset} onSelect={applyPreset} label="Quick Car Presets" />
+    <div className="space-y-8">
+      {/* 1. Hero Decision Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl border border-indigo-700/40">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-full border border-emerald-500/30">
+              🚗 Institutional Car Buying & Loan Decision Engine
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              {results.heroText}
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base max-w-2xl">
+              Model vehicle down payments, monthly EMIs, 5-year total ownership costs, EV electricity vs petrol fuel savings, Section 80EEB EV tax benefits, and reverse target EMI solvers.
+            </p>
+          </div>
+          <div className="bg-blue-900/50 border border-blue-500/40 p-4 rounded-xl text-center min-w-[220px]">
+            <span className="text-xs uppercase tracking-wider text-blue-300 font-bold block">
+              {state.calculationMode === 'reverse_emi' ? 'Max Affordable Car Price' : 'Monthly Car Loan EMI'}
+            </span>
+            <span className="text-3xl font-black text-emerald-400 mt-1 block">
+              {formatCurrency(
+                state.calculationMode === 'reverse_emi' ? results.vehiclePrice : results.emi
+              )}
+              {state.calculationMode === 'reverse_emi' ? '' : '/mo'}
+            </span>
+            <span className="text-xs text-blue-200 mt-1 block">
+              (FOIR: {results.foirPct}% of Monthly Salary)
+            </span>
+          </div>
+        </div>
+      </div>
 
-      {/* 2. HERO DECISION BANNER */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-canvas to-accent-sky/10 border-2 border-primary/40 shadow-soft space-y-3">
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-primary text-white font-mono text-xs font-bold uppercase">
-            🏆 OPTIMAL DECISION VERDICT
-          </span>
-          <span class={`text-xs font-mono font-bold px-2.5 py-1 rounded-xl border border-hairline ${results.affordabilityColor}`}>
-            Status: {results.affordabilityStatus}
-          </span>
+      {/* 2. Mode Switcher & Smart Presets */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between bg-white dark:bg-slate-800 p-2 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm max-w-md">
+          <button
+            type="button"
+            onClick={() => updateState('calculationMode', 'forward')}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+              state.calculationMode === 'forward'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400'
+            }`}
+          >
+            Car Repayment Mode
+          </button>
+          <button
+            type="button"
+            onClick={() => updateState('calculationMode', 'reverse_emi')}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+              state.calculationMode === 'reverse_emi'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400'
+            }`}
+          >
+            Target EMI Reverse Solver
+          </button>
         </div>
 
-        <h2 class="text-xl sm:text-2xl font-heading font-extrabold text-ink leading-tight">
-          {results.heroText}
-        </h2>
-        <p class="text-xs sm:text-sm text-body leading-relaxed">
-          {results.affordabilityDesc}
-        </p>
+        <ScenarioPresetCards
+          presets={presets}
+          activePresetId={null}
+          onSelectPreset={(p) => {
+            Object.entries(p.values).forEach(([k, v]) => updateState(k, v));
+          }}
+        />
+      </div>
 
-        {/* Quick Down Payment Chips */}
-        <div class="pt-3 border-t border-hairline/60 flex items-center gap-2 flex-wrap">
-          <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-muted mr-1">Quick Down Payment:</span>
-          {[15, 20, 25, 35].map((pct) => (
+      {/* 3. Input Controls Section */}
+      <div className="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 space-y-6">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-3">
+          1. Vehicle & Loan Financing Parameters
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {state.calculationMode === 'forward' ? (
+            <FormInputNumber
+              id="vehiclePrice"
+              label="On-Road Vehicle Price (₹)"
+              value={state.vehiclePrice}
+              onChange={(val) => updateState('vehiclePrice', val)}
+              min={100000}
+              max={50000000}
+              step={50000}
+            />
+          ) : (
+            <FormInputNumber
+              id="targetEmi"
+              label="Target Monthly Car Loan EMI (₹/mo)"
+              value={state.targetEmi}
+              onChange={(val) => updateState('targetEmi', val)}
+              min={2000}
+              max={500000}
+              step={1000}
+            />
+          )}
+
+          <FormInputNumber
+            id="downPaymentPct"
+            label="Down Payment Percentage (% of Vehicle Price)"
+            value={state.downPaymentPct}
+            onChange={(val) => updateState('downPaymentPct', val)}
+            min={0}
+            max={80}
+            step={5}
+          />
+
+          <FormInputNumber
+            id="rate"
+            label="Annual Interest Rate (% p.a.)"
+            value={state.rate}
+            onChange={(val) => updateState('rate', val)}
+            min={1.0}
+            max={25.0}
+            step={0.25}
+          />
+
+          <FormInputNumber
+            id="tenure"
+            label="Loan Repayment Tenure (Years: 1 to 7)"
+            value={state.tenure}
+            onChange={(val) => updateState('tenure', val)}
+            min={1}
+            max={7}
+            step={1}
+          />
+
+          <FormInputNumber
+            id="monthlyIncome"
+            label="Net Monthly Salary Income (₹/mo for Affordability)"
+            value={state.monthlyIncome}
+            onChange={(val) => updateState('monthlyIncome', val)}
+            min={20000}
+            max={2000000}
+            step={10000}
+          />
+
+          <FormInputNumber
+            id="annualKm"
+            label="Estimated Annual Driving Distance (km/year)"
+            value={state.annualKm}
+            onChange={(val) => updateState('annualKm', val)}
+            min={1000}
+            max={100000}
+            step={1000}
+          />
+
+          <FormInputNumber
+            id="processingFeePct"
+            label="Processing Fee Percentage (% of Loan)"
+            value={state.processingFeePct}
+            onChange={(val) => updateState('processingFeePct', val)}
+            min={0}
+            max={5}
+            step={0.25}
+          />
+
+          <FormInputNumber
+            id="inflationRate"
+            label="Expected Annual Inflation Rate (% p.a.)"
+            value={state.inflationRate}
+            onChange={(val) => updateState('inflationRate', val)}
+            min={0}
+            max={15}
+            step={0.5}
+          />
+        </div>
+
+        {/* Fuel & Energy Type Switcher */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+          <label className="text-sm font-bold text-slate-900 dark:text-white block">
+            Vehicle Powertrain / Fuel Type:
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { id: 'petrol', label: 'Petrol (₹7.5/km)', desc: 'Standard internal combustion engine' },
+              { id: 'diesel', label: 'Diesel (₹6.0/km)', desc: 'High mileage long-distance driving' },
+              { id: 'hybrid', label: 'Hybrid (₹4.5/km)', desc: 'Petrol + Electric battery hybrid' },
+              { id: 'ev', label: 'Electric (EV) (₹1.5/km)', desc: 'Zero tailpipe emission & low running cost' },
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => updateState('fuelType', f.id)}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  state.fuelType === f.id
+                    ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 shadow font-bold'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
+                }`}
+              >
+                <span className="font-bold text-slate-900 dark:text-white block text-sm">
+                  {f.label}
+                </span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 block">
+                  {f.desc}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Section 80EEB EV Tax Benefit Toggle */}
+        {state.fuelType === 'ev' && (
+          <div className="pt-3 flex items-center justify-between bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border border-emerald-500/30">
+            <div>
+              <span className="text-sm font-bold text-emerald-900 dark:text-emerald-200 block">
+                Section 80EEB Electric Vehicle Loan Tax Relief
+              </span>
+              <span className="text-xs text-slate-600 dark:text-slate-300">
+                Claim up to ₹1,50,000 tax deduction per year on EV loan interest for eligible loans.
+              </span>
+            </div>
             <button
-              key={pct}
               type="button"
-              onClick={() => setParam('downPaymentPct', pct)}
-              class={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
-                downPaymentPct === pct
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'bg-canvas hover:bg-surface-soft border border-hairline text-ink'
+              onClick={() => updateState('isSec80EEBEligible', !state.isSec80EEBEligible)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                state.isSec80EEBEligible
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
               }`}
             >
-              {pct}% DP
+              {state.isSec80EEBEligible ? 'Sec 80EEB Active' : 'Not Eligible'}
             </button>
+          </div>
+        )}
+      </div>
+
+      {/* 4. Primary Decision Dashboard */}
+      <ResultDashboard
+        primaryLabel={
+          state.calculationMode === 'reverse_emi'
+            ? 'Max Affordable Car Price'
+            : 'Monthly Car Loan EMI'
+        }
+        primaryValue={
+          state.calculationMode === 'reverse_emi'
+            ? formatCurrency(results.vehiclePrice)
+            : `${formatCurrency(results.emi)}/mo`
+        }
+        secondaryItems={[
+          {
+            label: `Down Payment (${state.downPaymentPct}%)`,
+            value: formatCurrency(results.downPaymentAmount),
+          },
+          {
+            label: 'Net Car Loan Principal',
+            value: formatCurrency(results.loanAmount),
+          },
+          {
+            label: 'Total Car Loan Interest',
+            value: formatCurrency(results.totalInterest),
+          },
+          {
+            label: '5-Year Operational Fuel/Energy Cost',
+            value: formatCurrency(results.fuel5Yr),
+          },
+          {
+            label: '5-Year Total True Ownership Cost',
+            value: formatCurrency(results.totalOwnershipCost5Yr),
+          },
+        ]}
+      />
+
+      {/* 5. Health Gauge & Donut Chart */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FinancialHealthGauge
+          score={results.score}
+          label={results.healthStatus}
+          description={results.affordabilityDesc}
+        />
+        <ResultDonutChart
+          title="5-Year Total Ownership Cost Breakdown"
+          items={[
+            {
+              label: 'Borrowed Loan Principal',
+              value: results.loanAmount,
+              color: '#3B82F6',
+            },
+            {
+              label: 'Car Loan Interest',
+              value: results.totalInterest,
+              color: '#EF4444',
+            },
+            {
+              label: 'Registration & Processing Fees',
+              value: results.registrationFee + results.processingFee,
+              color: '#F59E0B',
+            },
+            {
+              label: '5-Year Fuel / Energy Cost',
+              value: results.fuel5Yr,
+              color: '#10B981',
+            },
+            {
+              label: '5-Year Insurance & Maintenance',
+              value: results.insurance5Yr + results.maintenance5Yr,
+              color: '#8B5CF6',
+            },
+          ]}
+        />
+      </div>
+
+      {/* 6. Down Payment Coach Card */}
+      <div className="bg-blue-500/10 border border-blue-500/30 p-6 rounded-2xl text-blue-900 dark:text-blue-200 space-y-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h4 className="text-lg font-extrabold text-blue-700 dark:text-blue-300">
+              💡 Down Payment Coach (+₹1.0 Lakh DP Savings)
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
+              Increasing your down payment by +₹1,00,000 reduces your borrowed principal to {formatCurrency(results.dpCoach.newLoanAmount)}, lowering monthly EMI and total interest outgo.
+            </p>
+          </div>
+          <div className="bg-blue-900/30 p-4 rounded-xl border border-blue-500/40 text-center min-w-[200px]">
+            <span className="text-xs uppercase tracking-wider text-blue-300 font-bold block">Interest Saved</span>
+            <span className="text-2xl font-black text-emerald-400 mt-1 block">
+              {formatCurrency(results.dpCoach.interestSavedDp)}
+            </span>
+            <span className="text-xs text-blue-200 mt-0.5 block">
+              ({formatCurrency(results.dpCoach.emiReduction)}/mo Lower EMI)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 7. Section 80EEB EV Tax Relief Summary Card */}
+      {state.fuelType === 'ev' && state.isSec80EEBEligible && (
+        <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 rounded-2xl text-emerald-900 dark:text-emerald-200 space-y-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h4 className="text-lg font-extrabold text-emerald-700 dark:text-emerald-300">
+                ⚡ Section 80EEB EV Tax Relief Benefit
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
+                Under Section 80EEB of the Income Tax Act, up to ₹1,50,000 per year in EV loan interest is deductible from taxable income.
+              </p>
+            </div>
+            <div className="bg-emerald-900/30 p-4 rounded-xl border border-emerald-500/40 text-center min-w-[200px]">
+              <span className="text-xs uppercase tracking-wider text-emerald-300 font-bold block">Estimated Tax Savings</span>
+              <span className="text-2xl font-black text-emerald-400 mt-1 block">
+                {formatCurrency(results.sec80EEB_taxSavings)}
+              </span>
+              <span className="text-xs text-emerald-200 mt-0.5 block">
+                ({state.marginalTaxRate}% Tax Bracket)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 8. 4-Scenario Tenure & Down Payment Comparison Grid */}
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 space-y-4">
+        <div>
+          <h4 className="text-md font-bold text-slate-900 dark:text-white">
+            Tenure & Down Payment Scenario Comparison Grid
+          </h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Compare monthly EMIs, total interest, FOIR burden, and 5-year ownership costs across loan structures.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {results.scenarios.map((sc) => (
+            <div
+              key={sc.id}
+              className={`p-4 rounded-xl border ${
+                sc.tenure === state.tenure && sc.downPaymentPct === state.downPaymentPct
+                  ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 shadow font-bold'
+                  : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
+              }`}
+            >
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                {sc.label}
+              </span>
+              <div className="text-lg font-black text-slate-900 dark:text-white">
+                {formatCurrency(sc.emi)}/mo
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-2">
+                Total Interest: <strong className="text-slate-900 dark:text-white">{formatCurrency(sc.totalInterest)}</strong>
+              </p>
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-bold mt-1">
+                FOIR: {sc.foirPct}% of Income
+              </p>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* 3. Emotional Budget Warning Alert (If FOIR > 35%) */}
-      {results.foirPct > 35 && (
-        <div class="p-5 sm:p-6 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-ink space-y-2 shadow-soft">
-          <div class="flex items-center gap-2 font-bold font-heading text-amber-800 text-sm">
-            <span>⚠️</span>
-            <span>Budget Pressure Caution</span>
+      {/* 9. Inflation Real Value Card */}
+      <div className="bg-gradient-to-r from-amber-900/20 via-slate-900 to-indigo-900/20 p-6 rounded-2xl border border-amber-500/30 text-white space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h4 className="text-lg font-extrabold text-amber-400">
+              Inflation-Adjusted Real Outflow Analysis
+            </h4>
+            <p className="text-xs text-slate-300 max-w-xl mt-1">
+              At an assumed annual inflation rate of {state.inflationRate}%, your future 5-year total ownership cost of {formatCurrency(results.totalOwnershipCost5Yr)} has the equivalent real value in today's money shown below.
+            </p>
           </div>
-          <p class="text-xs sm:text-sm text-body leading-relaxed">
-            This purchase commits <strong>{results.foirPct}%</strong> of your monthly income to EMI repayments. Consider opting for a slightly lower-priced vehicle or increasing your down payment to improve monthly financial flexibility.
+          <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-500/40 text-center min-w-[200px]">
+            <span className="text-xs text-amber-200 uppercase tracking-wider font-bold block">Real Today's Value</span>
+            <span className="text-2xl font-black text-amber-400 mt-1 block">
+              {formatCurrency(results.realValue)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 10. Rate Sensitivity Grid */}
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 space-y-4">
+        <div>
+          <h4 className="text-md font-bold text-slate-900 dark:text-white">
+            Interest Rate Sensitivity Analysis ({state.rate - 1.0}% to {state.rate + 1.0}%)
+          </h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Illustrative monthly EMI and total interest outgo under ±1.0% interest rate fluctuations.
           </p>
         </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {results.sensitivityScenarios.map((sc) => (
+            <div
+              key={sc.rate}
+              className={`p-3 rounded-xl border ${
+                sc.rate === state.rate
+                  ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 font-bold'
+                  : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
+              }`}
+            >
+              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+                {sc.label}
+              </span>
+              <div className="text-base font-black text-slate-900 dark:text-white">
+                {formatCurrency(sc.emi)}/mo
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                Interest: {formatCurrency(sc.totalInterest)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 11. Year-by-Year Schedule Table */}
+      {results.schedule && results.schedule.length > 0 && (
+        <AmortizationTable
+          schedule={results.schedule}
+          title="Monthly Car Loan Amortization Schedule"
+        />
       )}
 
-      {/* 4. Interactive Calculator Workspace */}
-      <div class="grid lg:grid-cols-12 gap-8 items-start">
-        {/* Left Panel: Inputs */}
-        <div class="lg:col-span-6 bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-6 shadow-soft">
-          <div class="flex items-center justify-between border-b border-hairline pb-4">
-            <h3 class="text-xl font-bold font-heading text-ink">Car Loan Parameters</h3>
-            <ShareActions onShare={handleCopyLink} onReset={handleReset} copiedToast={copiedToast} />
-          </div>
-
-          <FormInputNumber
-            id="vehicle-price"
-            label="On-Road Vehicle Price (₹)"
-            value={vehiclePrice}
-            min={300000}
-            max={10000000}
-            step={25000}
-            prefix="₹"
-            minLabel="₹3 Lakhs"
-            maxLabel="₹1 Crore"
-            onChange={(v) => setParam('vehiclePrice', v)}
-          />
-
-          <FormInputNumber
-            id="down-payment-pct"
-            label="Down Payment (%)"
-            value={downPaymentPct}
-            min={10}
-            max={80}
-            step={5}
-            suffix="%"
-            subText={`Upfront Cash: ${formatCurrency(results.downPaymentAmount)}`}
-            minLabel="10%"
-            maxLabel="80%"
-            onChange={(v) => setParam('downPaymentPct', v)}
-          />
-
-          <FormInputNumber
-            id="interest-rate"
-            label="Interest Rate (% p.a.)"
-            value={rate}
-            min={6.0}
-            max={18.0}
-            step={0.1}
-            suffix="%"
-            minLabel="6%"
-            maxLabel="18%"
-            onChange={(v) => setParam('rate', v)}
-          />
-
-          <FormInputNumber
-            id="loan-tenure"
-            label="Loan Tenure (Years)"
-            value={tenure}
-            min={1}
-            max={7}
-            step={1}
-            suffix=" Years"
-            minLabel="1 Yr"
-            maxLabel="7 Yrs"
-            onChange={(v) => setParam('tenure', v)}
-          />
-
-          <FormInputNumber
-            id="monthly-income"
-            label="Net Monthly Salary (₹)"
-            value={monthlyIncome}
-            min={25000}
-            max={1000000}
-            step={5000}
-            prefix="₹"
-            minLabel="₹25,000"
-            maxLabel="₹10 Lakhs"
-            onChange={(v) => setParam('monthlyIncome', v)}
-          />
-
-          <FormSelect
-            id="fuel-type"
-            label="Engine & Fuel Type"
-            value={fuelType}
-            options={[
-              { value: 'petrol', label: 'Petrol Engine' },
-              { value: 'diesel', label: 'Diesel Engine' },
-              { value: 'hybrid', label: 'Strong Hybrid' },
-              { value: 'ev', label: 'Electric Vehicle (EV)' },
-            ]}
-            onChange={(v) => setParam('fuelType', v)}
-          />
-        </div>
-
-        {/* Right Panel: Output Dashboard & Charts */}
-        <div class="lg:col-span-6 space-y-6">
-          <ResultDashboard
-            primaryLabel="Monthly Car Loan EMI"
-            primaryValue={formatCurrency(results.emi)}
-            secondaryItems={[
-              { label: 'Loan Amount Required', value: formatCurrency(results.loanAmount) },
-              { label: 'Upfront Cash Required', value: formatCurrency(results.downPaymentAmount + results.processingFee) },
-              { label: 'Total Interest Payable', value: formatCurrency(results.totalInterest) },
-              { label: '5-Year Ownership Cost', value: formatCurrency(results.totalOwnershipCost5Yr) },
-            ]}
-          />
-
-          <ResultDonutChart
-            title="Loan Balance vs Total Interest"
-            centerValue={formatCurrency(results.emi)}
-            centerSubtext="Monthly EMI"
-            segments={[
-              { label: 'Principal Loan Amount', amount: results.loanAmount, colorClass: 'bg-primary' },
-              { label: 'Total Interest Paid', amount: results.totalInterest, colorClass: 'bg-semantic-warning' },
-              { label: 'Processing & Reg Fees', amount: results.processingFee + results.registrationFee, colorClass: 'bg-accent-sky' },
-            ]}
-          />
-
-          <FinancialHealthGauge
-            title="FOIR Debt Affordability Gauge"
-            score={Math.min(100, Math.max(0, 100 - results.foirPct))}
-            statusLabel={results.affordabilityStatus}
-            description={`Monthly EMI consumes ${results.foirPct}% of your net salary.`}
-          />
-        </div>
+      {/* 12. Financial Safety & Disclaimers */}
+      <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+        <p className="font-semibold text-slate-700 dark:text-slate-300">
+          ⚠️ Important Financial & Prudential Borrowing Norms:
+        </p>
+        <p>
+          • FOIR Borrowing Limit: Financial planners recommend keeping total loan EMIs (including car loan) below 35% to 40% of net monthly income.
+        </p>
+        <p>
+          • Section 80EEB EV Tax Deduction: Applies to electric vehicle loans sanctioned between April 1, 2019 and March 31, 2023. Consult your tax advisor to verify personal eligibility.
+        </p>
+        <p>
+          • True Cost of Ownership: Fuel, insurance, maintenance, and registration tax account for 30% to 40% of total 5-year car expenses beyond the vehicle sticker price.
+        </p>
       </div>
 
-      {/* 5. DOWN PAYMENT COACH ("+1 Lakh Down Payment Impact") */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-canvas border border-hairline space-y-4 shadow-soft">
-        <div class="flex items-center gap-2 text-primary font-bold font-heading text-lg">
-          <span>💡</span>
-          <h3>Down Payment Coach: "+ ₹1 Lakh Extra" Impact</h3>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-4">
-          <div class="p-4 rounded-2xl bg-surface-strong border border-hairline text-center space-y-1">
-            <span class="text-xs font-mono text-muted font-bold block uppercase">Monthly EMI Reduction</span>
-            <span class="text-xl font-bold font-mono text-semantic-success">
-              - {formatCurrency(results.dpCoach.emiReduction)} / mo
-            </span>
-          </div>
-          <div class="p-4 rounded-2xl bg-surface-strong border border-hairline text-center space-y-1">
-            <span class="text-xs font-mono text-muted font-bold block uppercase">Total Interest Saved</span>
-            <span class="text-xl font-bold font-mono text-primary">
-              {formatCurrency(results.dpCoach.interestSavedDp)}
-            </span>
-          </div>
-          <div class="p-4 rounded-2xl bg-surface-strong border border-hairline text-center space-y-1">
-            <span class="text-xs font-mono text-muted font-bold block uppercase">New Loan Balance</span>
-            <span class="text-xl font-bold font-mono text-ink">
-              {formatCurrency(results.dpCoach.newLoan)}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 6. INTEREST RATE SENSITIVITY TABLE */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-surface-strong border border-hairline space-y-4 shadow-soft font-mono">
-        <div class="flex items-center justify-between">
-          <h4 class="text-base font-bold font-heading text-ink">Festive Offer Rate Sensitivity</h4>
-          <span class="text-xs text-muted">Is waiting worth it?</span>
-        </div>
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div class="p-4 bg-canvas border border-hairline rounded-2xl space-y-1">
-            <span class="text-xs text-muted font-bold block">If Rate drops by -0.5% (to {(rate - 0.5).toFixed(1)}%)</span>
-            <span class="text-lg font-bold text-semantic-success">Save {formatCurrency(results.rateSensitivity.savings05)}</span>
-          </div>
-          <div class="p-4 bg-canvas border border-hairline rounded-2xl space-y-1">
-            <span class="text-xs text-muted font-bold block">If Rate drops by -1.0% (to {(rate - 1.0).toFixed(1)}%)</span>
-            <span class="text-lg font-bold text-primary">Save {formatCurrency(results.rateSensitivity.savings10)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 7. TRUE COST OF OWNERSHIP DASHBOARD */}
-      <CostBreakdownCard
-        title="5-Year True Cost of Ownership Breakdown"
-        subtitle={`Total 5-year financial commitment: ${formatCurrency(results.totalOwnershipCost5Yr)}`}
-        items={ownershipItems}
-      />
-
-      {/* 8. SMART RECOMMENDATIONS */}
-      <RecommendationCard recommendations={results.recommendations} />
-
-      {/* 9. KEY FINANCIAL INSIGHTS */}
-      <div class="grid sm:grid-cols-2 gap-4">
-        <InsightCard
-          title="Total Interest Cost"
-          value={formatCurrency(results.totalInterest)}
-          subtitle={`${((results.totalInterest / results.loanAmount) * 100).toFixed(1)}% of loan principal.`}
-          badgeText="Finance Charge"
-          badgeColorClass="bg-semantic-warning"
-        />
-        <InsightCard
-          title="Upfront Capital Needed"
-          value={formatCurrency(results.downPaymentAmount + results.processingFee)}
-          subtitle="Down payment + processing fee."
-          badgeText="Cash Needed"
-          badgeColorClass="bg-primary"
-        />
-      </div>
-
-      {/* 10. DECISION SUMMARY CARD (SCREENSHOT FRIENDLY) */}
-      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-surface-strong to-canvas border-2 border-hairline shadow-soft space-y-4">
-        <div class="flex items-center justify-between border-b border-hairline pb-3">
-          <span class="text-xs font-mono font-bold text-primary uppercase tracking-wider">📸 CAR BUYING DECISION SUMMARY</span>
-          <span class="text-xs text-muted font-mono">{tenure} Year Plan</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center font-mono">
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Vehicle Budget</span>
-            <span class="text-base font-bold text-ink">{formatCurrency(results.vehiclePrice)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Monthly EMI</span>
-            <span class="text-base font-bold text-primary">{formatCurrency(results.emi)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">Upfront Cash</span>
-            <span class="text-base font-bold text-ink">{formatCurrency(results.downPaymentAmount)}</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-muted block uppercase font-bold">5-Yr Total Cost</span>
-            <span class="text-base font-bold text-semantic-warning">{formatCurrency(results.totalOwnershipCost5Yr)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 11. AMORTIZATION SCHEDULE TABLE */}
-      <AmortizationTable schedule={results.schedule} />
+      {/* 13. Share Actions */}
+      <ShareActions title="Flagship Car Buying & Loan Decision Engine — Fintools Find" />
     </div>
   );
 }

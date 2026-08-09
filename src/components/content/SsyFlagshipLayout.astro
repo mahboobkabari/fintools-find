@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import SsyCalculatorWidget from '../calculators/SsyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Annual Deposit & Girl Child Age',
+    description: 'Specify your annual deposit amount (up to ₹1,50,000 Section 80C cap) and girl child current age (0 to 10 years).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Model 15-Year Deposit Window vs 21-Year Horizon',
+    description: 'Deposits are made for the first 15 years, while the accumulated balance continues compounding tax-free for the full 21 years.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Simulate 50% Higher Education Admission Withdrawal',
+    description: 'Model partial withdrawal of up to 50% of account balance when girl child reaches age 18 to fund college admission fees.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compare 100% Tax-Free SSY vs. Equity Mutual Fund SIP',
+    description: 'Evaluate 100% government capital-guaranteed EEE SSY maturity returns against market-linked equity mutual fund SIP projections.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Parents of Infant & Young Girl Children',
+    description: 'Parents opening an SSY account between age 0 and 10 to build a guaranteed college education and marriage corpus.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Section 80C Tax-Saving Investors',
+    description: 'Taxpayers seeking 100% tax-free EEE returns while claiming up to ₹1.5 Lakhs annual deduction under Section 80C.',
+    bgClass: 'bg-teal-50',
+    textClass: 'text-teal-600',
+  },
+  {
+    title: 'Higher Education Financial Planners',
+    description: 'Families structuring 50% partial withdrawal at age 18 for undergraduate university admission fees.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Zero-Risk Capital Preservation Savers',
+    description: 'Conservative investors prioritizing 100% sovereign government-backed capital safety over equity market volatility.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+];
+
+const formulaDetails = {
+  title: 'Sukanya Samriddhi Yojana Annual Compounding & Tax Formulas',
+  formula: 'A_{15} = \\sum_{y=1}^{15} P \\left(1 + \\frac{r}{100}\\right)^{21 - y + 1}, \\quad A_{21} = A_{15} \\left(1 + \\frac{r}{100}\\right)^6',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Annual Deposit Amount (Max ₹1.5L)',
+      description: 'Systematic annual contribution deposited into the SSY account for 15 financial years.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Notified Government Interest Rate (% p.a.)',
+      description: 'Official interest rate (currently 8.2% p.a.) credited annually on March 31st.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'A_{21}',
+      title: '100% Tax-Free Maturity Corpus',
+      description: 'Final accumulated balance at 21 years from account opening, 100% tax-exempt under Section 10(11A).',
+      colorClass: 'text-teal-600',
+    },
+    {
+      symbol: '\\text{Sec 80C}',
+      title: 'Annual Tax Savings',
+      description: 'Tax saved on annual contribution: $\\text{Deposit} \\times \\text{TaxBracket}\\%$.',
+      colorClass: 'text-semantic-warning',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Max ₹1.5 Lakh Annual Deposit (Age 1 Girl Child @ 8.2% p.a.)',
+    tag: 'Max Section 80C SSY',
+    subtitle: 'Full 15-Year Contribution & 21-Year Maturity',
+    metrics: [
+      { label: 'Annual Deposit', value: '₹150,000/yr', colorClass: 'text-primary font-bold' },
+      { label: 'Total Deposits (15Y)', value: '₹2,250,000', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Tax-Free Interest (21Y)', value: '₹4,682,000+', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Maturity Corpus (21Y)', value: '₹6,932,000+', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Investing ₹1.5 Lakhs/year for 15 years accumulates a 100% tax-free maturity corpus of ~₹69.3 Lakhs in 21 years, while saving ₹6.75 Lakhs in Section 80C income tax.',
+  },
+  {
+    title: 'Benchmark Case Study: ₹1 Lakh Annual Deposit with 50% Higher Education Withdrawal at Age 18',
+    tag: 'Education Admission Fund',
+    subtitle: 'College Funding with 50% Partial Withdrawal',
+    metrics: [
+      { label: 'Annual Deposit', value: '₹100,000/yr', colorClass: 'text-primary font-bold' },
+      { label: 'Edu Withdrawal (Age 18)', value: '₹1,500,000+', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Total Deposits Paid', value: '₹1,500,000', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Final Maturity Balance', value: '₹2,900,000+', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Taking a 50% partial withdrawal at age 18 provides immediate college admission funds while allowing the remaining balance to compound to ~₹29 Lakhs at maturity.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <SsyCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

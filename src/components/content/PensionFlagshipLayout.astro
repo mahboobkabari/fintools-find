@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PensionCalculatorWidget from '../calculators/PensionCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Retirement Corpus & Annuity Variant',
+    description: 'Enter your total accumulated pension corpus and choose from 4 statutory annuity options (ROP, Single Life, Joint Spouse, 20Y Guaranteed).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Audit Section 10(10A) Tax-Free Commutation',
+    description: 'Calculate upfront tax-free lump sum commutation limits based on your employment status (Government, Private Gratuity, Private Non-Gratuity).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Model Statutory EPFO EPS-95 Pension',
+    description: 'Compute your EPFO EPS-95 monthly pension entitlement based on pensionable service years (with 2-year bonus for service >= 20 years).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Total Pension & Compare SWP Sustainability',
+    description: 'Inspect total net monthly pension payout, inflation-adjusted purchasing power over 20 years, and SWP equity withdrawal corpus survival.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Superannuated Corporate & Private Employees',
+    description: 'Retirees deploying EPF, NPS, and Superannuation lump sums into guaranteed lifetime passive annuity income.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Government & Defense Retirees',
+    description: 'Civilian and military retirees optimizing 100% tax-free pension commutation under Section 10(10A)(i).',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'EPFO EPS-95 Pension Claimants',
+    description: 'Salaried employees with 10+ years of EPS service calculating statutory EPFO monthly pension benefits.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Retirement Cash Flow & SWP Optimizers',
+    description: 'Senior citizens evaluating fixed lifetime annuity income against systematic withdrawal plans (SWP).',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+];
+
+const formulaDetails = {
+  title: 'Pension Annuity & EPFO EPS-95 Statutory Formulas',
+  formula: 'P_{\\text{annuity}} = (C - C_{\\text{commuted}}) \\times \\frac{r}{100}, \\quad P_{\\text{EPS}} = \\frac{\\text{Salary}_{\\text{max } 15k} \\times N_{\\text{service}}}{70}',
+  parameters: [
+    {
+      symbol: 'C - C_{\\text{commuted}}',
+      title: 'Net Annuity Deployed Corpus',
+      description: 'Total retirement corpus remaining after deducting tax-exempt commuted lump sum under Sec 10(10A).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Effective Annuity Rate (% p.a.)',
+      description: 'Base annuity rate adjusted for selected payout option (Single Life, Joint Life, ROP).',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'P_{\\text{EPS}}',
+      title: 'EPFO EPS-95 Monthly Pension',
+      description: 'Statutory monthly pension computed as (Pensionable Salary * Service Years) / 70.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Sec 10(10A)}',
+      title: 'Commutation Tax Exemption',
+      description: 'Up to 33.33% (Gratuity) or 50.00% (Non-Gratuity) or 100% (Govt) commuted lump sum is tax-exempt.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹50 Lakh ROP Annuity (@ 6.5% p.a.)',
+    tag: 'Max Return of Purchase Price',
+    subtitle: 'Guaranteed Lifetime Pension with 100% Corpus Refund',
+    metrics: [
+      { label: 'Deployed Corpus', value: '₹5,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Pension', value: '₹27,083/mo', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Annual Income', value: '₹325,000/yr', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Corpus Returned to Nominee', value: '₹5,000,000', colorClass: 'text-purple-600 font-bold' },
+    ],
+    takeaway: 'Investing ₹50 Lakhs into an ROP annuity generates ₹27,083/month for life while preserving the entire ₹50 Lakh principal for legal heirs.',
+  },
+  {
+    title: 'Benchmark Case Study: EPFO EPS-95 Pension (35 Years Service @ ₹15,000 Salary Cap)',
+    tag: 'Statutory EPFO Pension',
+    subtitle: 'Maximized EPS-95 Government Pension Formula',
+    metrics: [
+      { label: 'Pensionable Salary Cap', value: '₹15,000/mo', colorClass: 'text-primary font-bold' },
+      { label: 'Actual Service', value: '35 Years', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Long-Service Bonus', value: '+2 Years', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Statutory Monthly EPS Pension', value: '₹7,929/mo', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Completing 35 years of EPFO pensionable service adds 2 bonus years, yielding a statutory monthly EPS pension of ₹7,929/month.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <PensionCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

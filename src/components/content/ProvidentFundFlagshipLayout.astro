@@ -1,0 +1,155 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ProvidentFundCalculatorWidget from '../calculators/ProvidentFundCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Salary & Basic Payroll Input',
+    description: 'Enter your monthly Basic Salary and Dearness Allowance (DA) to establish mandatory 12% employee and employer EPF contributions.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Voluntary VPF Top-Up Optimization',
+    description: 'Evaluate stepping up voluntary VPF contributions (up to 100% of Basic) to capture declared 8.25% EPFO returns.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Section 10(11) Tax Threshold Compliance',
+    description: 'Monitor annual employee contributions against the ₹2.5 Lakh/yr threshold to manage tax-free interest limits.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Inflation-Adjusted Retirement Harvest',
+    description: 'Harvest your final accumulated EPF + VPF corpus at age 58, evaluating both nominal wealth and real purchasing power.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Corporate Employees',
+    description: 'Formal sector employees seeking to maximize their mandatory EPF retirement accumulation with employer co-contributions.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Risk-Averse Fixed Return Investors',
+    description: 'Investors looking for high-yielding, government-backed fixed return accumulation through Voluntary Provident Fund (VPF) top-ups.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'High-Salary Executives',
+    description: 'Executives earning high basic salaries who need to optimize around the Section 10(11) ₹2.5 Lakh annual tax threshold.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+  {
+    title: 'Early Career Professionals',
+    description: 'Young professionals starting early to capture 30+ years of compounding on mandatory EPF deductions.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'EPFO Monthly Compounding & Interest Crediting Formula',
+  formula: 'B_m = B_{m-1} + E_{\\text{emp}} + VPF + E_{\\text{empr}}, \\quad I_{\\text{annual}} = \\sum_{m=1}^{12} B_m \\times \\left(\\frac{R}{12 \\times 100}\\right)',
+  parameters: [
+    {
+      symbol: 'E_{\\text{emp}}',
+      title: 'Employee EPF Contribution',
+      description: 'Mandatory 12% of Basic Salary + Dearness Allowance.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'VPF',
+      title: 'Voluntary Provident Fund',
+      description: 'Optional additional monthly contribution (up to 100% of Basic).',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: 'E_{\\text{empr}}',
+      title: 'Employer EPF Contribution',
+      description: '12% employer contribution minus EPS pension allocation (capped at ₹1,250/mo).',
+      colorClass: 'text-accent-cyan',
+    },
+    {
+      symbol: 'I_{\\text{annual}}',
+      title: 'Annual EPFO Interest',
+      description: 'Annual interest credited based on monthly accumulated balance at declared EPFO rate (8.25%).',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Standard EPF Accumulation: ₹50,000 Basic Salary (25 to 58 Years)',
+    tag: 'Baseline EPF',
+    subtitle: 'Mandatory 12% Contribution',
+    metrics: [
+      { label: 'Monthly Basic Salary', value: '₹50,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Assumed EPFO Rate', value: '8.25% p.a.', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Total Capital Invested', value: '₹71.95 Lakhs' },
+      { label: 'Projected Retirement Corpus', value: '₹2.12 Crores', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'A standard 12% EPF contribution on a ₹50,000 basic salary with 5% annual raises accumulates ₹2.12 Crores at age 58 at an assumed 8.25% EPFO rate.',
+  },
+  {
+    title: 'VPF Booster Case Study: EPF + 10% VPF Top-Up (₹50,000 Basic)',
+    tag: 'VPF Booster',
+    subtitle: 'Voluntary Top-Up Impact',
+    metrics: [
+      { label: 'Monthly VPF Top-Up', value: '10% of Basic (₹5,000/mo)', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Baseline EPF Corpus', value: '₹2.12 Crores' },
+      { label: 'Combined EPF + VPF Corpus', value: '₹3.36 Crores', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Additional VPF Wealth Created', value: '₹1.24 Crores', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Stepping up your monthly contribution by 10% VPF adds ₹1.24 Crores to your final retirement corpus, nearly doubling your retirement wealth!',
+  },
+];
+
+const comparisonData = {
+  title: 'EPF + VPF Top-Up vs. Standard EPF Only',
+  subtitle: 'Comparing voluntary contribution power, tax limits, and final retirement corpus',
+  optionA: {
+    badge: 'BOOSTER RETIREMENT WEALTH',
+    title: 'EPF + Voluntary VPF Top-Up',
+    items: [
+      { isPositive: true, text: 'Higher Wealth Accumulation: Generates up to 60–100% higher retirement corpus via government-backed fixed returns.' },
+      { isPositive: true, text: 'Convenient Salary Deduction: Automatically deducted from monthly payroll alongside mandatory EPF.' },
+      { isPositive: true, text: 'Flexibility: Can be modified or adjusted annually based on personal cash flow requirements.' },
+    ],
+  },
+  optionB: {
+    badge: 'BASELINE MANDATORY',
+    title: 'Standard EPF Only (12%)',
+    items: [
+      { isPositive: false, text: 'Lower Final Corpus: Relies strictly on mandatory 12% contributions without extra capital allocation.' },
+      { isPositive: false, text: 'Unused Saving Capacity: Leaves surplus salary uninvested in lower-yielding traditional accounts.' },
+      { isPositive: false, text: 'Inflation Vulnerability: Standard EPF alone may not fully cover rising post-retirement living expenses.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <ProvidentFundCalculatorWidget client:visible />
+</FlagshipLayout>

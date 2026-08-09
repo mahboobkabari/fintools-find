@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import KvpCalculatorWidget from '../calculators/KvpCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter KVP Principal Investment Deposit',
+    description: 'Enter your proposed deposit amount (minimum ₹1,000 in multiples of ₹100, no upper ceiling cap).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Review Government Notified Annual Interest Rate',
+    description: 'Verify the 7.5% p.a. government-notified interest rate compounded annually for the applicable financial year.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Track 115-Month Statutory Doubling Timeline',
+    description: 'Observe your principal deposit double into 2x maturity corpus in exactly 115 months (9 years 7 months).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Premature Encashment & Income Tax',
+    description: 'Inspect 30-month lock-in premature encashment payout tables and estimate marginal income tax slab impact.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Conservative Long-Term Depositors',
+    description: 'Risk-averse investors seeking guaranteed 100% sovereign-backed principal doubling with zero market risk.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Post Office Small Savings Investors',
+    description: 'Depositors combining KVP alongside PPF, NSC, and POMIS to build a diversified small savings portfolio.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Parents & Grandparents Planning Future Gifts',
+    description: 'Families locking in guaranteed doubled lump sums for children or grandchildren over a 9.58-year horizon.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'HNIs Seeking Uncapped Sovereign Deposits',
+    description: 'High-net-worth individuals depositing large sums without statutory ceiling restrictions (unlike PPF or SCSS).',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Kisan Vikas Patra (KVP) Statutory Formulas & Doubling Horizon',
+  formula: '\\text{Maturity Payout} = 2 \\times \\text{Principal}, \\quad A = P \\left(1 + \\frac{r}{100}\\right)^{115/12}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Principal Deposit',
+      description: 'Lump sum investment deposit (Minimum ₹1,000, no maximum upper cap).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Notified KVP Rate (% p.a.)',
+      description: '7.5% p.a. government-notified interest rate compounded annually.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '115 \\text{ Months}',
+      title: 'Doubling Horizon',
+      description: 'Exactly 9 Years and 7 Months required for principal deposit to double.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '2 \\times P',
+      title: 'Guaranteed Maturity Corpus',
+      description: 'Exactly 200% of principal deposit returned at Month 115.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Starter KVP Deposit (₹1 Lakh $\\rightarrow$ ₹2 Lakhs in 115 Months)',
+    tag: 'Starter Doubling Deposit',
+    subtitle: 'Standard Sovereign Doubling Timeline',
+    metrics: [
+      { label: 'Principal Deposit', value: '₹100,000', colorClass: 'text-primary font-bold' },
+      { label: 'Notified Rate', value: '7.5% p.a.', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Maturity Horizon', value: '115 Months', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Doubled Maturity Payout', value: '₹200,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Depositing ₹1,00,000 into Kisan Vikas Patra yields exactly ₹2,00,000 in 115 months (9 years 7 months), generating ₹1,00,000 in total compound interest with 100% sovereign guarantee.',
+  },
+  {
+    title: 'Benchmark Case Study: HNI Deposit (₹10 Lakhs $\\rightarrow$ ₹20 Lakhs in 115 Months)',
+    tag: 'Uncapped HNI Allocation',
+    subtitle: 'Large Scale Wealth Preservation',
+    metrics: [
+      { label: 'Principal Deposit', value: '₹1,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Total Interest Earned', value: '₹1,000,000', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Doubled Maturity Payout', value: '₹2,000,000', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Premature Payout (5 Yrs)', value: '₹1,334,000', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Because KVP has no upper statutory cap, HNIs can deposit ₹10 Lakhs to receive ₹20 Lakhs at Month 115, or exercise premature encashment after 2.5 years (30 months lock-in) at official Post Office payout rates.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <KvpCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

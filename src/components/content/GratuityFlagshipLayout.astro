@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import GratuityCalculatorWidget from '../calculators/GratuityCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Continuous Employment Service',
+    description: 'Render continuous service in a commercial, industrial, or government establishment.',
+  },
+  {
+    stepNumber: '02',
+    title: '5-Year Statutory Milestone',
+    description: 'Complete 5 years of continuous service (or satisfy 4 years 240 days precedent; waived for death/disability).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Separation / Resignation / Retirement',
+    description: 'Submit formal resignation or attain superannuation retirement age in your organization.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Gratuity Payout & Sec 10(10) Tax Relief',
+    description: 'Receive terminal lump-sum gratuity payout while claiming 100% tax exemption up to ₹20 Lakhs under Section 10(10).',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Corporate Salaried Employees',
+    description: 'Employees working in IT, manufacturing, banking, or commercial establishments covered under the Gratuity Act.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Non-Covered Enterprise Employees',
+    description: 'Professionals working in smaller establishments or partnerships not covered under the Gratuity Act (15/30 rule).',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Government Employees',
+    description: 'Central or State government employees enjoying 100% tax-free gratuity benefits under Section 10(10)(i).',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'HR & Payroll Audit Teams',
+    description: 'Corporate HR separation specialists auditing statutory terminal compensation settlement calculations.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Payment of Gratuity Act 15/26 Formula & Section 10(10) Tax Rules',
+  formula: '\\text{Gratuity} = \\frac{15}{26} \\times (\\text{Last Drawn Basic + DA}) \\times \\text{Rounded Service Years}, \\quad \\text{Tax-Free} = \\min(\\text{Gratuity}, \\text{₹20,00,000})',
+  parameters: [
+    {
+      symbol: '\\text{Basic}',
+      title: 'Last Drawn Basic + DA',
+      description: 'Last drawn monthly basic salary plus dearness allowance on final pay slip.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '15/26',
+      title: '15/26 Working Day Ratio',
+      description: '15 days salary per year based on 26 statutory working days per month.',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: '\\text{Years}',
+      title: 'Rounded Service Years',
+      description: 'Completed years of service. Extra service $\\ge 6$ months rounds UP to 1 full year.',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: '\\text{Sec 10(10)}',
+      title: '₹20 Lakh Tax Exemption Ceiling',
+      description: 'Maximum cumulative statutory tax-free exemption limit u/s 10(10) for non-government employees.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Salaried Manager Resigning After 15 Years & 7 Months',
+    tag: 'Covered Establishment',
+    subtitle: 'Standard 15/26 Formula',
+    metrics: [
+      { label: 'Last Drawn Basic + DA', value: '₹50,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Actual Tenure', value: '15 Years, 7 Months' },
+      { label: 'Rounded Service Years', value: '16 Years (7 Mos >= 6 Mos)', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Total Statutory Gratuity Payout', value: '₹4,61,538', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Section 10(10) Tax Exemption', value: '₹4,61,538 (100% Tax-Free)', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Because 7 months exceeds 6 months, service tenure rounds up to 16 full years, yielding ₹4,61,538 in 100% tax-free gratuity.',
+  },
+  {
+    title: 'Senior Executive Case Study: ₹1.5 Lakhs Basic Salary After 25 Years (Ceiling Breach)',
+    tag: 'Statutory Ceiling Breach',
+    subtitle: 'Section 10(10) ₹20L Cap',
+    metrics: [
+      { label: 'Last Drawn Basic + DA', value: '₹1,50,000 / mo', colorClass: 'text-primary font-bold' },
+      { label: 'Service Tenure', value: '25 Years' },
+      { label: 'Total Statutory Gratuity', value: '₹21,63,462', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Section 10(10) Tax-Free Cap', value: '₹20,00,000 (Maximum Cap)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Taxable Gratuity Portion', value: '₹1,63,462 (Taxed u/s 10(10))', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: 'Gratuity exceeding ₹20 Lakhs has ₹20,00,000 exempt from tax, with the remaining ₹1,63,462 taxed at the employee\'s marginal tax bracket.',
+  },
+];
+
+const comparisonData = {
+  title: 'Covered Establishment (15/26 Rule) vs. Non-Covered Establishment (15/30 Rule)',
+  subtitle: 'Comparing working day denominators, service month rounding rules, and tax exemption limits',
+  optionA: {
+    badge: 'PAYMENT OF GRATUITY ACT',
+    title: 'Covered Establishment (15/26 Rule)',
+    items: [
+      { isPositive: true, text: '26 Working Days Denominator: Calculates 15 days salary based on 26 statutory working days per month.' },
+      { isPositive: true, text: '6-Month Service Rounding: Extra service of 6 months or more rounds UP to 1 full year.' },
+      { isPositive: true, text: '₹20 Lakh Tax Ceiling: Maximum tax-free exemption u/s 10(10).' },
+    ],
+  },
+  optionB: {
+    badge: 'NON-COVERED ENTERPRISE',
+    title: 'Not Covered under Act (15/30 Rule)',
+    items: [
+      { isPositive: false, text: '30 Calendar Days Denominator: Calculates half-month salary based on 30 calendar days per month.' },
+      { isPositive: false, text: 'No Service Month Rounding: Only full completed years of service are counted.' },
+      { isPositive: true, text: '₹20 Lakh Tax Ceiling: Same statutory ₹20 Lakh tax-free limit u/s 10(10).' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <GratuityCalculatorWidget client:visible />
+</FlagshipLayout>

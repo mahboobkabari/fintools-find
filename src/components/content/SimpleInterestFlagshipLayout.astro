@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import SimpleInterestCalculatorWidget from '../calculators/SimpleInterestCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Initial Principal Amount',
+    description: 'Enter your principal investment or loan borrowing deposit (e.g., ₹1,00,000 or $10,000).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Annual Interest Rate (% p.a.)',
+    description: 'Specify the simple interest percentage rate agreed per annum.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Choose Duration & Time Unit (Days, Months, Years)',
+    description: 'Enter time duration and select unit (Days using 365-day convention, Months, or Years).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Simple Interest, Maturity Amount & Compound Advantage',
+    description: 'Instantly view your total simple interest (I = P × r × t), maturity payout, and compound interest comparison.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Short-Term Paper & Money Market Investors',
+    description: 'Depositors investing in short-term treasury bills, commercial papers, and simple interest notes.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Personal & Informal Loan Borrowers / Lenders',
+    description: 'Individuals calculating flat rate interest payments on personal loans or friend/family agreements.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Financial Planning & Math Students',
+    description: 'Students and analysts comparing the linear growth of simple interest against exponential compound growth.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Small Business & Trade Credit Managers',
+    description: 'Business owners calculating simple interest accrued on delayed trade credit invoices over 30/60/90 days.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Simple Interest & Compound Comparison Formulas',
+  formula: 'I = P \\times \\left(\\frac{r}{100}\\right) \\times t, \\quad A = P + I = P \\left(1 + \\frac{r}{100} t\\right)',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Initial Principal Amount',
+      description: 'Starting loan or investment deposit amount.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Annual Simple Interest Rate (% p.a.)',
+      description: 'Nominal flat annual interest percentage rate.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 't',
+      title: 'Time Duration in Years',
+      description: 'Investment horizon converted to year fraction (Days / 365, Months / 12, or Years).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'A',
+      title: 'Total Maturity Payout / Repayment',
+      description: 'Total value returned at maturity (Principal + Simple Interest).',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Standard 5-Year Lumpsum (₹1 Lakh @ 10% p.a. for 10 Yrs)',
+    tag: 'Standard 10-Year Simple Growth',
+    subtitle: 'Flat Rate Interest Accumulation',
+    metrics: [
+      { label: 'Initial Principal', value: '₹100,000', colorClass: 'text-primary font-bold' },
+      { label: 'Simple Interest Rate', value: '10.0% p.a.', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Total Simple Interest', value: '₹100,000', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Total Maturity Payout', value: '₹200,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Investing ₹1,00,000 at 10% simple interest over 10 years yields exactly ₹10,000 interest per year, accumulating ₹1,00,000 in total interest for a 2x final payout of ₹2,00,000.',
+  },
+  {
+    title: 'Benchmark Case Study: Simple vs Compound Interest Comparison (₹1 Lakh @ 10% p.a., 10 Yrs)',
+    tag: 'Simple vs Compound Benchmark',
+    subtitle: 'Linear vs Exponential Wealth Growth',
+    metrics: [
+      { label: 'Simple Interest Payout', value: '₹200,000', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Compound Interest Payout', value: '₹259,374', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Compounding Advantage', value: '+₹59,374', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Percentage Yield Delta', value: '+29.69%', colorClass: 'text-purple-600 font-bold' },
+    ],
+    takeaway: 'Compound interest reinvests accrued returns every year, generating ₹59,374 extra wealth (+29.69% higher yield) compared to simple interest on a ₹1 Lakh deposit over 10 years.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <SimpleInterestCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

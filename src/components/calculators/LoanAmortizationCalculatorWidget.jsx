@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { loanAmortizationCalculatorConfig } from '../../calculators/configs/loan-amortization-calculator.config.js';
+import LoanAmortizationFlagshipWidget from './primitives/LoanAmortizationFlagshipWidget';
 
 export default function LoanAmortizationCalculatorWidget() {
-  return <UniversalCalculatorWidget config={loanAmortizationCalculatorConfig} />;
+  return <LoanAmortizationFlagshipWidget />;
 }

@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { educationLoanCalculatorConfig } from '../../calculators/configs/education-loan-calculator.config.js';
+import EducationLoanFlagshipWidget from './primitives/EducationLoanFlagshipWidget';
 
-export default function EducationLoanCalculatorWidget() {
-  return <UniversalCalculatorWidget config={educationLoanCalculatorConfig} />;
+export default function EducationLoanCalculatorWidget(props) {
+  return <EducationLoanFlagshipWidget {...props} />;
 }

@@ -1,0 +1,97 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import TakeHomeSalaryCalculatorWidget from '../calculators/TakeHomeSalaryCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Offer Letter Breakdown', description: 'Deconstruct gross Cost to Company (CTC) into Basic Salary, HRA, Special Allowance, and Employer EPF.' },
+  { stepNumber: '02', title: 'Regime Selection (New vs. Old)', description: 'Compare Budget 2024 New Tax Regime lower slabs with ₹75,000 standard deduction against Old Regime Chapter VI-A claims.' },
+  { stepNumber: '03', title: 'Statutory Payroll Deductions', description: 'Subtract mandatory Employee EPF (12% of Basic) and state Professional Tax (PT) from gross salary.' },
+  { stepNumber: '04', title: 'Monthly Bank Credit', description: 'Verify final net in-hand salary deposited into your bank account on pay day.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Freshers & Entry-Level Hires', description: 'Salaries up to ₹7.75 Lakhs pay ZERO income tax under Budget 2024 New Tax Regime thanks to the ₹75,000 standard deduction and Section 87A rebate.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Software Engineers & Tech Talent', description: 'Evaluate high-CTC compensation packages containing variable pay, performance bonuses, and mandatory EPF deductions.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Mid-Career Professionals', description: 'Determine whether Chapter VI-A deductions (80C, 24b home loan, 80D health) are sufficient to outperform New Regime lower slabs.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Senior Managers & High Earners', description: 'Plan salary structures for compensation above ₹25 Lakhs, optimizing corporate perks and NPS under 80CCD(2).', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Take-Home Salary Calculation Formula (FY 2025-26)',
+  formula: '\\text{Net Take-Home} = \\text{Gross CTC} - \\text{Employer EPF} - \\text{Income Tax} - \\text{Employee EPF} - \\text{Professional Tax}',
+  parameters: [
+    { symbol: 'CTC', title: 'Cost to Company', description: 'Total annual monetary outlay incurred by employer.', colorClass: 'text-primary' },
+    { symbol: 'Gross Sal', title: 'Gross Annual Salary', description: 'Annual salary before employee tax and statutory deductions (CTC minus Employer EPF).', colorClass: 'text-accent-sky' },
+    { symbol: 'Std Ded', title: 'Standard Deduction', description: 'Flat ₹75,000 deduction under New Tax Regime (₹50,000 under Old Regime).', colorClass: 'text-semantic-success' },
+    { symbol: 'Tax & PF', title: 'Statutory Deductions', description: 'Income tax payable, 12% Employee EPF, and annual Professional Tax (PT).', colorClass: 'text-semantic-warning' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: '₹6.0 Lakh CTC (Entry Level - Zero Tax Zone)',
+    tag: 'Fresher Profile',
+    subtitle: '100% Tax Free under New Regime',
+    metrics: [
+      { label: 'Annual Gross CTC', value: '₹6,00,000' },
+      { label: 'Standard Deduction (New)', value: '₹75,000' },
+      { label: 'Taxable Income', value: '₹5,25,000' },
+      { label: 'Total Income Tax Payable', value: '₹0', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Monthly Take-Home Pay', value: '₹46,800 / mo', colorClass: 'text-emerald-500 font-extrabold' },
+    ],
+    takeaway: 'Under Budget 2024 New Regime, salaries up to ₹7.75 Lakhs pay zero income tax due to Section 87A rebate.',
+  },
+  {
+    title: '₹12.0 Lakh CTC (Mid-Level Benchmark)',
+    tag: 'Mid-Level Pro',
+    subtitle: 'New Regime Victory',
+    metrics: [
+      { label: 'Annual Gross CTC', value: '₹12,00,000' },
+      { label: 'Employer EPF (12% Basic)', value: '₹72,000' },
+      { label: 'New Regime Tax Payable', value: '₹71,500', colorClass: 'text-primary font-bold' },
+      { label: 'Old Regime Tax (Without 80C)', value: '₹1,17,000', colorClass: 'text-semantic-warning font-bold' },
+      { label: 'Net Monthly Take-Home Pay', value: '₹87,842 / mo', colorClass: 'text-emerald-500 font-extrabold' },
+    ],
+    takeaway: 'New Tax Regime saves ₹45,500 in annual tax outgo compared to Old Regime without investments.',
+  },
+  {
+    title: '₹25.0 Lakh CTC (Experienced Professional)',
+    tag: 'Senior Talent',
+    subtitle: 'Regime Comparison Tradeoff',
+    metrics: [
+      { label: 'Annual Gross CTC', value: '₹25,00,000' },
+      { label: 'Employer EPF (12% Basic)', value: '₹1,50,000' },
+      { label: 'New Regime Tax Payable', value: '₹4,44,600', colorClass: 'text-primary font-bold' },
+      { label: 'Net Monthly Take-Home Pay', value: '₹1,60,783 / mo', colorClass: 'text-emerald-500 font-extrabold' },
+    ],
+    takeaway: 'At ₹25L salary, New Regime provides ₹1.60+ Lakhs net monthly in-hand credit with zero paperwork.',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Maintain Basic Salary at 50% of CTC', description: 'Keeps mandatory EPF contribution at optimal rates for tax-free compounding under EPFO rules.' },
+  { number: '02', title: 'Utilize Employer NPS under 80CCD(2)', description: 'Employer contributions up to 10% of basic salary into NPS are tax-free under both tax regimes.' },
+  { number: '03', title: 'Evaluate Rent & HRA Claims', description: 'If paying substantial house rent, check whether Old Regime with HRA exemption beats New Regime lower slabs.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <TakeHomeSalaryCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

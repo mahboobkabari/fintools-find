@@ -1,0 +1,86 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CagrCalculatorWidget from '../calculators/CagrCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Initial Capital Purchase Cost', description: 'Record exact initial investment cost or purchase price paid at beginning of holding period.' },
+  { stepNumber: '02', title: 'Multi-Year Holding Duration', description: 'Hold asset across market cycles (stocks, mutual funds, real estate, gold, fixed deposits).' },
+  { stepNumber: '03', title: 'Maturity / Current Value Audit', description: 'Determine final market valuation or sale proceeds at the end of holding period.' },
+  { stepNumber: '04', title: 'Geometric CAGR & Inflation Adjustment', description: 'Calculate annualized CAGR percentage and Fisher real return after inflation.', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Equity & Stock Investors', description: 'Investors evaluating multi-year stock portfolio performance against benchmark indices like Nifty 50.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Mutual Fund Unitholders', description: 'Investors comparing 3-year, 5-year, and 10-year annualized CAGR returns across equity fund categories.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Real Estate Property Buyers', description: 'Property owners measuring true annualized land or residential property value appreciation.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Fixed Income & FD Investors', description: 'Conservative savers benchmarking bank fixed deposit compounding returns against inflation.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'Compound Annual Growth Rate Formula (CAGR)',
+  formula: '\\text{CAGR (\\%)} = \\left[ \\left(\\frac{\\text{Final Value}}{\\text{Initial Value}}\\right)^{\\frac{1}{n}} - 1 \\right] \\times 100',
+  parameters: [
+    { symbol: 'Final Value (FV)', title: 'Current / Sale Value', description: 'Total market value or sale proceeds at end of tenure.', colorClass: 'text-primary' },
+    { symbol: 'Initial Value (IV)', title: 'Purchase / Capital Cost', description: 'Original capital invested at start of tenure.', colorClass: 'text-accent-sky' },
+    { symbol: 'n (Years)', title: 'Holding Duration', description: 'Total holding period in years (can be fractional).', colorClass: 'text-semantic-success' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Stock Investment (₹1L to ₹2.5L in 5 Years)',
+    tag: 'Equity Investment',
+    subtitle: '20.11% CAGR Achieved',
+    metrics: [
+      { label: 'Initial Purchase Cost', value: '₹1,00,000' },
+      { label: 'Final Value (5 Yrs)', value: '₹2,50,000' },
+      { label: 'Absolute Wealth Gain', value: '₹1,50,000' },
+      { label: 'Absolute Return (%)', value: '150.0%' },
+      { label: 'Annualized CAGR (%)', value: '20.11% p.a.', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Wealth Multiplier', value: '2.50x', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Even though absolute gain was 150%, the true annualized compound growth rate was 20.11% per year.',
+  },
+  {
+    title: 'Long-Term Mutual Fund Portfolio (₹2L to ₹10L in 10 Years)',
+    tag: 'Mutual Funds',
+    subtitle: '5x Wealth Multiplier',
+    metrics: [
+      { label: 'Initial Investment', value: '₹2,00,000' },
+      { label: 'Final Corpus Value', value: '₹10,00,000' },
+      { label: 'Absolute Wealth Gain', value: '₹8,00,000' },
+      { label: 'Absolute Return (%)', value: '400.0%' },
+      { label: 'Annualized CAGR (%)', value: '17.46% p.a.', colorClass: 'text-emerald-500 font-extrabold' },
+      { label: 'Real CAGR (6% Inflation)', value: '10.81% p.a.', colorClass: 'text-accent-sky font-bold' },
+    ],
+    takeaway: 'A 400% absolute return over 10 years equals an annual CAGR of 17.46% (10.81% real CAGR after inflation).',
+  },
+];
+
+const strategies = [
+  { number: '01', title: 'Always Compare CAGR Across Equal Holding Durations', description: 'Do not compare absolute returns of a 3-year investment with a 10-year investment; use CAGR to normalize rates.' },
+  { number: '02', title: 'Factor Inflation to Measure Real Purchasing Power', description: 'Subtract inflation impact using the Fisher equation to ensure positive real capital growth above cost of living.' },
+  { number: '03', title: 'Use XIRR for Cash Flow Portfolios (SIPs)', description: 'CAGR measures point-to-point lump sums. If you make recurring cash injections or withdrawals, use XIRR / IRR.' },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CagrCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

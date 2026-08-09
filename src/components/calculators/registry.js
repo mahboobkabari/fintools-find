@@ -26,6 +26,21 @@ import ProvidentFundCalculatorWidget from './ProvidentFundCalculatorWidget';
 import GratuityCalculatorWidget from './GratuityCalculatorWidget';
 import FireCalculatorWidget from './FireCalculatorWidget';
 import PensionCalculatorWidget from './PensionCalculatorWidget';
+import ScssCalculatorWidget from './ScssCalculatorWidget';
+import NscCalculatorWidget from './NscCalculatorWidget';
+import PomisCalculatorWidget from './PomisCalculatorWidget';
+import VpfCalculatorWidget from './VpfCalculatorWidget';
+import KvpCalculatorWidget from './KvpCalculatorWidget';
+import ApyCalculatorWidget from './ApyCalculatorWidget';
+import CompoundInterestCalculatorWidget from './CompoundInterestCalculatorWidget';
+import SimpleInterestCalculatorWidget from './SimpleInterestCalculatorWidget';
+import XirrCalculatorWidget from './XirrCalculatorWidget';
+import InflationCalculatorWidget from './InflationCalculatorWidget';
+import GoalSipCalculatorWidget from './GoalSipCalculatorWidget';
+import RentVsBuyCalculatorWidget from './RentVsBuyCalculatorWidget';
+import FdVsDebtFundCalculatorWidget from './FdVsDebtFundCalculatorWidget';
+import HomeAffordabilityCalculatorWidget from './HomeAffordabilityCalculatorWidget';
+import DebtSnowballCalculatorWidget from './DebtSnowballCalculatorWidget';
 
 export const CALCULATOR_REGISTRY = {
   'emi-calculator': EmiCalculatorWidget,
@@ -56,8 +71,24 @@ export const CALCULATOR_REGISTRY = {
   'gratuity-calculator': GratuityCalculatorWidget,
   'fire-calculator': FireCalculatorWidget,
   'pension-calculator': PensionCalculatorWidget,
+  'scss-calculator': ScssCalculatorWidget,
+  'nsc-calculator': NscCalculatorWidget,
+  'pomis-calculator': PomisCalculatorWidget,
+  'vpf-calculator': VpfCalculatorWidget,
+  'kvp-calculator': KvpCalculatorWidget,
+  'apy-calculator': ApyCalculatorWidget,
+  'compound-interest-calculator': CompoundInterestCalculatorWidget,
+  'simple-interest-calculator': SimpleInterestCalculatorWidget,
+  'xirr-calculator': XirrCalculatorWidget,
+  'inflation-calculator': InflationCalculatorWidget,
+  'goal-sip-calculator': GoalSipCalculatorWidget,
+  'rent-vs-buy-calculator': RentVsBuyCalculatorWidget,
+  'fd-vs-debt-fund-calculator': FdVsDebtFundCalculatorWidget,
+  'home-affordability-calculator': HomeAffordabilityCalculatorWidget,
+  'debt-snowball-calculator': DebtSnowballCalculatorWidget,
 };
 
 export function getCalculatorWidget(slug) {
   return CALCULATOR_REGISTRY[slug] || null;
 }
+

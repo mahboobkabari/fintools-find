@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import RentVsBuyCalculatorWidget from '../calculators/RentVsBuyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Property Purchase Price & Monthly Rent',
+    description: 'Specify the purchase price of the target property (e.g. ₹75 Lakhs) and the current monthly rent for an equivalent property (e.g. ₹25,000/mo).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Financing & Appreciation Parameters',
+    description: 'Set your down payment %, home loan interest rate (% p.a.), expected annual property appreciation %, and rent inflation %.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Configure Equity Investment Return Assumption',
+    description: 'Set the expected equity mutual fund return rate (% p.a.) for investing the down payment lumpsum and monthly cash flow savings.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Financial Winner & Breakeven Horizon',
+    description: 'Instantly view which housing choice generates higher estimated net worth over your horizon, and check the exact breakeven crossover year.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Prospective Home Buyers',
+    description: 'Individuals evaluating whether buying a home with a 20-year home loan is financially superior to renting and investing in equity SIPs.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Real Estate & Equity Investors',
+    description: 'Investors comparing property appreciation returns against multi-asset equity mutual fund wealth creation.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Financial Planners & Advisors',
+    description: 'Advisors modeling opportunity cost of home down payments and monthly EMI cash outflow deltas.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Relocating Professionals',
+    description: 'Working professionals deciding whether to buy property in a new city or rent and keep capital liquid.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Rent vs Buy Opportunity Cost Formulas',
+  formula: '\\text{NetWorth}_{\\text{Buy}}(y) = V_{\\text{prop}}(y) - L(y) - C_{\\text{sell}}, \\quad \\text{NetWorth}_{\\text{Rent}}(y) = V_{\\text{Lumpsum}}(y) + V_{\\text{SIP}}(y)',
+  parameters: [
+    {
+      symbol: 'V_{prop}(y)',
+      title: 'Future Property Value',
+      description: 'Property purchase price escalated by compound appreciation rate.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'L(y)',
+      title: 'Remaining Loan Balance',
+      description: 'Outstanding home loan principal balance after amortization.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'V_{Lumpsum}(y)',
+      title: 'Lumpsum Investment Value',
+      description: 'Initial down payment & transaction costs invested in equity @ r_equity%.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'V_{SIP}(y)',
+      title: 'Accumulated Monthly Surplus SIP',
+      description: 'Monthly cash flow savings ((EMI + Maint) - Rent) invested in equity @ r_equity%.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Metro Tier-1 Apartment (₹75 Lakhs Property vs ₹25,000 Rent, 20 Yrs)',
+    tag: 'Metro Housing Benchmark',
+    subtitle: '20-Year Opportunity Cost Modeling',
+    metrics: [
+      { label: 'Property Price Today', value: '₹7,500,000', colorClass: 'text-primary font-bold' },
+      { label: 'Initial Monthly Rent', value: '₹25,000/mo', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Net Worth (Buy)', value: '₹18.49 Cr / ₹1.85 Cr', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Net Worth (Rent)', value: '₹2.76 Cr', colorClass: 'text-blue-600 font-bold' },
+    ],
+    takeaway: 'Under standard baseline assumptions (5% property growth, 7% rent inflation, 12% equity return), Renting & Investing generates a higher estimated net worth than Buying because the ₹18.75 Lakhs initial down payment and early monthly cash savings compound significantly faster in equity.',
+  },
+  {
+    title: 'Benchmark Case Study: High Real Estate Appreciation (₹75 Lakhs Property @ 10% Appreciation)',
+    tag: 'High Property Growth Scenario',
+    subtitle: 'Real Estate Capital Gains Advantage',
+    metrics: [
+      { label: 'Property Appreciation', value: '10.0% p.a.', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Equity SIP Return', value: '8.0% p.a.', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Winning Decision', value: 'BUYING WINS', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Breakeven Horizon', value: 'Year 6', colorClass: 'text-indigo-600 font-bold' },
+    ],
+    takeaway: 'When annual property appreciation (10% p.a.) outpaces equity returns (8% p.a.), Buying becomes financially superior starting from Year 6.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <RentVsBuyCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

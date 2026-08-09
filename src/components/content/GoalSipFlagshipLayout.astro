@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import GoalSipCalculatorWidget from '../calculators/GoalSipCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Target Present Goal Amount Today',
+    description: 'Specify your target financial goal amount in today’s value (e.g., ₹50 Lakhs for home down payment, ₹25 Lakhs for education, or ₹1 Crore for retirement).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Time Horizon & Expected Return Rate',
+    description: 'Select your investment duration in years and expected mutual fund annual return rate (% p.a.).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Enable Goal Inflation Adjustment',
+    description: 'Toggle inflation escalation (default 6% p.a.) to calculate the real future inflated cost of your goal.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Required SIP & Step-Up Savings',
+    description: 'Instantly view your required fixed monthly SIP, or see how much less starting SIP you need with an annual Step-Up.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Parents Planning Higher Education Goals',
+    description: 'Parents calculating the exact monthly mutual fund SIP needed to fund a degree in 10-15 years.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Prospective Home Buyers',
+    description: 'Individuals aiming to accumulate a lump sum property down payment over 5-10 years.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Retirement Corpus Builders',
+    description: 'Investors modeling exact monthly savings required to build a ₹1+ Crore retirement nest egg.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Career Starters Using Step-Up SIP',
+    description: 'Young professionals starting with a smaller initial monthly SIP and increasing contributions by 10% annually as salary rises.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Goal SIP Reverse Solver Formulas',
+  formula: 'FV_{\\text{inflated}} = \\text{Target} \\times (1 + i)^n, \\quad PMT = \\frac{FV_{\\text{inflated}} \\times r_m}{(1 + r_m)^{12n} - 1} \\times \\frac{1}{1 + r_m}',
+  parameters: [
+    {
+      symbol: 'Target',
+      title: 'Present Goal Amount Today',
+      description: 'The target financial goal in today’s prices.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'FV_{inflated}',
+      title: 'Inflation-Adjusted Target Goal',
+      description: 'Future escalated cost of the goal after compound inflation.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'r_m',
+      title: 'Monthly Return Rate',
+      description: 'Annual return rate divided by 12 (r / 12 / 100).',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'PMT',
+      title: 'Required Monthly SIP',
+      description: 'Exact monthly deposit required at beginning of month.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹50 Lakhs Goal in 10 Years @ 12% Return (6% Inflation)',
+    tag: 'Standard Goal Benchmark',
+    subtitle: 'Inflation-Adjusted Goal Reverse Engineering',
+    metrics: [
+      { label: 'Present Goal Today', value: '₹5,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Inflated Goal (6% Infl)', value: '₹8,954,238', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Required Fixed SIP', value: '₹38,540/mo', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Starting 10% Step-Up SIP', value: '₹26,539/mo', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Adjusting for 6% inflation, a ₹50 Lakh goal today requires ₹89.54 Lakhs in 10 years. A fixed monthly SIP of ₹38,540 @ 12% return achieves the target. Alternatively, an investor can start with ₹26,539/mo and step up by 10% each year.',
+  },
+  {
+    title: 'Benchmark Case Study: Child Higher Education (₹25 Lakhs Goal in 15 Years @ 12% Return)',
+    tag: 'Higher Education Benchmark',
+    subtitle: 'Long-Horizon Goal Planning',
+    metrics: [
+      { label: 'Current Degree Cost', value: '₹2,500,000', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Inflated Degree Cost (6% Infl)', value: '₹5,991,395', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Required Fixed SIP', value: '₹11,874/mo', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Starting 10% Step-Up SIP', value: '₹6,464/mo', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Starting early drastically reduces the monthly SIP commitment. A 15-year goal requires only ₹11,874/mo fixed or ₹6,464/mo with annual 10% step-up.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <GoalSipCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ApyCalculatorWidget from '../calculators/ApyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Subscriber Entry Age (18–40 Years)',
+    description: 'Specify your current entry age. Joining earlier significantly lowers your monthly auto-debited contribution.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Choose Target Guaranteed Monthly Pension Tier',
+    description: 'Select your desired guaranteed monthly lifetime pension (₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Review Auto-Debited Contribution & Frequency',
+    description: 'Inspect auto-debited monthly, quarterly, or half-yearly contributions according to the official PFRDA statutory table.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Lifetime Pension & Nominee Corpus Return',
+    description: 'Review your guaranteed monthly lifetime pension and the statutory return of pension corpus (up to ₹8.5 Lakhs) to your nominee.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Unorganized Sector Workers & Self-Employed Citizens',
+    description: 'Workers, gig economy drivers, artisans, shopkeepers, and freelancers securing a guaranteed government pension.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Young Adults & Early Career Entrants (Ages 18–25)',
+    description: 'Young citizens locking in ₹5,000 monthly pension for life for just ₹210/month (₹7/day) by joining at age 18.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Non-Income Tax Paying Citizens',
+    description: 'Eligible non-taxpayers taking full advantage of government-guaranteed social security retirement benefits.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Spouses & Family Retirement Planners',
+    description: 'Couples opening individual APY accounts to secure a combined guaranteed household pension of ₹10,000 per month.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Atal Pension Yojana (APY) PFRDA Statutory Framework',
+  formula: 'C_{\\text{monthly}} = \\text{PFRDA\\_Table}(\\text{EntryAge}, \\text{PensionTier}), \\quad C_{\\text{total}} = C_{\\text{monthly}} \\times (60 - \\text{EntryAge}) \\times 12',
+  parameters: [
+    {
+      symbol: 'C_{\\text{monthly}}',
+      title: 'Auto-Debited Monthly Contribution',
+      description: 'Prescribed statutory monthly contribution based on entry age (18–40) and selected pension tier (₹1k–₹5k).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Age } 60',
+      title: 'Vesting & Pension Start Age',
+      description: 'Guaranteed monthly lifetime pension payout commences automatically on reaching age 60.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'P_{\\text{monthly}}',
+      title: 'Guaranteed Lifetime Pension',
+      description: '₹1,000 to ₹5,000 monthly guaranteed pension paid to subscriber for life (and then to spouse).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Corpus}',
+      title: 'Statutory Nominee Return',
+      description: '100% of accumulated pension corpus (up to ₹8.5 Lakhs) returned to nominee upon death of subscriber and spouse.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Earliest Entry at Age 18 (₹5,000/mo Pension @ ₹210/mo)',
+    tag: 'Earliest Entry Advantage',
+    subtitle: 'Optimal Pension Value Strategy',
+    metrics: [
+      { label: 'Entry Age', value: '18 Years', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Auto-Debit', value: '₹210 / month', colorClass: 'text-indigo-600 font-bold' },
+      { label: '42-Year Total Contrib', value: '₹105,840', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Nominee Corpus Return', value: '₹850,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Joining APY at age 18 requires contributing only ₹210 per month (just ₹7/day) over 42 years (total contribution ₹1,05,840) to guarantee a lifetime monthly pension of ₹5,00,00 and secure an ₹8,50,000 corpus return for your nominee.',
+  },
+  {
+    title: 'Benchmark Case Study: Late Entry at Age 40 (₹5,000/mo Pension @ ₹1,454/mo)',
+    tag: 'Maximum Entry Age Cap',
+    subtitle: '20-Year Accelerated Window Strategy',
+    metrics: [
+      { label: 'Entry Age', value: '40 Years', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly Auto-Debit', value: '₹1,454 / month', colorClass: 'text-indigo-600 font-bold' },
+      { label: '20-Year Total Contrib', value: '₹348,960', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Nominee Corpus Return', value: '₹850,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'At the maximum entry age of 40, contributing ₹1,454 per month over 20 years (total contribution ₹3,48,960) locks in the maximum guaranteed ₹5,000/month pension starting at age 60, with the full ₹8.5 Lakhs returned to the nominee.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <ApyCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

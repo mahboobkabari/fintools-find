@@ -7,14 +7,19 @@ slug: "gratuity-calculator"
 currency: "INR"
 howToUse:
   - "Enter your last drawn monthly Basic Salary + Dearness Allowance (DA) in Rupees (₹)."
-  - "Enter total completed years of continuous service."
-  - "Enter additional completed months of service (0 to 11 months)."
-  - "Select whether your organization is covered under the Payment of Gratuity Act, 1972 (standard default is Yes)."
-  - "Instantly view total statutory gratuity payout, Section 10(10) tax-free exemption, and taxable gratuity amount."
+  - "Enter total completed years and additional months of service."
+  - "Select establishment coverage type: Covered under Act (15/26), Non-Covered (15/30), or Government Employee."
+  - "Toggle permanent disablement or death exception if applicable (waives 5-year requirement)."
+  - "Set expected annual salary growth rate (% p.a.) for the Work 1-to-5 More Years simulator."
+  - "Enter your marginal income tax bracket (% for taxable gratuity outgo)."
+  - "Instantly view total statutory gratuity payout, Section 10(10) tax-free exemption, taxable portion, and net cash flow."
 features:
   - "Payment of Gratuity Act 1972 statutory 15/26 working day calculation engine"
-  - "Automatic service months rounding logic (6+ months rounds UP to 1 full year)"
+  - "Automatic service months rounding logic (6+ months rounds UP to 1 full year for covered establishments)"
   - "Section 10(10) ₹20 Lakh statutory tax exemption ceiling deduction"
+  - "Work 1-to-5 More Years Career Growth Simulator (Shows extra gratuity earned by staying 1-5 more years)"
+  - "Reverse Target Gratuity Salary Solver (Calculates required basic salary for target gratuity)"
+  - "4-Scenario Service Tenure Milestone Grid (5Y Milestone vs 10Y vs 15Y vs 25Y)"
   - "Visual breakdown bar comparing tax-free gratuity vs taxable gratuity"
 benefits:
   - "Determine exact terminal gratuity payout before submitting job resignation or retiring"
@@ -25,11 +30,11 @@ faqs:
   - question: "What is Gratuity?"
     answer: "Gratuity is a statutory monetary benefit paid by an employer to an employee as a token of gratitude for rendering continuous service in the organization for 5 or more years, regulated under the Payment of Gratuity Act, 1972."
   - question: "Is 5 years of continuous service mandatory to receive gratuity?"
-    answer: "Yes. Under Section 4(1) of the Payment of Gratuity Act, completion of at least 5 years of continuous service is mandatory. However, the 5-year requirement is waived in case of employee death or permanent disablement due to accident or disease."
+    answer: "Yes, under Section 4(1) of the Payment of Gratuity Act, completion of at least 5 years of continuous service is mandatory. However, the 5-year requirement is legally waived in case of employee death or permanent disablement due to accident or disease."
   - question: "How is gratuity calculated for employees covered under the Act?"
     answer: "For employees covered under the Act, gratuity is calculated using the 15/26 working days formula: Gratuity = (15 / 26) x Last Drawn Basic Salary + DA x Completed Years of Service. Additional service of 6 months or more is rounded up to 1 full year."
   - question: "What is the maximum tax-free gratuity limit under Section 10(10)?"
-    answer: "Under Section 10(10) of the Income Tax Act, the maximum cumulative tax-free exemption limit for gratuity received by non-government private sector employees is ₹20,00,000 (₹20 Lakhs). For government employees, 100% of gratuity is tax-free."
+    answer: "Under Section 10(10) of the Income Tax Act, the maximum cumulative tax-free exemption limit for gratuity received by non-government private sector employees is ₹20,00,000 (₹20 Lakhs). For government employees, 100% of gratuity is tax-free u/s 10(10)(i)."
   - question: "How is service tenure rounded off for gratuity calculations?"
     answer: "For organizations covered under the Act, if the excess service period after full years is 6 months or more (e.g. 15 years and 7 months), it is rounded UP to the next full year (16 years). If less than 6 months (e.g. 15 years and 4 months), it is rounded DOWN to 15 years."
   - question: "Can an employer forfeit an employee's gratuity?"
@@ -67,12 +72,6 @@ A **Gratuity Calculator** is an essential statutory tool designed for salaried e
 
 Gratuity represents a major lump-sum financial benefit paid by employers upon job resignation, superannuation, or retirement after 5 or more years of continuous service. Knowing your exact gratuity entitlement helps you audit corporate HR separation settlements and plan post-resignation finances accurately.
 
-### Who Should Use It & When?
-* **Employees Planning Job Resignation:** To calculate expected terminal payout cash flows before submitting formal notice.
-* **Pre-Retirees & Pensioners:** To estimate lump-sum retirement gratuity payouts alongside our [Provident Fund Calculator](/tools/retirement/provident-fund-calculator/).
-* **HR & Payroll Administrators:** To audit statutory gratuity settlement computations across departing employees.
-* **Taxpayers Preparing ITR Filings:** To determine taxable vs tax-free gratuity amounts under Section 10(10).
-
 ---
 
 ## Payment of Gratuity Act Rules (Covered vs Non-Covered)
@@ -81,7 +80,7 @@ Gratuity represents a major lump-sum financial benefit paid by employers upon jo
 |---|---|---|---|---|
 | **Covered under Act** | $\frac{15}{26} \times \text{Basic} \times \text{Years}$ | **26 Working Days** | $\ge 6$ Months = **+1 Year** | **₹20 Lakhs** (Sec 10(10)) |
 | **Not Covered under Act** | $\frac{15}{30} \times \text{Half-Month Avg} \times \text{Years}$ | **30 Calendar Days** | Full Completed Years Only | **₹20 Lakhs** (Sec 10(10)) |
-| **Government Employees** | Full Pension Rules | Official Service Rules | Full Service Rules | **100% Tax-Free** |
+| **Government Employees** | Full Pension Rules | Official Service Rules | Full Service Rules | **100% Tax-Free** (u/s 10(10)(i)) |
 
 ---
 
@@ -120,13 +119,3 @@ $$\text{Gratuity Amount} = \frac{15}{26} \times ₹50,000 \times 16 = \mathbf{�
 * **Total Gratuity Payable:** **₹4,61,538**
 * **Section 10(10) Tax-Free Exemption:** **₹4,61,538** (below ₹20 Lakh cap)
 * **Net Taxable Gratuity:** **₹0** (100% Tax-Free!)
-
----
-
-## 5 Essential Strategies for Gratuity Management
-
-1. **Verify 5-Year Continuous Service:** Ensure you complete 5 full years (or at least 4 years 240 working days) before resigning to protect your statutory gratuity rights.
-2. **Audit 15/26 Formula:** Check that your HR department uses 26 working days (not 30 days) to compute your gratuity payout.
-3. **Reinvest Tax-Free Gratuity Cash:** Reinvest your tax-free gratuity lump sum into mutual fund systematic withdrawal plans via our [SWP Calculator](/tools/investment/swp-calculator/).
-4. **Combine Gratuity with EPF & NPS:** Plan your total retirement lump sum by pairing gratuity with your [NPS Calculator](/tools/retirement/nps-calculator/) balance.
-5. **Report Terminal Compensation in ITR:** Declare tax-exempt gratuity under Exempt Income in your annual ITR return alongside our [Income Tax Calculator](/tools/tax/income-tax-calculator/).

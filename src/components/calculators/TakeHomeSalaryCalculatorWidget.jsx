@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { takeHomeSalaryCalculatorConfig } from '../../calculators/configs/take-home-salary-calculator.config.js';
+import TakeHomeSalaryFlagshipWidget from './primitives/TakeHomeSalaryFlagshipWidget';
 
 export default function TakeHomeSalaryCalculatorWidget() {
-  return <UniversalCalculatorWidget config={takeHomeSalaryCalculatorConfig} />;
+  return <TakeHomeSalaryFlagshipWidget />;
 }

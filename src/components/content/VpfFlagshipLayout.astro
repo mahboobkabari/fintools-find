@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import VpfCalculatorWidget from '../calculators/VpfCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Monthly Basic Salary & VPF Contribution Rate',
+    description: 'Specify your monthly basic salary and choose your voluntary VPF allocation percentage (up to 88% above mandatory 12% EPF).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Review EPFO Notified Annual Interest Rate',
+    description: 'Verify the 8.25% p.a. annual interest rate notified by EPFO for the applicable financial year.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Section 10(11) Tax Threshold',
+    description: 'Track your annual combined employee contribution against the ₹2,50,000 threshold to confirm 100% tax-free interest status.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compare VPF Yields against PPF & NPS',
+    description: 'Compare VPF accumulation against Public Provident Fund (PPF @ 7.1%) and National Pension System (NPS @ 10.0% market returns).',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Corporate Employees in India',
+    description: 'Employees covered under EPF aiming to maximize safe, high-yielding voluntary retirement savings directly via salary deduction.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Tax-Conscious Investors Maximizing Sec 10(11)',
+    description: 'Mid-to-high earners fitting employee contributions up to ₹2.5 Lakhs/year to secure 100% tax-exempt interest compounding.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Conservative Wealth Accumulators',
+    description: 'Risk-averse investors choosing EPFO sovereign-backed annual returns over volatile equity markets.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Senior Executives & High Earners',
+    description: 'Executives evaluating Section 10(11) taxable interest rules on employee EPF+VPF contributions exceeding ₹2.5 Lakhs/year.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Voluntary Provident Fund (VPF) Statutory Formulas & Compounding',
+  formula: 'A_y = (A_{y-1} + C_y) \\times (1 + r), \\quad C_y = \\text{Basic}_y \\times 12 \\times (\\%\\text{EPF} + \\%\\text{VPF})',
+  parameters: [
+    {
+      symbol: 'C_y',
+      title: 'Annual Employee Contribution',
+      description: 'Combined mandatory EPF (12%) + voluntary VPF (%) on basic salary.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'EPFO Notified Annual Rate',
+      description: '8.25% p.a. interest rate notified by EPFO for the applicable financial year.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Sec } 10(11)',
+      title: 'Tax Threshold Rule',
+      description: 'Employee contributions up to ₹2,50,000/year earn tax-free interest; excess is taxable at slab.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'A_y',
+      title: 'End of Year Corpus',
+      description: 'Accumulated principal plus compound interest calculated on monthly/annual balance.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Optimal 10% VPF Contribution (₹50,000 Basic Salary @ 8.25% p.a.)',
+    tag: 'Optimal Tax-Free VPF',
+    subtitle: 'Balanced Salaried Employee Allocation Below ₹2.5L Cap',
+    metrics: [
+      { label: 'Monthly Basic Salary', value: '₹50,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly VPF + EPF (22%)', value: '₹11,000/mo', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Year 1 Employee Contrib', value: '₹132,000/yr', colorClass: 'text-purple-600 font-bold' },
+      { label: '28-Year Retirement Corpus', value: '₹1.72 Crores', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Contributing 10% VPF alongside mandatory 12% EPF on a ₹50,000 basic salary generates a total retirement corpus of ₹1.72 Crores over 28 years. Because annual employee contribution (₹1.32L/yr) remains below ₹2.5L, 100% of the interest earned is tax-exempt under Section 10(11).',
+  },
+  {
+    title: 'Benchmark Case Study: HNI Executive Allocation (₹2,00,000 Basic Salary @ 8.25% p.a.)',
+    tag: 'Sec 10(11) Taxable Excess Audit',
+    subtitle: 'High Earner Exceeding ₹2.5L Annual Threshold',
+    metrics: [
+      { label: 'Monthly Basic Salary', value: '₹200,000', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly EPF+VPF (27%)', value: '₹54,000/mo', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Annual Employee Contrib', value: '₹648,000/yr', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Taxable Annual Contrib', value: '₹398,000/yr', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'For senior executives contributing ₹6.48 Lakhs/year, the first ₹2.5 Lakhs earns tax-free interest, while interest accrued on the remaining ₹3.98 Lakhs/year is taxable at the 30% slab rate in separate EPF taxable accounts.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <VpfCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

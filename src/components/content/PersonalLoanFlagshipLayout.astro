@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PersonalLoanCalculatorWidget from '../calculators/PersonalLoanCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Eligibility & Credit Score Assessment',
+    description: 'Check your personal loan eligibility based on monthly salary income, employment stability, and CIBIL credit score.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Interest Rate & Upfront Fee Disclosure',
+    description: 'Compare bank interest rates (10.5% to 24%) and upfront processing fees (1% to 3% plus 18% statutory GST).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Instant Bank Sanction & Cash Disbursal',
+    description: 'Complete digital KYC, sign loan agreement, and receive net cash disbursed into your bank account.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Structured Repayment & Debt Consolidation',
+    description: 'Service fixed monthly EMIs comfortably within a 35% FOIR salary budget while clearing high-cost credit card debt.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Emergency Borrowers',
+    description: 'Professionals borrowing ₹2L to ₹15L for medical, wedding, or travel emergencies budgeting monthly EMIs.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Credit Card Debt Consolidators',
+    description: 'Borrowers consolidating high-interest credit card balances (36% to 42% APR) into a single 12% personal loan.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Home Renovation & Improvement',
+    description: 'Homeowners funding interior design, kitchen remodeling, or structural upgrades without mortgaging property.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Prudential Debt Budgeters',
+    description: 'Salaried professionals auditing FOIR borrowing limits to ensure unsecured debt stays safely below 35% of income.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Personal Loan EMI & Effective APR Formulas',
+  formula: '\\text{EMI} = P \\times r \\times \\frac{(1+r)^n}{(1+r)^n - 1}, \\quad \\text{Effective APR} = r_{\\text{apr}} \\times 12 \\times 100',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Borrowed Personal Loan Amount',
+      description: 'Total unsecured loan principal sanctioned by bank or NBFC.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Monthly Interest Rate',
+      description: 'Nominal annual interest rate divided by 12 months ($r = R / 1200$).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: '\\text{APR}',
+      title: 'Effective Annual Percentage Rate',
+      description: 'True annual borrowing cost incorporating upfront processing fees and 18% statutory GST.',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: '\\text{Fee GST}',
+      title: '18% Statutory GST on Fees',
+      description: 'Government Goods and Services Tax charged on bank processing fees.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹5 Lakhs Personal Loan (11.5% Interest Rate over 3 Years)',
+    tag: 'Standard Borrowing',
+    subtitle: 'Balanced Monthly EMI',
+    metrics: [
+      { label: 'Borrowed Personal Loan Amount', value: '₹5,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Processing Fee + 18% GST', value: '₹5,900 (1% + 18% GST)', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Net Disbursed Cash Principal', value: '₹4,94,100' },
+      { label: 'Monthly Personal Loan EMI', value: '₹16,488 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Total Interest Outgo over 3 Years', value: '₹93,568', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'A ₹5 Lakhs loan at 11.5% for 3 years results in a monthly EMI of ₹16,488/mo, consuming 16% of a ₹1.0 Lakh monthly income.',
+  },
+  {
+    title: 'Smart Debt Consolidation Case Study: ₹8 Lakhs Credit Card Balance (36% APR vs 12% Personal Loan)',
+    tag: 'Debt Consolidation',
+    subtitle: 'Massive Interest Savings',
+    metrics: [
+      { label: 'Revolving Credit Card Debt', value: '₹8,00,000 (at 36% APR)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Credit Card Min Monthly Payment', value: '₹40,000 / mo', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Replacement Personal Loan EMI', value: '₹21,068 / mo (at 12% over 4Y)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Monthly Payment Savings', value: '₹18,932 / mo Lower', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Total Interest Savings over 4 Years', value: '₹5,76,000 Saved', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Replacing high-interest credit card debt (36% APR) with a 12% personal loan reduces monthly payments by ₹18,932/month and saves over ₹5.76 Lakhs in interest!',
+  },
+];
+
+const comparisonData = {
+  title: 'Structured Personal Loan (11.5% Rate) vs. High-Interest Credit Card Debt (36% APR)',
+  subtitle: 'Comparing interest rates, repayment tenure, monthly cash flow, and debt trap risks',
+  optionA: {
+    badge: 'STRUCTURED LOWER INTEREST',
+    title: 'Unsecured Personal Loan (11.5% to 14%)',
+    items: [
+      { isPositive: true, text: 'Lower Fixed Interest Rate: Typically 11.5% to 14.0% p.a., reducing borrowing costs.' },
+      { isPositive: true, text: 'Fixed Amortization Schedule: Clear end-date for full debt payoff in 1 to 5 years.' },
+      { isPositive: true, text: 'Predictable Monthly EMI: Protects monthly budget from compounding revolving debt.' },
+    ],
+  },
+  optionB: {
+    badge: 'HIGH COST DEBT TRAP',
+    title: 'Revolving Credit Card Debt (36% to 42% APR)',
+    items: [
+      { isPositive: false, text: 'Extremely High Interest Rate: 3.0% to 3.5% per month (36% to 42% annual APR).' },
+      { isPositive: false, text: 'Revolving Compounding Trap: Paying 5% minimum monthly payment extends debt payoff to 15+ years.' },
+      { isPositive: false, text: 'Heavy Late Fees & Penalties: Missing payments triggers immediate credit score damage.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <PersonalLoanCalculatorWidget client:visible />
+</FlagshipLayout>

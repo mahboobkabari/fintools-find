@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { mutualFundReturnsCalculatorConfig } from '../../calculators/configs/mutual-fund-returns-calculator.config.js';
+import MutualFundReturnsFlagshipWidget from './primitives/MutualFundReturnsFlagshipWidget';
 
 export default function MutualFundReturnsCalculatorWidget() {
-  return <UniversalCalculatorWidget config={mutualFundReturnsCalculatorConfig} />;
+  return <MutualFundReturnsFlagshipWidget />;
 }

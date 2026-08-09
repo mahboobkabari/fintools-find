@@ -1,0 +1,98 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import NpsCalculatorWidget from '../calculators/NpsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  { stepNumber: '01', title: 'Tier 1 Accumulation Phase', description: 'Systematically invest monthly in Tier 1 account across Equity (E), Corporate Debt (C), and Govt Bonds (G).' },
+  { stepNumber: '02', title: 'Annual Tax Savings Claim', description: 'Claim up to ₹50,000 extra tax deduction under Section 80CCD(1B) (Old Regime) saving up to ₹15,600/year.' },
+  { stepNumber: '03', title: 'Age 60 Superannuation Exit', description: 'Withdraw up to 60% of total accumulated nest egg completely tax-free under Section 10(12A).' },
+  { stepNumber: '04', title: 'Lifetime Pension Annuity Stream', description: 'Convert remaining 40% minimum corpus into a monthly lifetime annuity pension through an ASP (Annuity Service Provider).', colorClass: 'text-semantic-success' },
+];
+
+const targetPersonas = [
+  { title: 'Tax-Saving Employees (Old Regime)', description: 'Claiming the exclusive ₹50,000 deduction u/s 80CCD(1B) to reduce taxable income over and above Section 80C limit.', bgClass: 'bg-blue-50', textClass: 'text-primary' },
+  { title: 'Corporate Employees (New Regime)', description: 'Leveraging employer contribution u/s 80CCD(2) up to 14% of Basic Salary, fully tax-exempt even under the New Tax Regime.', bgClass: 'bg-emerald-50', textClass: 'text-semantic-success' },
+  { title: 'Young Starters (Age 25–35)', description: 'Choosing 75% Equity (Active Choice E / LC75) to compound a multi-crore retirement nest egg over a 30+ year horizon.', bgClass: 'bg-sky-50', textClass: 'text-accent-sky' },
+  { title: 'Pre-Retirees (Age 50–59)', description: 'Tapering equity allocation towards conservative Government Bonds (Class G) and locking in tax-free lump-sum exit strategy.', bgClass: 'bg-amber-50', textClass: 'text-semantic-warning' },
+];
+
+const formulaDetails = {
+  title: 'NPS Compounding & Annuity Pension Formula',
+  formula: 'A_{\\text{pension}} = \\frac{\\left[ \\text{Corpus}_{60} \\times \\left(\\frac{\\text{Annuity \\%}}{100}\\right) \\right] \\times r_{\\text{annuity}}}{12}',
+  parameters: [
+    { symbol: 'Corpus_60', title: 'Accumulated Nest Egg', description: 'Total NPS Tier 1 compounding value at retirement age 60.', colorClass: 'text-primary' },
+    { symbol: 'Annuity %', title: 'Annuity Conversion %', description: 'Mandatory minimum 40% purchase for lifetime pension stream.', colorClass: 'text-accent-amber' },
+    { symbol: 'r_annuity', title: 'Annuity Pension Rate', description: 'Annual return rate (% p.a.) paid by Annuity Service Provider.', colorClass: 'text-semantic-success' },
+    { symbol: 'A_pension', title: 'Monthly Pension Stream', description: 'Guaranteed monthly payout received throughout retirement.', colorClass: 'text-purple-600' },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Age 30 Salaried Employee (₹5,000/mo Contribution, 30 Yrs Horizon)',
+    tag: '30 Yrs Accumulation',
+    subtitle: 'Standard Tier 1 Plan',
+    metrics: [
+      { label: 'Total Accumulated Corpus (Age 60)', value: '₹1.14 Crores', colorClass: 'text-primary font-bold' },
+      { label: '60% Tax-Free Lump-Sum', value: '₹68.3 Lakhs', colorClass: 'text-semantic-success font-bold' },
+      { label: '40% Mandatory Annuity Value', value: '₹45.5 Lakhs' },
+      { label: 'Estimated Monthly Pension (6% Rate)', value: '₹22,767 / mo', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Investing ₹5,000/month from age 30 yields a ₹68.3 Lakh tax-free lump sum plus ₹22,767/month pension while saving ₹15,600/year in income tax.',
+  },
+  {
+    title: 'Corporate Employee u/s 80CCD(2) (New Tax Regime, ₹10L Basic)',
+    tag: 'Corporate NPS Match',
+    subtitle: 'New Tax Regime',
+    metrics: [
+      { label: 'Annual Employer Contribution (14%)', value: '₹1,40,000 / yr' },
+      { label: 'Eligible Sec 80CCD(2) Deduction', value: '₹1,40,000 / yr', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Annual Tax Saved (30% Bracket)', value: '₹43,680 / yr', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Total Nest Egg at Age 60', value: '₹3.18 Crores', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Under the New Tax Regime, 14% employer contribution u/s 80CCD(2) remains 100% tax-deductible, saving ₹43,680 in annual tax.',
+  },
+];
+
+const comparisonData = {
+  title: 'NPS Tier 1 (Retirement Account) vs. Tier 2 (Voluntary Savings) Comparison',
+  subtitle: 'Understanding the key differences in tax benefits, lock-in rules, and withdrawal flexibility',
+  optionA: {
+    badge: 'RETIREMENT & TAX SAVING',
+    title: 'NPS Tier 1 Account',
+    items: [
+      { isPositive: true, text: 'Tax Deductions: Eligible for Sec 80CCD(1B) extra ₹50k & Sec 80CCD(2) employer match.' },
+      { isPositive: true, text: '60% Tax-Free Exit: Up to 60% lump-sum withdrawal completely tax-free at age 60.' },
+      { isPositive: false, text: 'Strict Lock-in: Capital locked until age 60 (partial withdrawals allowed for specific emergencies).' },
+    ],
+  },
+  optionB: {
+    badge: 'FLEXIBLE LIQUID SAVINGS',
+    title: 'NPS Tier 2 Account',
+    items: [
+      { isPositive: true, text: 'Zero Lock-in: Unlimited deposits and instant withdrawals anytime without penalty.' },
+      { isPositive: true, text: 'Low-Cost Investment: Same low fund management fee (0.09%) as Tier 1 account.' },
+      { isPositive: false, text: 'No Tax Benefits: Withdrawals treated as taxable income for private subscribers.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <NpsCalculatorWidget client:visible />
+</FlagshipLayout>

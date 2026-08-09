@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import InflationCalculatorWidget from '../calculators/InflationCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Present Value Amount Today',
+    description: 'Enter your current living expense, education goal, or savings amount today (e.g. ₹1,00,000 or $10,000).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Specify Assumed Inflation Rate (% p.a.)',
+    description: 'Set your expected annual inflation rate (e.g., 6.0% p.a. default, 4.0% RBI target, or 8.0% education rate).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Set Time Horizon (Years)',
+    description: 'Enter your investment horizon or future goal timeline in years (1 to 50 years).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Future Cost, Purchasing Power & Real Returns',
+    description: 'Instantly view your future inflated cost, eroded purchasing power, cumulative price escalation, and Fisher real rate of return.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Long-Term Financial & Goal Planners',
+    description: 'Individuals calculating future inflated costs for higher education, wedding expenses, or property purchases.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Retirement Corpus Planners',
+    description: 'Retirees modeling monthly living expense erosion over 20-30 year post-retirement horizons.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Mutual Fund & Wealth Investors',
+    description: 'Investors evaluating Fisher real rates of return (r_real) after deducting compound inflation.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Household Budget Managers',
+    description: 'Families auditing multi-year grocery, healthcare, and lifestyle basket price increases.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Inflation & Purchasing Power Formulas',
+  formula: 'FV = PV \\times (1 + i)^n, \\quad PV_{\\text{real}} = \\frac{PV}{(1 + i)^n}, \\quad r_{\\text{real}} = \\frac{1 + r}{1 + i} - 1',
+  parameters: [
+    {
+      symbol: 'PV',
+      title: 'Present Value Amount Today',
+      description: 'Current price or expense today.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'i',
+      title: 'Annual Inflation Rate (% p.a.)',
+      description: 'Assumed compound inflation rate.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'n',
+      title: 'Time Horizon in Years',
+      description: 'Investment or planning horizon in years.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'FV',
+      title: 'Future Inflated Cost',
+      description: 'Escalated future cost required to buy the exact same basket of goods.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Standard 10-Year Inflation (₹1 Lakh @ 6% p.a., 10 Yrs)',
+    tag: 'Standard 10-Year Inflation',
+    subtitle: 'Compound Price Escalation',
+    metrics: [
+      { label: 'Present Value Today', value: '₹100,000', colorClass: 'text-primary font-bold' },
+      { label: 'Inflation Rate', value: '6.0% p.a.', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Future Inflated Cost', value: '₹179,085', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Retained Purchasing Power', value: '₹55,839', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'An item costing ₹1,00,000 today will cost ₹1,79,085 in 10 years at 6% annual inflation (+79.08% cumulative price increase). Conversely, ₹1,00,000 in cash will only buy ₹55,839 worth of goods in 10 years.',
+  },
+  {
+    title: 'Benchmark Case Study: Higher Education Goal (₹25 Lakhs @ 8% p.a., 15 Yrs)',
+    tag: 'Education Inflation Benchmark',
+    subtitle: 'Higher Cost Escalation Rate',
+    metrics: [
+      { label: 'Current Degree Cost', value: '₹2,500,000', colorClass: 'text-slate-600 font-bold' },
+      { label: 'Education Inflation', value: '8.0% p.a.', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Future Inflated Degree Cost', value: '₹7,930,423', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Cumulative Price Increase', value: '+217.22%', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Education inflation typically runs higher than headline CPI. A ₹25 Lakh degree today will cost over ₹79.3 Lakhs in 15 years at 8% p.a. inflation.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <InflationCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

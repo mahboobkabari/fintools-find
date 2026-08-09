@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { fireCalculatorConfig } from '../../calculators/configs/fire-calculator.config.js';
+import FireFlagshipWidget from './primitives/FireFlagshipWidget';
 
-export default function FireCalculatorWidget() {
-  return <UniversalCalculatorWidget config={fireCalculatorConfig} />;
+export default function FireCalculatorWidget({ initialValues = {} }) {
+  return <FireFlagshipWidget initialValues={initialValues} />;
 }

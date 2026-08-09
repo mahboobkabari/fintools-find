@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import NscCalculatorWidget from '../calculators/NscCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter NSC Investment Amount & Tax Slab',
+    description: 'Input your principal deposit amount (minimum ₹1,000) and select your marginal income tax slab (e.g., 30%).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Claim Year 1 Section 80C Initial Tax Deduction',
+    description: 'Claim up to ₹1,50,000 tax deduction under Section 80C on your initial principal deposit in Financial Year 1.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Years 1–4 Deemed Interest Reinvestment',
+    description: 'Track interest accrued in Years 1, 2, 3, and 4 which is deemed reinvested into NSC and qualifies for additional Sec 80C deductions.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Guaranteed 5-Year Maturity Corpus',
+    description: 'View your 100% sovereign-guaranteed maturity payout at 7.7% p.a. annual compounding and Year 5 taxable interest.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Section 80C Tax Savers',
+    description: 'Individual taxpayers looking to maximize Section 80C deductions up to ₹1.5 Lakhs with sovereign safety.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Senior Citizens & Conservative Investors',
+    description: 'Retirees seeking 100% government-backed capital protection and guaranteed 7.7% p.a. annual compounding.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Post Office Small Savings Depositors',
+    description: 'Investors building a balanced small savings portfolio alongside PPF, SSY, and SCSS deposits.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'High Net-Worth Investors (HNIs)',
+    description: 'HNIs placing large sovereign allocations with no upper statutory ceiling on investment amount.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+];
+
+const formulaDetails = {
+  title: 'National Savings Certificate (NSC) Compounding & Tax Formulas',
+  formula: 'A_5 = P \\left(1 + \\frac{r}{100}\\right)^5, \\quad \\text{Deemed Interest}_y = A_y - A_{y-1}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Principal Deposit',
+      description: 'Initial lump sum invested into NSC (min ₹1,000, no upper limit).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Notified NSC Interest Rate',
+      description: '7.7% p.a. government-notified interest rate compounded annually.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'A_5',
+      title: 'Guaranteed Maturity Corpus',
+      description: 'Total maturity payout returned to depositor after exactly 5 years.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Sec 80C Deemed}',
+      title: 'Years 1-4 Reinvested Interest',
+      description: 'Annual interest accrued in Y1–Y4 is deemed reinvested and qualifies for Sec 80C deductions.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Max Section 80C Deposit (₹1.5 Lakhs @ 7.7% p.a.)',
+    tag: 'Max Sec 80C Tax Saver',
+    subtitle: '5-Year Sovereign Growth with Full Tax Benefit',
+    metrics: [
+      { label: 'Initial Principal', value: '₹150,000', colorClass: 'text-primary font-bold' },
+      { label: 'Year 1 Tax Saved (30% Slab)', value: '₹45,000', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Total 5Y Guaranteed Interest', value: '₹67,355', colorClass: 'text-indigo-600 font-bold' },
+      { label: '5-Year Maturity Corpus', value: '₹217,355', colorClass: 'text-purple-600 font-bold' },
+    ],
+    takeaway: 'Depositing ₹1.5 Lakhs into NSC saves ₹45,000 in upfront Year 1 taxes, generates ₹67,355 in guaranteed interest, and provides an additional ₹51,815 in deemed Section 80C interest deductions over Years 1 to 4.',
+  },
+  {
+    title: 'Benchmark Case Study: HNI Sovereign Allocation (₹10 Lakhs @ 7.7% p.a.)',
+    tag: 'High Net-Worth Allocation',
+    subtitle: 'Zero Upper Statutory Ceiling Investment',
+    metrics: [
+      { label: 'Principal Deposit', value: '₹1,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Annual Compounding Rate', value: '7.7% p.a.', colorClass: 'text-blue-600 font-bold' },
+      { label: '5-Year Total Interest Earned', value: '₹449,033', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Guaranteed Maturity Corpus', value: '₹1,449,033', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Because NSC has no statutory upper investment ceiling, HNIs can deposit ₹10 Lakhs with 100% sovereign safety to earn ₹449,033 in guaranteed returns.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <NscCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

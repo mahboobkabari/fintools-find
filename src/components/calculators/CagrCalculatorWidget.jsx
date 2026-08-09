@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { cagrCalculatorConfig } from '../../calculators/configs/cagr-calculator.config.js';
+import CagrFlagshipWidget from './primitives/CagrFlagshipWidget';
 
 export default function CagrCalculatorWidget() {
-  return <UniversalCalculatorWidget config={cagrCalculatorConfig} />;
+  return <CagrFlagshipWidget />;
 }

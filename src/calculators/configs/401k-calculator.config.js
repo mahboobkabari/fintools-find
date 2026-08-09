@@ -1,7 +1,93 @@
 import { calculate401kCalculator } from '../retirement/401k-calculator.js';
 
+export const FOUR_ZERO_ONE_K_CONFIG = {
+  id: '401k-calculator',
+  title: '401(k) Retirement Calculator',
+  category: 'Retirement Calculators',
+  categorySlug: 'retirement',
+  defaultSalary: 90000,
+  defaultAge: 30,
+  defaultRetirementAge: 65,
+  defaultReturn: 7.0,
+
+  presets: [
+    {
+      id: 'standard_match_50_6',
+      title: '🏢 Standard Corporate Match (50% up to 6%)',
+      description: 'Typical US employer match offering 50% match on employee salary contributions up to 6%.',
+      values: {
+        annualSalary: 90000,
+        currentAge: 30,
+        retirementAge: 65,
+        contributionPercent: 8,
+        employerMatchPercent: 50,
+        employerMatchLimit: 6,
+        currentBalance: 25000,
+        expectedReturn: 7,
+        annualSalaryIncrease: 3,
+      },
+    },
+    {
+      id: 'generous_match_100_5',
+      title: '🌟 Generous Employer Match (100% up to 5%)',
+      description: 'Top-tier tech/consulting employer match offering 100% dollar-for-dollar match up to 5%.',
+      values: {
+        annualSalary: 120000,
+        currentAge: 28,
+        retirementAge: 65,
+        contributionPercent: 10,
+        employerMatchPercent: 100,
+        employerMatchLimit: 5,
+        currentBalance: 40000,
+        expectedReturn: 7.5,
+        annualSalaryIncrease: 4,
+      },
+    },
+    {
+      id: 'max_irs_contributor',
+      title: '🚀 Max IRS Contributor ($23.5k Annual Cap)',
+      description: 'High earner maximizing the full annual IRS 401(k) elective deferral limit.',
+      values: {
+        annualSalary: 180000,
+        currentAge: 35,
+        retirementAge: 65,
+        contributionPercent: 15,
+        employerMatchPercent: 50,
+        employerMatchLimit: 6,
+        currentBalance: 120000,
+        expectedReturn: 7,
+        annualSalaryIncrease: 3,
+      },
+    },
+    {
+      id: 'catch_up_age_50',
+      title: '👵 Age 50+ Catch-Up Contributor ($31k Cap)',
+      description: 'Older worker taking advantage of the additional $7,500 IRS catch-up allowance.',
+      values: {
+        annualSalary: 140000,
+        currentAge: 52,
+        retirementAge: 67,
+        contributionPercent: 20,
+        employerMatchPercent: 50,
+        employerMatchLimit: 6,
+        currentBalance: 350000,
+        expectedReturn: 6.5,
+        annualSalaryIncrease: 2.5,
+      },
+    },
+  ],
+
+  benchmarks: {
+    irsBaseLimit2025: 23500,
+    irsCatchUpLimit2025: 7500,
+    irsMaxTotalLimit2025: 69000,
+    avgStockMarketReturn: 7.0,
+    avgSalaryGrowth: 3.0,
+  },
+};
+
 export const fourZeroOneKCalculatorConfig = {
-  title: '401(k) Retirement Details',
+  ...FOUR_ZERO_ONE_K_CONFIG,
   currency: 'USD',
   currencySymbol: '$',
   calculateFn: calculate401kCalculator,

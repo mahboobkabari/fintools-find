@@ -1,0 +1,156 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CarLoanCalculatorWidget from '../calculators/CarLoanCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Vehicle Selection & On-Road Price Discovery',
+    description: 'Select your preferred car model and determine the total on-road price including ex-showroom, state RTO registration, and insurance.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Down Payment & Financing Structure',
+    description: 'Determine your down payment contribution (15% to 25% recommended) and structure loan tenure (3 to 7 years).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Bank Loan Sanction & Delivery',
+    description: 'Get auto loan approval from your bank/NBFC, pay processing fees, and take delivery of your new vehicle.',
+  },
+  {
+    stepNumber: '04',
+    title: '5-Year Ownership & EMI Repayment',
+    description: 'Service monthly EMIs comfortably within a 35% FOIR salary budget while managing fuel, maintenance, and insurance costs.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'First-Time Car Buyers',
+    description: 'Buyers purchasing hatchback or compact sedan models (₹6L to ₹12L) budgeting monthly EMIs against salary income.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Premium SUV & Luxury Buyers',
+    description: 'Buyers upgrading to mid-size or premium SUVs (₹18L to ₹35L) evaluating 5-year vs 7-year loan amortizations.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Electric Vehicle (EV) Enthusiasts',
+    description: 'EV buyers analyzing low electricity running costs (₹1.5/km) and Section 80EEB income tax interest deductions.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Prudential Salary Budgeters',
+    description: 'Salaried professionals auditing FOIR borrowing limits to ensure car EMIs stay safely below 35% of net income.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: 'Car Loan EMI & 5-Year Total Ownership Cost Formulas',
+  formula: '\\text{EMI} = P \\times r \\times \\frac{(1+r)^n}{(1+r)^n - 1}, \\quad \\text{True Cost} = \\text{Price} + \\text{Interest} + \\text{Fees} + \\text{Fuel} + \\text{Insurance} + \\text{Maint}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Net Loan Principal',
+      description: 'Vehicle Price minus Down Payment Amount ($P = \\text{Price} - \\text{Down Payment}$).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Monthly Interest Rate',
+      description: 'Annual interest rate divided by 12 months ($r = R / 1200$).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'n',
+      title: 'Loan Tenure (Months)',
+      description: 'Repayment tenure in months (e.g. 5 Years = 60 months).',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: '\\text{Fuel5Yr}',
+      title: '5-Year Operational Fuel Cost',
+      description: 'Total estimated driving km over 5 years multiplied by fuel/EV rate per km.',
+      colorClass: 'text-semantic-success',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹12 Lakhs Petrol Sedan (20% Down Payment @ 9.0% over 5 Years)',
+    tag: 'Standard Financing',
+    subtitle: 'Balanced Monthly EMI',
+    metrics: [
+      { label: 'On-Road Vehicle Price', value: '₹12,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Down Payment (20%)', value: '₹2,40,000', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Net Borrowed Car Loan', value: '₹9,60,000' },
+      { label: 'Monthly Car Loan EMI', value: '₹19,928 / mo', colorClass: 'text-semantic-success font-bold' },
+      { label: '5-Year Total True Ownership Cost', value: '₹18,77,680', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'A 20% down payment (₹2.4 Lakhs) keeps monthly EMI at ₹19,928/mo, consuming 20% of a ₹1.0 Lakh monthly income.',
+  },
+  {
+    title: 'Smart EV Case Study: ₹18 Lakhs Electric Vehicle vs Petrol (15,000 km/yr over 5 Years)',
+    tag: 'EV Energy Savings',
+    subtitle: 'Massive Running Cost Reduction',
+    metrics: [
+      { label: 'EV Electricity Cost (5 Years)', value: '₹1,12,500 (at ₹1.5/km)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Petrol Fuel Cost (5 Years)', value: '₹5,62,500 (at ₹7.5/km)', colorClass: 'text-rose-600 font-bold' },
+      { label: '5-Year Direct Fuel Savings', value: '₹4,50,000 Saved', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Section 80EEB EV Tax Relief', value: '₹77,600 Tax Saved', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Driving an EV for 15,000 km/year saves ₹4.50 Lakhs in fuel costs over 5 years compared to petrol, offsetting higher initial EV purchase prices!',
+  },
+];
+
+const comparisonData = {
+  title: '3-Year Fast Track vs. 5-Year Standard vs. 7-Year Long Term Car Loan',
+  subtitle: 'Comparing monthly EMI burden, cumulative interest outgo, and total ownership costs',
+  optionA: {
+    badge: 'MINIMUM INTEREST OUTGO',
+    title: '3-Year Fast Track Loan',
+    items: [
+      { isPositive: true, text: 'Massive Interest Savings: Reduces total loan interest outgo by over 45%.' },
+      { isPositive: true, text: 'Faster Car Equity: Clear car loan ownership in just 36 months.' },
+      { isPositive: false, text: 'Higher Monthly EMI: Requires significantly higher monthly cash flow allocation.' },
+    ],
+  },
+  optionB: {
+    badge: 'BALANCED STANDARD',
+    title: '5-Year Standard Loan (Industry Norm)',
+    items: [
+      { isPositive: true, text: 'Balanced Cash Flow: Provides an optimal balance between monthly EMI and interest outgo.' },
+      { isPositive: true, text: 'Matches Car Resale Lifecycle: Aligns loan payoff with peak car resale value window.' },
+      { isPositive: true, text: 'Manageable FOIR: Fits comfortably within 20% to 25% of net monthly salary.' },
+    ],
+  },
+};
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  comparisonData={comparisonData}
+>
+  <CarLoanCalculatorWidget client:visible />
+</FlagshipLayout>

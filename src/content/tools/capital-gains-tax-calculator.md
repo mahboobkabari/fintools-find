@@ -1,56 +1,61 @@
 ---
-title: "Capital Gains Tax Calculator: Equity, Property & Asset Tax Rates"
-metaDescription: "Calculate STCG and LTCG capital gains tax for FY 2025-26 under Budget 2024 rules. Estimate tax liability for stocks, equity mutual funds, and real estate."
+title: "Capital Gains Tax Calculator: Equity, Property & Asset Tax Rates (FY 2025-26)"
+metaDescription: "Calculate STCG & LTCG capital gains tax for FY 2025-26 (AY 2026-27) under Budget 2024 rules. Estimate tax liabilities for stocks, equity MFs, property & gold."
 category: "tax"
 categoryName: "Tax Calculators"
 slug: "capital-gains-tax-calculator"
 currency: "INR"
 howToUse:
+  - "Select target asset category (Listed Equity, Real Estate, Physical Gold, Unlisted Shares, or Debt MFs)."
   - "Enter original purchase cost in Rupees (₹)."
-  - "Enter total sale or redemption price in Rupees (₹)."
-  - "Select holding period duration in months."
-  - "Enter brokerage or sales transfer expenses (if applicable)."
-  - "Instantly view your gross capital gain, Section 112A tax exemption, taxable capital gain, 4% Cess, and net tax payable."
+  - "Enter gross sale price or redemption proceeds in Rupees (₹)."
+  - "Enter holding period duration in months."
+  - "Enter brokerage, stamp duty, or transfer expenses (if applicable)."
+  - "Instantly view your net capital gain, Section 112A exemption, taxable gain, 4% Cess, and net tax payable."
 features:
-  - "Budget 2024 tax rate engine (20% STCG & 12.5% LTCG for equity assets)"
+  - "Budget 2024 Finance Act 2024 tax rate engine for FY 2025-26 (AY 2026-27)"
+  - "Section 111A (20% STCG) & Section 112A (12.5% LTCG) equity taxation"
   - "Automatic Section 112A ₹1.25 Lakh annual LTCG tax exemption deduction"
+  - "Section 50AA specified mutual fund deemed STCG slab rate calculation"
+  - "Section 112 (12.5% LTCG without indexation) for real estate, gold & unlisted shares"
   - "4% Health & Education Cess inclusion"
-  - "Visual net profit vs tax payable ratio progress bar"
+  - "Hypothetical 5-scenario asset sale simulation grid"
 benefits:
   - "Plan asset sales tax-efficiently before executing market redemptions"
   - "Harvest up to ₹1.25 Lakhs of tax-free long-term capital gains every financial year"
   - "Prepare accurate capital gains schedules for annual ITR-2 / ITR-3 tax returns"
-  - "Understand new tax rates introduced in Finance Act 2024"
+  - "Understand Finance Act 2024 tax rules applied to transfers post-July 23, 2024"
 faqs:
-  - question: "What is Capital Gains Tax?"
-    answer: "Capital Gains Tax is a tax levied on the profits earned from the sale or transfer of capital assets such as equity shares, mutual funds, real estate property, gold, or bonds."
-  - question: "What are the new Capital Gains Tax rates for FY 2025-26 (Budget 2024)?"
-    answer: "Under Finance Act 2024 amendments: Short-Term Capital Gains (STCG) on equity assets held $\\le 12$ months are taxed at 20%. Long-Term Capital Gains (LTCG) on equity assets held $> 12$ months are taxed at 12.5% on profits exceeding ₹1.25 Lakhs per financial year."
+  - question: "What is Capital Gains Tax for FY 2025-26 (AY 2026-27)?"
+    answer: "Capital Gains Tax is a tax levied on profits earned from selling capital assets (stocks, equity mutual funds, real estate, gold, unlisted shares). Under Budget 2024 rules (Finance Act 2024), listed equity STCG is taxed at 20% and LTCG is taxed at 12.5% above ₹1.25 Lakhs per year."
+  - question: "What are the STCG and LTCG rates for listed equity shares and equity mutual funds?"
+    answer: "For listed equity held for >12 months, Long-Term Capital Gains (LTCG) are taxed at 12.5% under Section 112A on gains exceeding ₹1,25,000 per financial year. For listed equity held for <=12 months, Short-Term Capital Gains (STCG) are taxed at 20% under Section 111A."
+  - question: "How are real estate property capital gains taxed under post-2024 rules?"
+    answer: "For real estate property transferred post-July 23, 2024: holding period >24 months is classified as LTCG and taxed at 12.5% without indexation under Section 112. Holding period <=24 months is STCG taxed at the taxpayer's applicable income tax slab rate."
+  - question: "How are Debt Mutual Funds taxed under Section 50AA?"
+    answer: "Under Section 50AA of the Income Tax Act, gains from specified mutual funds (debt MFs with <=35% equity acquired on or after April 1, 2023) are deemed short-term capital gains and taxed at your applicable income tax slab rate regardless of holding period duration."
+  - question: "Are Sovereign Gold Bonds (SGB) exempt from capital gains tax?"
+    answer: "Redemption of Sovereign Gold Bonds (SGB) at maturity (after 8 years) by an individual taxpayer is 100% tax-exempt under Section 47(viib). However, transfers of SGB before maturity in secondary markets follow standard gold LTCG (12.5%) or STCG (slab rate) rules."
   - question: "What is Section 112A tax exemption?"
-    answer: "Section 112A provides an annual tax exemption on up to ₹1,25,000 of aggregate long-term capital gains realized from equity shares and equity-oriented mutual funds in a single financial year."
-  - question: "How is the holding period determined for short-term vs long-term capital gains?"
-    answer: "For listed equity shares and equity mutual funds, holding period $> 12$ months is classified as Long-Term. For real estate property, unlisted shares, and physical gold, holding period $> 24$ months is classified as Long-Term."
-  - question: "What is Tax Loss Harvesting?"
-    answer: "Tax Loss Harvesting is a legal tax-saving strategy where investors sell underperforming stocks or mutual fund units at a loss before the end of the financial year to offset taxable capital gains."
-  - question: "Can capital losses be set off against capital gains?"
-    answer: "Yes. Short-term capital losses can be set off against both STCG and LTCG. Long-term capital losses can only be set off against long-term capital gains. Unadjusted capital losses can be carried forward for up to 8 assessment years."
+    answer: "Section 112A provides an annual tax-free threshold of up to ₹1,25,000 on aggregate long-term capital gains realized from listed equity shares and equity-oriented mutual funds in a single financial year."
 calculatorModule: "tax/capital-gains-tax-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
-  methodology: "Calculations strictly execute official Central Board of Direct Taxes (CBDT) capital gains provisions under Income Tax Act, 1961 (as amended by Finance Act 2024)."
+  methodology: "Calculations strictly execute official Central Board of Direct Taxes (CBDT) provisions under Sections 111A, 112A, 112, 50AA, and 45 of Income Tax Act, 1961 (Finance Act 2024)."
   dataSources:
     - "Income Tax Department, Government of India (Section 111A & Section 112A Provisions)"
-    - "Union Budget 2024 Tax Reform Notifications"
+    - "Union Budget 2024 Tax Reform Notifications (Finance Act 2024)"
 advancedContent:
-  definitionSnippet: "A Capital Gains Tax Calculator is an interactive tax planning tool that computes Short-Term (STCG) and Long-Term (LTCG) capital gains liabilities, Section 112A exemptions, and net post-tax profits under official CBDT tax rules."
+  definitionSnippet: "A Capital Gains Tax Calculator is an interactive tax planning tool that computes Short-Term (STCG) and Long-Term (LTCG) capital gains liabilities, Section 112A exemptions, Section 50AA debt rules, and net post-tax profits under official CBDT FY 2025-26 rules."
   proTips:
-    - "Harvest up to ₹1.25 Lakhs of tax-free LTCG each year by redeeming and reinvesting equity mutual fund units before March 31."
+    - "Harvest up to ₹1.25 Lakhs of tax-free LTCG each financial year by redeeming and reinvesting equity mutual fund units before March 31."
     - "Deduct brokerage fees, stamp duty, and transfer expenses from your gross sales price to lower your net taxable gain."
-    - "Set off short-term capital losses against taxable long-term gains to minimize your annual tax bill."
+    - "Set off short-term capital losses against taxable long-term gains under Section 70/71 to minimize your annual tax bill."
   commonMistakes:
-    - "Forgetting that the annual ₹1.25 Lakh LTCG exemption under Section 112A applies to aggregate equity gains, not per individual scheme."
+    - "Assuming the annual ₹1.25 Lakh Section 112A LTCG exemption applies to non-equity assets like property or gold."
+    - "Hardcoding 30% tax on non-equity STCG without checking your actual marginal income tax slab rate."
     - "Failing to add the 4% Health & Education Cess when calculating total tax liabilities."
   glossaryTerms:
     - term: "STCG (Short-Term Capital Gain)"
@@ -59,45 +64,32 @@ advancedContent:
       definition: "Profit realized from selling a capital asset held beyond the statutory long-term threshold period."
     - term: "Section 112A Exemption"
       definition: "Annual ₹1.25 Lakh tax-free threshold granted on equity LTCG profits."
+    - term: "Section 50AA"
+      definition: "Provision deeming specified debt mutual funds acquired on/after 1 April 2023 as short-term capital assets taxed at slab rate."
 ---
 
 ## What is a Capital Gains Tax Calculator?
 
-A **Capital Gains Tax Calculator** is an essential wealth and tax planning tool designed to compute personal tax liabilities on profits realized from selling financial investments, real estate property, or commercial assets in India.
+A **Capital Gains Tax Calculator** is an essential wealth and tax planning tool designed to compute personal tax liabilities on profits realized from selling financial investments, real estate property, gold, or unlisted corporate assets in India.
 
-Following the major tax reforms enacted in **Union Budget 2024 (Finance Act 2024)**, capital gains tax rates were updated to **20% for STCG** and **12.5% for LTCG** (with an expanded annual exemption threshold of **₹1.25 Lakhs** under Section 112A). Knowing your exact tax liability before executing asset sales helps you optimize returns and preserve net net worth.
+For **Financial Year FY 2025-26 (Assessment Year AY 2026-27)**, capital gains taxation follows major amendments enacted in **Union Budget 2024 (Finance Act 2024)** for transfers post-July 23, 2024:
+* **Listed Equity & Equity MFs:** **20% STCG** (Section 111A) & **12.5% LTCG** (Section 112A) above **₹1.25 Lakhs** annual exemption limit.
+* **Real Estate, Gold & Unlisted Shares:** **12.5% LTCG** (Section 112) without indexation for post-23 July 2024 transfers.
+* **Specified Debt Mutual Funds:** Taxed at taxpayer **marginal slab rate** (Section 50AA) regardless of holding period.
 
-### Who Should Use It & When?
-* **Equity & Mutual Fund Investors:** Before executing portfolio rebalancing, profit booking, or systematic withdrawals via our [SWP Calculator](/tools/investment/swp-calculator/).
-* **Property Sellers:** When selling real estate residential apartments or land parcels to calculate post-2024 LTCG liabilities.
-* **ESOP & RSU Holders:** When liquidating corporate stock options or vested RSUs.
-* **Taxpayers Filing ITR-2 / ITR-3:** At tax return filing time to verify annual capital gains schedule figures against Form 26AS / AIS statements.
-
----
-
-## Budget 2024 Capital Gains Tax Rate Structure (FY 2025-26)
-
-| Asset Category | Short-Term Threshold | STCG Tax Rate | Long-Term Threshold | LTCG Tax Rate | Annual Exemption |
-|---|---|---|---|---|---|
-| **Listed Equity Shares & Equity MFs** | $\le 12$ Months | **20%** | $> 12$ Months | **12.5%** | **₹1.25 Lakhs / Yr** (Sec 112A) |
-| **Real Estate Property** | $\le 24$ Months | Slab Rate | $> 24$ Months | **12.5%** | Nil (Sec 54 options available) |
-| **Physical Gold & Commodities** | $\le 24$ Months | Slab Rate | $> 24$ Months | **12.5%** | Nil |
-| **Unlisted Shares** | $\le 24$ Months | Slab Rate | $> 24$ Months | **12.5%** | Nil |
+Knowing your exact tax liability before executing asset sales helps you optimize portfolio returns and preserve net worth.
 
 ---
 
-## Capital Gains Tax Formulas & Mathematical Logic
+## Authoritative Tax Provisions Table (FY 2025-26 / AY 2026-27)
 
-### 1. Net Capital Gain Formula
-$$\text{Net Capital Gain} = \text{Sale Price} - \text{Purchase Price} - \text{Transfer Expenses}$$
-
-### 2. Taxable Gain Formula (Equity LTCG)
-$$\text{Taxable Gain} = \max(0, \text{Net Capital Gain} - \text{₹1,25,000 Exemption})$$
-
-### 3. Total Tax Payable Formula (Including 4% Cess)
-$$\text{Base Tax} = \text{Taxable Gain} \times \left( \frac{\text{Tax Rate \%}}{100} \right)$$
-
-$$\text{Total Tax Payable} = \text{Base Tax} \times 1.04$$
+| Asset Category | Holding Threshold | STCG Provision & Rate | LTCG Provision & Rate | Annual Exemption Threshold |
+|---|---|---|---|---|
+| **Listed Equity & Equity MFs** | $> 12$ Months | **Section 111A (20%)** | **Section 112A (12.5%)** | **₹1,25,000 / Financial Year** |
+| **Real Estate Property** | $> 24$ Months | Section 45 (Slab Rate) | **Section 112 (12.5%)** | Nil (Section 54 options) |
+| **Physical Gold & Gold ETFs** | $> 24$ Months | Section 45 (Slab Rate) | **Section 112 (12.5%)** | Nil (SGB Maturity 100% Tax-Free) |
+| **Unlisted Equity Shares** | $> 24$ Months | Section 45 (Slab Rate) | **Section 112 (12.5%)** | Nil |
+| **Specified Debt Mutual Funds** | Deemed Short-Term | **Section 50AA (Slab Rate)** | **Section 50AA (Slab Rate)** | Nil |
 
 ---
 
@@ -107,8 +99,8 @@ $$\text{Total Tax Payable} = \text{Base Tax} \times 1.04$$
 
 Suppose an investor bought equity fund units for **₹1,00,000 (₹1 Lakh)** and sold them 18 months later for **₹2,50,000 (₹2.5 Lakhs)** with **₹0 transfer fees**:
 
-1. **Gross Profit:** $₹2,50,000 - ₹1,00,000 = \mathbf{₹1,50,000}$
-2. **Holding Period:** 18 Months ($> 12$ Months $\rightarrow$ **LTCG @ 12.5%**)
+1. **Gross Capital Profit:** $₹2,50,000 - ₹1,00,000 = \mathbf{₹1,50,000}$
+2. **Holding Period:** 18 Months ($> 12$ Months $\rightarrow$ **Section 112A LTCG @ 12.5%**)
 3. **Section 112A Exemption:** **₹1,25,000**
 4. **Net Taxable Gain:** $₹1,50,000 - ₹1,25,000 = \mathbf{₹25,000}$
 5. **Base Tax (12.5% of ₹25,000):** **₹3,125**
@@ -116,27 +108,28 @@ Suppose an investor bought equity fund units for **₹1,00,000 (₹1 Lakh)** and
 7. **Total Tax Payable:** $₹3,125 + ₹125 = \mathbf{₹3,250}$
 8. **Net Post-Tax Profit Kept:** $₹1,50,000 - ₹3,250 = \mathbf{₹1,46,750}$
 
-Out of ₹1.5 Lakhs in profits, you pay only **₹3,250 in tax** thanks to the ₹1.25 Lakh exemption limit!
+Out of ₹1.5 Lakhs in profits, you pay only **₹3,250 in tax** thanks to the ₹1.25 Lakh Section 112A exemption limit!
 
 ---
 
-### Example 2: Equity Short-Term Capital Gain (₹1 Lakh Gain in 6 Months)
+### Example 2: Real Estate Property LTCG (₹25 Lakh Gain in 36 Months)
 
-Suppose an investor bought stock shares for **₹1,00,000** and sold them 6 months later for **₹2,00,000**:
+Suppose a homeowner sold residential property for **₹75,00,000** acquired 36 months earlier for **₹50,00,000**:
 
-1. **Net Capital Gain:** **₹1,00,000**
-2. **Holding Period:** 6 Months ($\le 12$ Months $\rightarrow$ **STCG @ 20%**)
-3. **Exemption:** Nil (Exemption applies only to LTCG)
-4. **Base Tax (20% of ₹1L):** **₹20,000**
-5. **Health & Education Cess (4%):** **₹800**
-6. **Total Tax Payable:** $₹20,000 + ₹800 = \mathbf{₹20,800}$
+1. **Net Capital Gain:** **₹25,00,000**
+2. **Holding Period:** 36 Months ($> 24$ Months $\rightarrow$ **Section 112 LTCG @ 12.5%**)
+3. **Base Tax (12.5% of ₹25L):** **₹3,12,500**
+4. **Health & Education Cess (4%):** **₹12,500**
+5. **Total Tax Payable:** $₹3,12,500 + ₹12,500 = \mathbf{₹3,25,000}$
+6. **Net Sale Proceeds Retained:** $₹75,00,000 - ₹3,25,000 = \mathbf{₹71,75,000}$
 
 ---
 
-## 5 Smart Capital Gains Tax-Saving Strategies
+## Related Financial Calculators
 
-1. **Utilize Annual Tax Loss Harvesting:** Realize up to ₹1.25 Lakhs of equity LTCG every financial year before March 31 tax-free to reset your cost basis higher.
-2. **Hold Equities for $> 12$ Months:** Holding stocks for more than 1 year lowers your effective tax rate from 20% (STCG) down to 12.5% (LTCG) plus grants ₹1.25L exemption.
-3. **Set Off Losses Legal Method:** Offset short-term losses against both short-term and long-term capital gains to minimize taxable income.
-4. **Reinvest Real Estate Gains under Section 54:** Reinvest residential house property gains into buying another residential house property within 2 years to claim 100% tax exemption.
-5. **Evaluate Overall Tax Bracket:** Plan capital gains redemptions alongside overall annual take-home salary using our [Income Tax Calculator](/tools/tax/income-tax-calculator/).
+- [Income Tax Calculator](/tools/tax/income-tax-calculator/) – Calculate comprehensive annual income tax liabilities under Old vs New Tax Regime.
+- [CAGR Calculator](/tools/investment/cagr-calculator/) – Compute annualized compound growth rates for multi-year investments.
+- [Mutual Fund Returns Calculator](/tools/investment/mutual-fund-returns-calculator/) – Estimate mutual fund wealth growth and capital gains.
+- [Lumpsum Calculator](/tools/investment/lumpsum-calculator/) – Project future wealth for lump-sum investments.
+- [SIP Calculator](/tools/investment/sip-calculator/) – Plan systematic investment contributions and returns.
+- [Take Home Salary Calculator](/tools/salary/take-home-salary-calculator/) – Estimate net monthly salary and annual tax deductions.

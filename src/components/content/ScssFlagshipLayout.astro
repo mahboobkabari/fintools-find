@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ScssCalculatorWidget from '../calculators/ScssCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Eligibility & Account Category',
+    description: 'Choose your age/retirement status (Age 60+, VRS Civilian 55-60, Defense 50+) and select Individual (₹30L cap) vs Joint Spouse (₹60L cap) account.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Lump-Sum SCSS Deposit Amount',
+    description: 'Specify your deposit amount up to statutory caps (in multiples of ₹1,000) to lock in government-guaranteed quarterly passive interest.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Section 80C, 80TTB & Section 194A TDS',
+    description: 'Calculate upfront Section 80C tax savings (up to ₹1.5L), Section 80TTB ₹50,000 senior citizen interest tax exemption, and Form 15H TDS optimization.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Guaranteed Quarterly Pension & 5Y Schedule',
+    description: 'Inspect guaranteed calendar quarterly payouts (April, July, October, January), inflation purchasing power, premature exit tiers, and SCSS vs Bank FD alpha.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Superannuated & General Senior Citizens (60+)',
+    description: 'Retirees deploying EPF, Gratuity, and Superannuation lump sums into 100% sovereign risk-free quarterly passive pension income.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'VRS & Retired Civilian Employees (55-60)',
+    description: 'Civilian retirees investing lump-sum severance benefits within 1 month of receipt under official SCSS Scheme 2019 provisions.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Retired Defense Personnel (50+)',
+    description: 'Ex-servicemen and armed forces veterans allocating retirement gratuity and commuted pension into high-yield sovereign savings.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+  {
+    title: 'Senior Citizen Tax & Cash Flow Optimizers',
+    description: 'Seniors seeking tax exemption under Section 80TTB (up to ₹50,000) and preventing unwanted TDS through Form 15H submission.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+];
+
+const formulaDetails = {
+  title: 'Senior Citizens Savings Scheme (SCSS) Statutory Payout & Tax Formulas',
+  formula: 'I_q = D \\times \\frac{r / 100}{4}, \\quad \\text{TDS}_{\\text{annual}} = \\begin{cases} 0 & \\text{if } I_a \\le 50k \\text{ or Form 15H} \\\\ I_a \\times 10\\% & \\text{if PAN furnished} \\\\ I_a \\times 20\\% & \\text{if non-PAN} \\end{cases}',
+  parameters: [
+    {
+      symbol: 'D',
+      title: 'Principal SCSS Deposit',
+      description: 'Lump-sum deposit capped at ₹30 Lakhs (Individual) or ₹60 Lakhs (Joint with Spouse).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Notified Interest Rate (% p.a.)',
+      description: 'Official Government of India SCSS interest rate (currently 8.2% p.a.).',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'I_q',
+      title: 'Gross Quarterly Passive Pension',
+      description: 'Quarterly payout credited on 1st working day of April, July, October, January.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Sec 80TTB}',
+      title: 'Senior Citizen Interest Tax Exemption',
+      description: 'Up to ₹50,000 of interest income exempt from income tax each financial year.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Max ₹30 Lakh Individual Deposit (@ 8.2% p.a.)',
+    tag: 'Max Individual SCSS',
+    subtitle: 'Guaranteed Sovereign Quarterly Pension',
+    metrics: [
+      { label: 'Deposit Amount', value: '₹3,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Quarterly Pension', value: '₹61,500/qtr', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Annual Interest', value: '₹246,000/yr', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Total 5Y Interest', value: '₹1,230,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Deploying the maximum ₹30 Lakh individual cap yields ₹61,500 every quarter (₹2.46 Lakhs annually) with 100% sovereign backing by the Government of India.',
+  },
+  {
+    title: 'Benchmark Case Study: Max ₹60 Lakh Joint Account with Spouse (@ 8.2% p.a.)',
+    tag: 'Eligible Senior Couple',
+    subtitle: 'Maximized Household Retirement Passive Income',
+    metrics: [
+      { label: 'Combined Deposit', value: '₹6,000,000', colorClass: 'text-primary font-bold' },
+      { label: 'Quarterly Household Pension', value: '₹123,000/qtr', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Annual Interest Income', value: '₹492,000/yr', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Total 5Y Passive Income', value: '₹2,460,000', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'An eligible senior couple combining individual limits into a ₹60 Lakh joint deposit receives ₹1,23,000 guaranteed cash payout every quarter.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <ScssCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

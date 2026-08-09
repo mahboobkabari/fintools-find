@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { capitalGainsTaxCalculatorConfig } from '../../calculators/configs/capital-gains-tax-calculator.config.js';
+import CapitalGainsTaxFlagshipWidget from './primitives/CapitalGainsTaxFlagshipWidget';
 
 export default function CapitalGainsTaxCalculatorWidget() {
-  return <UniversalCalculatorWidget config={capitalGainsTaxCalculatorConfig} />;
+  return <CapitalGainsTaxFlagshipWidget />;
 }

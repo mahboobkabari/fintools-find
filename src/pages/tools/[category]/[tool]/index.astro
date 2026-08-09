@@ -6,6 +6,44 @@ import SipFlagshipLayout from '@components/content/SipFlagshipLayout.astro';
 import HomeLoanFlagshipLayout from '@components/content/HomeLoanFlagshipLayout.astro';
 import IncomeTaxFlagshipLayout from '@components/content/IncomeTaxFlagshipLayout.astro';
 import RetirementCorpusFlagshipLayout from '@components/content/RetirementCorpusFlagshipLayout.astro';
+import TakeHomeSalaryFlagshipLayout from '@components/content/TakeHomeSalaryFlagshipLayout.astro';
+import HraFlagshipLayout from '@components/content/HraFlagshipLayout.astro';
+import CagrFlagshipLayout from '@components/content/CagrFlagshipLayout.astro';
+import CapitalGainsTaxFlagshipLayout from '@components/content/CapitalGainsTaxFlagshipLayout.astro';
+import MutualFundReturnsFlagshipLayout from '@components/content/MutualFundReturnsFlagshipLayout.astro';
+import LoanPrepaymentFlagshipLayout from '@components/content/LoanPrepaymentFlagshipLayout.astro';
+import FireFlagshipLayout from '@components/content/FireFlagshipLayout.astro';
+import NpsFlagshipLayout from '@components/content/NpsFlagshipLayout.astro';
+import SwpFlagshipLayout from '@components/content/SwpFlagshipLayout.astro';
+import LoanEligibilityFlagshipLayout from '@components/content/LoanEligibilityFlagshipLayout.astro';
+import StepUpSipFlagshipLayout from '@components/content/StepUpSipFlagshipLayout.astro';
+import ProvidentFundFlagshipLayout from '@components/content/ProvidentFundFlagshipLayout.astro';
+import EducationLoanFlagshipLayout from '@components/content/EducationLoanFlagshipLayout.astro';
+import GratuityFlagshipLayout from '@components/content/GratuityFlagshipLayout.astro';
+import CarLoanFlagshipLayout from '@components/content/CarLoanFlagshipLayout.astro';
+import PersonalLoanFlagshipLayout from '@components/content/PersonalLoanFlagshipLayout.astro';
+import LoanAmortizationFlagshipLayout from '@components/content/LoanAmortizationFlagshipLayout.astro';
+import FourZeroOneKFlagshipLayout from '@components/content/FourZeroOneKFlagshipLayout.astro';
+import FdFlagshipLayout from '@components/content/FdFlagshipLayout.astro';
+import PpfFlagshipLayout from '@components/content/PpfFlagshipLayout.astro';
+import RdFlagshipLayout from '@components/content/RdFlagshipLayout.astro';
+import SsyFlagshipLayout from '@components/content/SsyFlagshipLayout.astro';
+import ScssFlagshipLayout from '@components/content/ScssFlagshipLayout.astro';
+import PensionFlagshipLayout from '@components/content/PensionFlagshipLayout.astro';
+import NscFlagshipLayout from '@components/content/NscFlagshipLayout.astro';
+import PomisFlagshipLayout from '@components/content/PomisFlagshipLayout.astro';
+import VpfFlagshipLayout from '@components/content/VpfFlagshipLayout.astro';
+import KvpFlagshipLayout from '@components/content/KvpFlagshipLayout.astro';
+import ApyFlagshipLayout from '@components/content/ApyFlagshipLayout.astro';
+import CompoundInterestFlagshipLayout from '@components/content/CompoundInterestFlagshipLayout.astro';
+import SimpleInterestFlagshipLayout from '@components/content/SimpleInterestFlagshipLayout.astro';
+import XirrFlagshipLayout from '@components/content/XirrFlagshipLayout.astro';
+import InflationFlagshipLayout from '@components/content/InflationFlagshipLayout.astro';
+import GoalSipFlagshipLayout from '@components/content/GoalSipFlagshipLayout.astro';
+import RentVsBuyFlagshipLayout from '@components/content/RentVsBuyFlagshipLayout.astro';
+import FdVsDebtFundFlagshipLayout from '@components/content/FdVsDebtFundFlagshipLayout.astro';
+import HomeAffordabilityFlagshipLayout from '@components/content/HomeAffordabilityFlagshipLayout.astro';
+import DebtSnowballFlagshipLayout from '@components/content/DebtSnowballFlagshipLayout.astro';
 import HomeLoanCalculatorWidget from '@components/calculators/HomeLoanCalculatorWidget';
 import PersonalLoanCalculatorWidget from '@components/calculators/PersonalLoanCalculatorWidget';
 import LoanAmortizationCalculatorWidget from '@components/calculators/LoanAmortizationCalculatorWidget';
@@ -32,6 +70,7 @@ import ProvidentFundCalculatorWidget from '@components/calculators/ProvidentFund
 import GratuityCalculatorWidget from '@components/calculators/GratuityCalculatorWidget';
 import FireCalculatorWidget from '@components/calculators/FireCalculatorWidget';
 import PensionCalculatorWidget from '@components/calculators/PensionCalculatorWidget';
+import ScssCalculatorWidget from '@components/calculators/ScssCalculatorWidget';
 
 export async function getStaticPaths() {
   const tools = await getCollection('tools');
@@ -62,6 +101,82 @@ const data = entry.data;
   <IncomeTaxFlagshipLayout data={data} slug={slug} />
 ) : slug === 'retirement-corpus-calculator' ? (
   <RetirementCorpusFlagshipLayout data={data} slug={slug} />
+) : slug === 'take-home-salary-calculator' ? (
+  <TakeHomeSalaryFlagshipLayout data={data} slug={slug} />
+) : slug === 'hra-calculator' ? (
+  <HraFlagshipLayout data={data} slug={slug} />
+) : slug === 'cagr-calculator' ? (
+  <CagrFlagshipLayout data={data} slug={slug} />
+) : slug === 'capital-gains-tax-calculator' ? (
+  <CapitalGainsTaxFlagshipLayout data={data} slug={slug} />
+) : slug === 'mutual-fund-returns-calculator' ? (
+  <MutualFundReturnsFlagshipLayout data={data} slug={slug} />
+) : slug === 'loan-prepayment-calculator' ? (
+  <LoanPrepaymentFlagshipLayout data={data} slug={slug} />
+) : slug === 'fire-calculator' ? (
+  <FireFlagshipLayout data={data} slug={slug} />
+) : slug === 'nps-calculator' ? (
+  <NpsFlagshipLayout data={data} slug={slug} />
+) : slug === 'swp-calculator' ? (
+  <SwpFlagshipLayout data={data} slug={slug} />
+) : slug === 'loan-eligibility-calculator' ? (
+  <LoanEligibilityFlagshipLayout data={data} slug={slug} />
+) : slug === 'step-up-sip-calculator' ? (
+  <StepUpSipFlagshipLayout data={data} slug={slug} />
+) : slug === 'provident-fund-calculator' ? (
+  <ProvidentFundFlagshipLayout data={data} slug={slug} />
+) : slug === 'education-loan-calculator' ? (
+  <EducationLoanFlagshipLayout data={data} slug={slug} />
+) : slug === 'gratuity-calculator' ? (
+  <GratuityFlagshipLayout data={data} slug={slug} />
+) : slug === 'car-loan-calculator' ? (
+  <CarLoanFlagshipLayout data={data} slug={slug} />
+) : slug === 'personal-loan-calculator' ? (
+  <PersonalLoanFlagshipLayout data={data} slug={slug} />
+) : slug === 'loan-amortization-calculator' ? (
+  <LoanAmortizationFlagshipLayout data={data} slug={slug} />
+) : slug === '401k-calculator' ? (
+  <FourZeroOneKFlagshipLayout data={data} slug={slug} />
+) : slug === 'fd-calculator' ? (
+  <FdFlagshipLayout data={data} slug={slug} />
+) : slug === 'ppf-calculator' ? (
+  <PpfFlagshipLayout data={data} slug={slug} />
+) : slug === 'rd-calculator' ? (
+  <RdFlagshipLayout data={data} slug={slug} />
+) : slug === 'ssy-calculator' ? (
+  <SsyFlagshipLayout data={data} slug={slug} />
+) : slug === 'scss-calculator' ? (
+  <ScssFlagshipLayout data={data} slug={slug} />
+) : slug === 'pension-calculator' ? (
+  <PensionFlagshipLayout data={data} slug={slug} />
+) : slug === 'nsc-calculator' ? (
+  <NscFlagshipLayout data={data} slug={slug} />
+) : slug === 'pomis-calculator' ? (
+  <PomisFlagshipLayout data={data} slug={slug} />
+) : slug === 'vpf-calculator' ? (
+  <VpfFlagshipLayout data={data} slug={slug} />
+) : slug === 'kvp-calculator' ? (
+  <KvpFlagshipLayout data={data} slug={slug} />
+) : slug === 'apy-calculator' ? (
+  <ApyFlagshipLayout data={data} slug={slug} />
+) : slug === 'compound-interest-calculator' ? (
+  <CompoundInterestFlagshipLayout data={data} slug={slug} />
+) : slug === 'simple-interest-calculator' ? (
+  <SimpleInterestFlagshipLayout data={data} slug={slug} />
+) : slug === 'xirr-calculator' ? (
+  <XirrFlagshipLayout data={data} slug={slug} />
+) : slug === 'inflation-calculator' ? (
+  <InflationFlagshipLayout data={data} slug={slug} />
+) : slug === 'goal-sip-calculator' ? (
+  <GoalSipFlagshipLayout data={data} slug={slug} />
+) : slug === 'rent-vs-buy-calculator' ? (
+  <RentVsBuyFlagshipLayout data={data} slug={slug} />
+) : slug === 'fd-vs-debt-fund-calculator' ? (
+  <FdVsDebtFundFlagshipLayout data={data} slug={slug} />
+) : slug === 'home-affordability-calculator' ? (
+  <HomeAffordabilityFlagshipLayout data={data} slug={slug} />
+) : slug === 'debt-snowball-calculator' ? (
+  <DebtSnowballFlagshipLayout data={data} slug={slug} />
 ) : (
   <ToolLayout
     title={data.title}
@@ -106,6 +221,7 @@ const data = entry.data;
       {slug === 'gratuity-calculator' && <GratuityCalculatorWidget client:visible />}
       {slug === 'fire-calculator' && <FireCalculatorWidget client:visible />}
       {slug === 'pension-calculator' && <PensionCalculatorWidget client:visible />}
+      {slug === 'scss-calculator' && <ScssCalculatorWidget client:visible />}
     </div>
 
     <Content />

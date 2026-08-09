@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import FourZeroOneKCalculatorWidget from '../calculators/401kCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Annual Salary & Employer Match Policy',
+    description: 'Input your gross salary, current age, and your employer match rate (e.g. 50% match up to 6% of salary).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set Employee Contribution Rate & Audit IRS Caps',
+    description: 'Select your salary contribution percentage and verify IRS annual elective deferral limits ($23,500 base / $31,000 age 50+ catch-up).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Compare Traditional Pre-Tax vs. Roth 401(k)',
+    description: 'Evaluate tax savings today (Pre-Tax 401(k)) versus 100% tax-free withdrawals in retirement (Roth 401(k)).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Inspect Year-by-Year Accumulation Schedule',
+    description: 'Review multi-decade investment growth, cumulative employer matching dollars, and overall wealth multiplier.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Corporate & Tech Employees',
+    description: 'Professionals maximizing workplace 401(k) contributions to capture 100% of employer matching dollars.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'High-Income Tax Optimizers',
+    description: 'Earners evaluating Traditional pre-tax tax reduction today vs. Roth tax-free compounding in higher tax brackets.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Age 50+ Catch-Up Savers',
+    description: 'Older workers taking advantage of the additional $7,500 IRS catch-up allowance to accelerate retirement readiness.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Early Career Retirement Planners',
+    description: 'Young professionals establishing disciplined multi-decade retirement compounding from their first salary.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-semantic-warning',
+  },
+];
+
+const formulaDetails = {
+  title: '401(k) Wealth Accumulation & Match Formulas',
+  formula: 'C_{\\text{emp}} = \\min\\left(S \\times \\%_{\\text{emp}}, \\text{IRS}_{\\text{cap}}\\right), \\quad C_{\\text{match}} = S \\times \\min(\\%_{\\text{emp}}, \\%_{\\text{limit}}) \\times \\%_{\\text{match}}',
+  parameters: [
+    {
+      symbol: 'S',
+      title: 'Gross Annual Salary',
+      description: 'Current annual salary baseline before pre-tax deductions.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{IRS}_{\\text{cap}}',
+      title: 'IRS Contribution Limit',
+      description: '$23,500 base cap ($31,000 cap for age 50+ catch-up eligible workers).',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: 'C_{\\text{match}}',
+      title: 'Employer Match Contribution',
+      description: 'Company matching dollars added to your account ("100% free money").',
+      colorClass: 'text-semantic-success',
+    },
+    {
+      symbol: '\\text{Roth}_{\\text{tax}}',
+      title: 'Roth Tax-Free Growth',
+      description: 'Post-tax contributions growing completely tax-free for qualified retirement distributions.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: $90,000 Salary (50% Match up to 6% over 35 Years)',
+    tag: 'Standard Corporate Match',
+    subtitle: 'Capturing Full Employer Match',
+    metrics: [
+      { label: 'Current Salary', value: '$90,000/yr', colorClass: 'text-primary font-bold' },
+      { label: 'Employee Contrib (8%)', value: '$7,200/yr', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Employer Match (3%)', value: '$2,700/yr', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Projected 35Y Nest Egg', value: '$2,000,000+', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Contributing 8% (above the 6% match ceiling) fully captures $150,000+ in lifetime employer matching dollars and builds a $2.0M+ retirement nest egg.',
+  },
+  {
+    title: 'Benchmark Case Study: $180,000 Salary (Maxing IRS $23,500 Cap over 30 Years)',
+    tag: 'Max IRS Contributor',
+    subtitle: 'High Earner Wealth Escalation',
+    metrics: [
+      { label: 'Current Salary', value: '$180,000/yr', colorClass: 'text-primary font-bold' },
+      { label: 'Max IRS Employee Contrib', value: '$23,500/yr', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Employer Match (3%)', value: '$5,400/yr', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Projected 30Y Nest Egg', value: '$3,800,000+', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Maximizing the annual IRS $23,500 contribution cap accelerates multi-decade compounding, creating over $3.8M in pre-tax retirement wealth.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <FourZeroOneKCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

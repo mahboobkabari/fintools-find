@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PpfCalculatorWidget from '../calculators/PpfCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Annual Deposit & Choose Contribution Timing',
+    description: 'Specify your annual contribution amount (up to ₹1,50,000 statutory cap) and select deposit timing (on or before 5th of month for optimal interest).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Verify Official Interest Rate & 15-Year Lock-In',
+    description: 'Review the Govt of India notified rate (7.1% p.a.) and statutory 15-year financial maturity horizon.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Evaluate 5-Year Extension Block Options',
+    description: 'Simulate extending your account in 5-year blocks (20Y, 25Y, 30Y) with or without fresh contributions to maximize compounding.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review EEE Tax-Free Corpus & Section 80C Savings',
+    description: 'Inspect total 100% tax-free maturity balance, cumulative Section 80C tax saved, inflation purchasing power, and year-by-year schedule.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Long-Term Tax-Free Wealth Builders',
+    description: 'Investors looking for 100% guaranteed, risk-free retirement wealth backed by the Government of India under EEE tax status.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Section 80C Tax Optimizers',
+    description: 'Taxpayers saving up to ₹45,000 annually in income tax by depositing ₹1,50,000 into PPF.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Disciplined Monthly SIP Savers',
+    description: 'Salaried professionals investing ₹12,500 every month on or before the 5th to capture maximum monthly interest compounding.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Retirement Extension Planners',
+    description: 'Existing PPF account holders extending mature 15-year accounts into 20-year or 25-year compounding engines.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'PPF Scheme 2019 Compounding & EEE Formulas',
+  formula: 'I_m = \\text{MinBalance}_{\\text{5th-End}} \\times \\frac{r/100}{12}, \\quad \\text{Balance}_{\\text{Mar 31}} = \\text{Opening} + \\sum D + \\sum I_m',
+  parameters: [
+    {
+      symbol: '\\text{MinBalance}',
+      title: '5th-to-End Minimum Balance',
+      description: 'Lowest balance between the close of the 5th day and the end of the month.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Notified Annual Rate (% p.a.)',
+      description: '7.1% p.a. official benchmark notified quarterly by Ministry of Finance.',
+      colorClass: 'text-accent-amber',
+    },
+    {
+      symbol: '\\sum D',
+      title: 'Annual Contributions',
+      description: 'Total yearly deposits capped at ₹1,50,000 under Section 80C statutory limits.',
+      colorClass: 'text-blue-600',
+    },
+    {
+      symbol: '\\text{EEE}',
+      title: 'Exempt-Exempt-Exempt Tax Status',
+      description: 'Contributions, interest, and maturity withdrawals are 100% tax-free under Section 10(11).',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹1,50,000 Max Annual Deposit (15-Year Baseline @ 7.1%)',
+    tag: 'Statutory 15-Year Maturity',
+    subtitle: 'Maximized 80C Tax-Free Compounding',
+    metrics: [
+      { label: 'Annual Contribution', value: '₹150,000/yr', colorClass: 'text-primary font-bold' },
+      { label: 'Total 15Y Deposits', value: '₹2,250,000', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Tax-Free Interest', value: '₹1,818,209', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Maturity Corpus', value: '₹4,068,209', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Depositing the maximum statutory limit of ₹1,50,000 annually creates over ₹18.1 Lakhs in 100% tax-free interest and saves ₹6,75,000 in income tax under Section 80C.',
+  },
+  {
+    title: 'Benchmark Case Study: ₹150,000 Annual Deposit (Extended to 25 Years)',
+    tag: '25-Year Extension Block',
+    subtitle: 'Multi-Decade Compounding Engine',
+    metrics: [
+      { label: 'Tenure Horizon', value: '25 Years (2 Blocks)', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Total 25Y Deposits', value: '₹3,750,000', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Tax-Free Interest', value: '₹6,559,000+', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Maturity Corpus', value: '₹10,300,000+', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Extending a PPF account for 2 five-year blocks (25 years total) transforms a ₹37.5 Lakh deposit into a ₹1.03 Crore+ completely tax-free nest egg.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <PpfCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

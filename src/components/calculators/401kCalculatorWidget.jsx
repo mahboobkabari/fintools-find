@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { fourZeroOneKCalculatorConfig } from '../../calculators/configs/401k-calculator.config.js';
+import FourZeroOneKFlagshipWidget from './primitives/FourZeroOneKFlagshipWidget';
 
 export default function FourZeroOneKCalculatorWidget() {
-  return <UniversalCalculatorWidget config={fourZeroOneKCalculatorConfig} />;
+  return <FourZeroOneKFlagshipWidget />;
 }
