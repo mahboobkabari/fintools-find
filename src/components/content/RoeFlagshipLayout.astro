@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ReturnOnEquityCalculatorWidget from '../calculators/ReturnOnEquityCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Net Profit After Tax (PAT)',
+    description: 'Determine bottom-line net income after deducting cost of goods sold, operating expenses, depreciation, interest expenses, and corporate income taxes.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Calculate Total Shareholders\' Equity (Net Worth)',
+    description: 'Sum paid-up common equity share capital, share premium reserves, retained earnings, and general reserves while deducting accumulated losses.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Perform 3-Step DuPont Diagnostic Decomposition',
+    description: 'Deconstruct ROE into Net Profit Margin (profitability), Asset Turnover (operational efficiency), and Equity Multiplier (financial leverage).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compute Sustainable Growth Rate (SGR) & Value Spread',
+    description: 'Determine the maximum self-funded growth rate possible via earnings retention and evaluate economic value added above the Cost of Equity hurdle.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Equity Investors & Fund Managers',
+    description: 'Value investors, institutional fund managers, and Buffett-style moat investors identifying high-return compounding businesses.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Chief Financial Officers & Treasurers',
+    description: 'Corporate finance officers optimizing capital structure, debt leverage, share repurchases, and dividend distribution policies.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Business Owners & Founders',
+    description: 'Entrepreneurs evaluating whether retained profits generate superior returns compared to alternative market investments.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Equity Research & M&A Analysts',
+    description: 'Investment banking analysts benchmarking corporate capital efficiency and return on invested capital across sector peers.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Return on Equity (ROE) & DuPont Analysis Formulations',
+  formula: '\\text{ROE} = \\frac{\\text{Net Income}}{\\text{Shareholders\' Equity}} = \\underbrace{\\left(\\frac{\\text{Net Income}}{\\text{Revenue}}\\right)}_{\\text{Net Margin}} \\times \\underbrace{\\left(\\frac{\\text{Revenue}}{\\text{Total Assets}}\\right)}_{\\text{Asset Turnover}} \\times \\underbrace{\\left(\\frac{\\text{Total Assets}}{\\text{Shareholders\' Equity}}\\right)}_{\\text{Equity Multiplier}}',
+  parameters: [
+    {
+      symbol: '\\text{Net Income}',
+      title: 'Net Profit After Tax',
+      description: 'Total earnings available to equity shareholders after all operating costs, interest payments, and taxes.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Shareholders\' Equity}',
+      title: 'Net Worth / Common Equity',
+      description: 'Book value of total equity capital including paid-in capital, retained earnings, and reserves.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Asset Turnover}',
+      title: 'Asset Turnover Ratio',
+      description: 'Revenue generated per dollar of total assets deployed, reflecting operational asset utilization efficiency.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Equity Multiplier}',
+      title: 'Financial Leverage Multiplier',
+      description: 'Total assets divided by shareholders\' equity, measuring the extent of debt financing in the capital structure.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: High-Moat Consumer FMCG Company',
+    tag: 'FMCG & Consumer Brands',
+    subtitle: 'High Margin & Asset Turns Driver',
+    metrics: [
+      { label: 'Financial Performance', value: '₹15 Cr Net Income on ₹60 Cr Equity' },
+      { label: 'Return on Equity (ROE)', value: '25.00% ROE (High Quality)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'DuPont Breakdown', value: '12.5% Net Margin × 1.41x Asset Turns × 1.42x Leverage', colorClass: 'text-primary font-bold' },
+      { label: 'Sustainable Growth Rate', value: '15.00% SGR with 40% Dividend Payout', colorClass: 'text-ink font-black' },
+    ],
+    takeaway: 'The consumer brand generated an exceptional 25% ROE with minimal debt leverage (1.42x multiplier), demonstrating strong pricing power and high inventory turnover.',
+  },
+  {
+    title: 'Case Study 2: Heavily Leveraged Commercial Lender',
+    tag: 'Financial Institutions',
+    subtitle: 'Leverage-Driven Return on Equity',
+    metrics: [
+      { label: 'Financial Performance', value: '₹40 Cr Net Income on ₹250 Cr Equity & ₹2,000 Cr Assets' },
+      { label: 'Return on Equity (ROE)', value: '16.00% ROE' },
+      { label: 'Return on Assets (ROA)', value: '2.00% ROA' },
+      { label: 'Financial Leverage', value: '8.00x Equity Multiplier (High Debt Dependency)', colorClass: 'text-amber-600 font-black' },
+    ],
+    takeaway: 'Decomposing the bank\'s 16% ROE revealed that an 8.0x leverage multiplier amplified a modest 2.0% ROA, highlighting vulnerability to interest rate shifts.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Focus on Margin Expansion & Pricing Power',
+    description: 'Increasing operating profit margins raises ROE organically without expanding the balance sheet or increasing debt default risks.',
+  },
+  {
+    number: '02',
+    title: 'Accelerate Working Capital & Asset Turnover',
+    description: 'Improving inventory turnover and shortening receivable cycles generates more revenue per rupee of capital invested.',
+  },
+  {
+    number: '03',
+    title: 'Distinguish Between Operational Moats vs Debt Leverage',
+    description: 'An elevated ROE generated through a high equity multiplier (>3.5x) carries substantial solvency risk compared to high-margin compounding.',
+  },
+  {
+    number: '04',
+    title: 'Benchmark ROE Against Cost of Equity (Ke Hurdle)',
+    description: 'To generate true economic value added (EVA), ensure ROE consistently exceeds your required equity hurdle rate by at least 3% to 5%.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <ReturnOnEquityCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import BreakEvenCalculatorWidget from '../calculators/BreakEvenCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Fixed Overhead Costs',
+    description: 'Enter monthly or annual fixed operating expenses such as rent, salaries, software, and insurance.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Unit Selling Price & Variable Cost',
+    description: 'Specify the price charged per unit sold and the direct variable cost per unit (COGS, shipping, sales commission).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Analyze Unit & Revenue Break-Even',
+    description: 'Evaluate the exact unit sales volume and revenue threshold needed to cover all costs with zero loss.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Assess Margin of Safety & Target Profit',
+    description: 'Calculate your buffer above break-even and determine unit sales required to hit target profit milestones.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Small Business Owners & Retailers',
+    description: 'Store owners evaluating monthly sales volume needed to cover commercial rent, employee wages, and inventory.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'E-Commerce & D2C Founders',
+    description: 'Online brands tracking per-unit packaging, ad spend, and manufacturing costs against monthly subscription or unit sales.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Startup Founders & Product Managers',
+    description: 'Tech startups modeling customer unit economics, SaaS subscription pricing tiers, and burn rate recovery.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Freelancers & Agency Owners',
+    description: 'Service providers calculating billable client projects needed to cover office overhead and desired net income.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Cost-Volume-Profit (CVP) Break-Even Formulas',
+  formula: '\\text{BEP}_{\\text{units}} = \\left\\lceil \\frac{\\text{Fixed Costs}}{\\text{Selling Price} - \\text{Variable Cost}} \\right\\rceil, \\quad \\text{BEP}_{\\text{revenue}} = \\text{BEP}_{\\text{units}} \\times \\text{Selling Price}',
+  parameters: [
+    {
+      symbol: '\\text{Contribution Margin}',
+      title: 'Per-Unit Equity Margin',
+      description: 'Difference between Unit Selling Price and Unit Variable Cost.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{BEP}_{\\text{units}}',
+      title: 'Break-Even Units',
+      description: 'Minimum units sold to achieve zero net profit/loss.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{BEP}_{\\text{revenue}}',
+      title: 'Break-Even Sales Revenue',
+      description: 'Gross sales revenue required to cover all fixed overhead and variable costs.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Margin of Safety}',
+      title: 'Safety Buffer %',
+      description: 'Percentage by which current sales can drop before the business incurs a net operating loss.',
+      colorClass: 'text-purple-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: D2C E-Commerce Brand (₹1.5 Lakhs Monthly Overhead)',
+    tag: 'E-Commerce Unit Economics',
+    subtitle: 'Selling Price ₹1,200 vs Variable Cost ₹450',
+    metrics: [
+      { label: 'Fixed Overhead Costs', value: '₹150,000 / month', colorClass: 'text-primary font-bold' },
+      { label: 'Unit Contribution Margin', value: '₹750 / unit (62.5% CM Ratio)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Break-Even Threshold', value: '200 Units (₹240,000 Revenue)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Current Sales (350 Units)', value: '₹112,500 Profit (42.9% Safety Margin)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Selling 350 units per month yields ₹1,12,500 in net profit with a comfortable 42.9% margin of safety above the 200-unit break-even threshold.',
+  },
+  {
+    title: 'Benchmark Case Study: SaaS Subscription Startup (High Fixed Overhead)',
+    tag: 'SaaS Business Model',
+    subtitle: 'Fixed Overhead ₹4.5 Lakhs vs Unit Price ₹2,500',
+    metrics: [
+      { label: 'Fixed Developer Overhead', value: '₹450,000 / month', colorClass: 'text-primary font-bold' },
+      { label: 'Server Variable Cost', value: '₹250 / user (90.0% CM Ratio)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Break-Even Threshold', value: '200 Subscribers (₹500,000 MRR)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Target Profit Milestone', value: '245 Subscribers for ₹1 Lakh Profit', colorClass: 'text-indigo-600 font-extrabold' },
+    ],
+    takeaway: 'High 90% contribution margins allow the SaaS business to reach break-even at 200 subscribers, with every additional user contributing ₹2,250 directly to net profit.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <BreakEvenCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

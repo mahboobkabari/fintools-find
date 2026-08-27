@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import Budget503020CalculatorWidget from '../calculators/Budget503020CalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Calculate Net Post-Tax Monthly Income',
+    description: 'Determine your true take-home income after income tax, provident fund (EPF), and professional tax deductions.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Deconstruct Fixed & Essential Needs (50% Target)',
+    description: 'Itemize non-negotiable living obligations: rent/mortgage EMI, groceries, utilities, transit, and essential healthcare insurance.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Discretionary Lifestyle Wants (30% Target)',
+    description: 'Track flexible lifestyle choices: dining out, streaming subscriptions, vacations, electronics, and shopping without deprivation.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Automate Wealth Investments & Savings (20% Target)',
+    description: 'Direct at least 20% of net income into emergency cash reserves, equity mutual fund SIPs, and debt pre-payments on salary day.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Corporate Employees & Young Professionals',
+    description: 'Early to mid-career professionals looking to establish structured monthly cash flow management and eliminate lifestyle creep.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Families & Metro City Homeowners',
+    description: 'Households balancing mortgage EMIs, children school fees, grocery inflation, and long-term retirement investments.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'FIRE Movement & Early Retirement Aspirants',
+    description: 'Aggressive savers utilizing 40/20/40 or custom allocation models to compress working career duration to 10–15 years.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Debt Recovery & Turnaround Budgeters',
+    description: 'Individuals actively paying down credit card balances and high-interest personal loans using the 70/20/10 framework.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: '50/30/20 Budgeting Rule & Compound Wealth Growth Formulas',
+  formula: '\\text{Needs} = I_{\\text{net}} \\times 0.50, \\quad \\text{Wants} = I_{\\text{net}} \\times 0.30, \\quad \\text{Savings} = I_{\\text{net}} \\times 0.20, \\quad \\text{Corpus}_{10\\text{yr}} = S \\times \\left[ \\frac{(1 + r/12)^{120} - 1}{r/12} \\right]',
+  parameters: [
+    {
+      symbol: 'I_{\\text{net}}',
+      title: 'Net Monthly Take-Home Income',
+      description: 'Post-tax salary deposited into your bank account each month.',
+      colorClass: 'text-ink',
+    },
+    {
+      symbol: '\\text{Needs (50%)}',
+      title: 'Essential Living Obligations',
+      description: 'Rent, mortgage, groceries, electricity, gas, internet, transit, and healthcare.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Wants (30%)}',
+      title: 'Discretionary Lifestyle Choices',
+      description: 'Dining out, entertainment, holidays, shopping, and hobbies.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Savings (20%)}',
+      title: 'Wealth Accumulation & Debt Elimination',
+      description: 'Equity mutual fund SIPs, emergency cash reserves, and retirement contributions.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: 28-Year-Old Software Engineer (₹1,00,000 Monthly Salary)',
+    tag: '50/30/20 Standard Rule',
+    subtitle: 'Young Professional Wealth Building',
+    metrics: [
+      { label: 'Monthly Net Income', value: '₹1,00,000 / Month' },
+      { label: 'Essential Needs (50%)', value: '₹50,000 / Month', colorClass: 'text-primary font-bold' },
+      { label: 'Discretionary Wants (30%)', value: '₹30,000 / Month', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Monthly Equity SIP (20%)', value: '₹20,000 / Month', colorClass: 'text-emerald-600 font-bold' },
+      { label: '10-Year Wealth Corpus (12% CAGR)', value: '₹46.5 Lakhs Liquid Wealth', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'By maintaining an automated ₹20,000 monthly SIP into broad index funds, the engineer amasses a ₹46.5 Lakhs portfolio in 10 years without compromising lifestyle wants.',
+  },
+  {
+    title: 'Case Study 2: Metro Family with Home Loan (₹1,50,000 Combined Income)',
+    tag: '60/20/20 Metro Framework',
+    subtitle: 'Managing Elevated Tier-1 Living Costs',
+    metrics: [
+      { label: 'Monthly Take-Home', value: '₹1,50,000 / Month' },
+      { label: 'Metro Needs (60%)', value: '₹90,000 (Rent + EMI + Groceries)', colorClass: 'text-primary font-bold' },
+      { label: 'Controlled Wants (20%)', value: '₹30,000 / Month', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Monthly Savings (20%)', value: '₹30,000 / Month', colorClass: 'text-emerald-600 font-bold' },
+      { label: '15-Year Projected Wealth (12% CAGR)', value: '₹1.51 Crores Corpus', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Switching to the 60/20/20 framework accommodates higher tier-1 metro rent while preserving a non-negotiable 20% savings rate to build a ₹1.51 Crore retirement nest egg.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Pay Yourself First on Salary Day',
+    description: 'Set up auto-debit SIPs for your 20% savings target on the 1st or 5th of every month. Spend only what remains after investing, rather than saving what is left after spending.',
+  },
+  {
+    number: '02',
+    title: 'Distinguish True Needs from Camouflaged Wants',
+    description: 'A basic mobile plan is a need; the latest flagship smartphone is a want. Basic groceries are a need; gourmet dining deliveries are wants. Categorize objectively.',
+  },
+  {
+    number: '03',
+    title: 'Maintain a 6-Month Emergency Cash Buffer',
+    description: 'Before deploying all 20% savings into market-linked equity SIPs, build an emergency fund in high-yield liquid deposits to cover 6 months of essential needs.',
+  },
+  {
+    number: '04',
+    title: 'Annual Step-Up on Salary Increments',
+    description: 'Whenever you receive an annual salary appraisal, allocate at least 50% of the increment to savings. This permanently suppresses lifestyle creep and accelerates financial freedom.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <Budget503020CalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

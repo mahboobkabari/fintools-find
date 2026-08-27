@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DiscountedCashFlowCalculatorWidget from '../calculators/DiscountedCashFlowCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Project Annual Free Cash Flows (FCF)',
+    description: 'Specify projected annual FCFs using either explicit annual inputs or a simplified baseline growth rate (% p.a.).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Set WACC & Terminal Valuation Method',
+    description: 'Configure your discount rate (WACC %) and select either Gordon Growth perpetuities or Exit EV/EBITDA multiples.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Bridge to Equity Value & Intrinsic Share Price',
+    description: 'Add cash, subtract debt, and divide by diluted shares to compute intrinsic price per share and target Margin of Safety.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Mature Blue-Chip Dividend Firm',
+    scenario: 'FCF = ₹50 Lakhs | Growth = 8% | WACC = 10% | Terminal Growth = 3%',
+    recommendation: 'Enterprise Value = ₹8.14 Cr | Equity Value = ₹8.04 Cr. Terminal Value represents 68.5% of Enterprise Value.',
+  },
+  {
+    persona: 'High-Growth Tech Enterprise',
+    scenario: 'FCF = ₹20 Lakhs | Growth = 20% | WACC = 12% | Terminal Growth = 3.5%',
+    recommendation: 'Enterprise Value = ₹4.52 Cr | Equity Value = ₹4.77 Cr. Rapid explicit cash flow growth offsets higher cost of capital.',
+  },
+  {
+    persona: 'Undervalued Deep Value Opportunity',
+    scenario: 'FCF = ₹30 Lakhs | Explicit Forecast | WACC = 9% | Cash Cushion = ₹80 Lakhs',
+    recommendation: 'Substantial net cash cushion provides a strong Margin of Safety relative to current market trading price.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <DiscountedCashFlowCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        How to Evaluate Corporate Valuation Using Discounted Cash Flow (DCF)
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        Discounted Cash Flow (DCF) valuation calculates the present intrinsic value of an asset by discounting all projected future cash flows and terminal value back to present value using WACC.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Household Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Illustrative Valuation Case Studies
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-primary block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

@@ -41,6 +41,25 @@ import RentVsBuyCalculatorWidget from './RentVsBuyCalculatorWidget';
 import FdVsDebtFundCalculatorWidget from './FdVsDebtFundCalculatorWidget';
 import HomeAffordabilityCalculatorWidget from './HomeAffordabilityCalculatorWidget';
 import DebtSnowballCalculatorWidget from './DebtSnowballCalculatorWidget';
+import NetWorthCalculatorWidget from './NetWorthCalculatorWidget';
+import BreakEvenCalculatorWidget from './BreakEvenCalculatorWidget';
+import LifeInsuranceNeedsCalculatorWidget from './LifeInsuranceNeedsCalculatorWidget';
+import DebtToIncomeRatioCalculatorWidget from './DebtToIncomeRatioCalculatorWidget';
+import EmergencyFundCalculatorWidget from './EmergencyFundCalculatorWidget';
+import RentalYieldCalculatorWidget from './RentalYieldCalculatorWidget';
+import DiscountedCashFlowCalculatorWidget from './DiscountedCashFlowCalculatorWidget';
+import CreditCardPayoffCalculatorWidget from './CreditCardPayoffCalculatorWidget';
+import BalanceTransferCalculatorWidget from './BalanceTransferCalculatorWidget';
+import NpvCalculatorWidget from './NpvCalculatorWidget';
+import HealthInsuranceCalculatorWidget from './HealthInsuranceCalculatorWidget';
+import ProfitMarginCalculatorWidget from './ProfitMarginCalculatorWidget';
+import CtcCalculatorWidget from './CtcCalculatorWidget';
+import CapRateCalculatorWidget from './CapRateCalculatorWidget';
+import PaybackPeriodCalculatorWidget from './PaybackPeriodCalculatorWidget';
+import DebtAvalancheCalculatorWidget from './DebtAvalancheCalculatorWidget';
+import CashOnCashCalculatorWidget from './CashOnCashCalculatorWidget';
+import PropertyValuationCalculatorWidget from './PropertyValuationCalculatorWidget';
+import GRMCalculatorWidget from './GRMCalculatorWidget';
 
 export const CALCULATOR_REGISTRY = {
   'emi-calculator': EmiCalculatorWidget,
@@ -86,6 +105,25 @@ export const CALCULATOR_REGISTRY = {
   'fd-vs-debt-fund-calculator': FdVsDebtFundCalculatorWidget,
   'home-affordability-calculator': HomeAffordabilityCalculatorWidget,
   'debt-snowball-calculator': DebtSnowballCalculatorWidget,
+  'net-worth-calculator': NetWorthCalculatorWidget,
+  'break-even-calculator': BreakEvenCalculatorWidget,
+  'life-insurance-needs-calculator': LifeInsuranceNeedsCalculatorWidget,
+  'debt-to-income-ratio-calculator': DebtToIncomeRatioCalculatorWidget,
+  'emergency-fund-calculator': EmergencyFundCalculatorWidget,
+  'rental-yield-calculator': RentalYieldCalculatorWidget,
+  'discounted-cash-flow-calculator': DiscountedCashFlowCalculatorWidget,
+  'credit-card-payoff-calculator': CreditCardPayoffCalculatorWidget,
+  'balance-transfer-calculator': BalanceTransferCalculatorWidget,
+  'npv-calculator': NpvCalculatorWidget,
+  'health-insurance-calculator': HealthInsuranceCalculatorWidget,
+  'profit-margin-calculator': ProfitMarginCalculatorWidget,
+  'ctc-calculator': CtcCalculatorWidget,
+  'cap-rate-calculator': CapRateCalculatorWidget,
+  'payback-period-calculator': PaybackPeriodCalculatorWidget,
+  'debt-avalanche-calculator': DebtAvalancheCalculatorWidget,
+  'cash-on-cash-return-calculator': CashOnCashCalculatorWidget,
+  'property-valuation-calculator': PropertyValuationCalculatorWidget,
+  'gross-rent-multiplier-calculator': GRMCalculatorWidget,
 };
 
 export function getCalculatorWidget(slug) {

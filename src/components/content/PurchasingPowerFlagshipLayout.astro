@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PurchasingPowerCalculatorWidget from '../calculators/PurchasingPowerCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Initial Cash Sum or Annual Salary',
+    description: 'Input your savings balance, emergency reserve, retirement corpus, or current annual salary base.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Expected Inflation Rate & Horizon',
+    description: 'Set your long-term CPI assumption (e.g. 5.5% - 7.0% for India, 2.5% - 3.5% for US/EU) and target horizon.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Model Optional Salary & Wage Growth',
+    description: 'Optionally input your expected annual raise percentage to evaluate net real purchasing power expansion or wage drag.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Halving Horizon & Yearly Schedule',
+    description: 'Review when your money loses 50% of its buying capacity and examine the full year-by-year erosion schedule.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Employees & Career Professionals',
+    description: 'Evaluating whether annual company increments beat inflation or result in real purchasing power contraction.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Retirees & Fixed-Income Savers',
+    description: 'Auditing the erosion risk of living on static bank FD interest or fixed annuity payouts over 20 to 30 year horizons.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Parents Planning Education Goals',
+    description: 'Calculating future college tuition costs under elevated 8% - 10% higher education inflation rates.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Long-Term Investors & Estate Planners',
+    description: 'Ensuring portfolio target asset allocations deliver positive real (Fisher) returns above compound inflation.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Purchasing Power & Real Valuation Formulations',
+  formula: '\\text{Real Purchasing Power} = \\frac{\\text{Amount}}{(1 + i)^n}, \\quad \\text{Halving Years} = \\frac{\\ln(2)}{\\ln(1 + i)}',
+  parameters: [
+    {
+      symbol: '\\text{Real Purchasing Power}',
+      title: 'Future Real Cash Value',
+      description: 'What a nominal sum of money today will actually be worth in terms of today’s goods and services in Year n.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'i',
+      title: 'Annual Inflation Rate',
+      description: 'The decimal compound annual increase in the general consumer price level (e.g. 0.06 for 6.0%).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'n',
+      title: 'Time Horizon (Years)',
+      description: 'The number of compounding years over which price inflation degrades the currency value.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Future Equivalent Cost}',
+      title: 'Inflated Lifestyle Cost',
+      description: 'The nominal cash required in Year n (Amount × (1 + i)ⁿ) to purchase the exact same basket of goods as today.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: The Hidden Erosion of ₹10 Lakhs Bank FD over 15 Years',
+    tag: 'Retirement & Fixed Income',
+    subtitle: 'Idle Cash vs 6.0% Inflation',
+    metrics: [
+      { label: 'Initial Deposit', value: '₹10,00,000 Nominal Cash' },
+      { label: 'Purchasing Power (Yr 15)', value: '₹4,17,265 Real Value (58.3% Lost)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Future Cost to Match', value: '₹23,96,558 Required in 15 Years', colorClass: 'text-primary font-bold' },
+      { label: 'Halving Point', value: '50% Buying Power lost at Year 11.9', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Holding static cash or low-interest deposits under 6% inflation halves buying power in under 12 years, requiring an asset allocation shift toward inflation-beating equity index funds.',
+  },
+  {
+    title: 'Case Study 2: Tech Professional Salary Hike vs Inflation Reality',
+    tag: 'Salaried Career',
+    subtitle: '8.5% Increment vs 6.0% CPI Inflation',
+    metrics: [
+      { label: 'Starting CTC', value: '₹15,00,000 Annual Salary' },
+      { label: 'Nominal CTC (Yr 5)', value: '₹22,55,502 (+50.4% Nominal Growth)' },
+      { label: 'Real Discounted CTC (Yr 5)', value: '₹16,85,427 (+12.4% Real Growth)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Real Growth Rate', value: '+2.36% p.a. Net Real Expansion', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'While a 8.5% hike looks like a 50% raise over 5 years on paper, inflation consumes the vast majority of the gain, leaving a net real lifestyle expansion of +12.4%.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Never Keep Long-Term Capital in Zero-Yield Accounts',
+    description: 'Cash in standard savings accounts earning 2.5% to 3.5% suffers negative real returns under 5% - 7% inflation. Only retain 3 to 6 months of living expenses in liquid accounts.',
+  },
+  {
+    number: '02',
+    title: 'Invest in Productive, Growth-Compounding Equities',
+    description: 'Historically, broad-market diversified equity index funds (Nifty 50, S&P 500) generate 11% - 14% nominal returns, yielding a robust 5% - 8% net real return above inflation.',
+  },
+  {
+    number: '03',
+    title: 'Negotiate Compensation on Real (Inflation-Adjusted) Terms',
+    description: 'A 5% annual increment under 6% inflation is effectively a 1% pay cut in real living standards. Track personal cost of living and benchmark raises against actual inflation.',
+  },
+  {
+    number: '04',
+    title: 'Hedge Healthcare & Higher Education with Higher Rates',
+    description: 'Specific sectors like higher education and specialized medical healthcare inflate at 8% - 12% annually—substantially faster than general CPI. Plan education goals with elevated inflation rates.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <PurchasingPowerCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

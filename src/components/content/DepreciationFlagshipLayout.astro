@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DepreciationCalculatorWidget from '../calculators/DepreciationCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Asset Capitalization & Cost Basis Establishment',
+    description: 'Record total acquisition outlay including purchase invoice, non-refundable duties, freight, transit insurance, and site installation charges.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Estimate Useful Life & Terminal Residual Scrap Value',
+    description: 'Determine expected operational lifespan based on Companies Act Schedule II / IRS MACRS tables and establish realistic scrap recovery value.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Select Financial & Tax Depreciation Methods',
+    description: 'Apply Straight-Line Method (SLM) for financial shareholder statements (GAAP/IFRS) and Written Down Value (WDV) Block of Assets for tax returns.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Annual Depreciation Write-off & Tax Shield Benefit',
+    description: 'Book annual non-cash depreciation expense in the Profit & Loss statement, reducing taxable corporate earnings and generating tax shields.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Corporate CFOs & Financial Controllers',
+    description: 'Finance executives modeling multi-year fixed asset capital expenditure (CapEx) schedules, EBITDA adjustments, and free cash flows.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Chartered Accountants, CPAs & Auditors',
+    description: 'Practitioners reconciling book depreciation under Companies Act Schedule II with tax depreciation under Section 32 WDV blocks.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Small Business Owners & Entrepreneurs',
+    description: 'Founders planning equipment purchases, fleet vans, computers, and industrial machinery to maximize annual corporate tax deductions.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Tax Advisors & Corporate Valuation Analysts',
+    description: 'Analysts calculating present value of depreciation tax shields (PVTS) for Discounted Cash Flow (DCF) enterprise valuations.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Mathematical Formulas for Asset Depreciation Methods',
+  formula: 'D_{\\text{SLM}} = \\frac{C - S}{n}, \\quad r_{\\text{WDV}} = 1 - \\left(\\frac{S}{C}\\right)^{1/n}, \\quad D_{\\text{DDB}} = BV_{t-1} \\times \\frac{2}{n}, \\quad D_{\\text{SYD}} = (C - S) \\times \\frac{n - t + 1}{\\frac{n(n+1)}{2}}',
+  parameters: [
+    {
+      symbol: 'C',
+      title: 'Initial Asset Acquisition Cost',
+      description: 'Total capitalized cost including purchase price, freight, transit taxes, and setup expenses.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'S',
+      title: 'Estimated Residual / Salvage Value',
+      description: 'Expected net realization value when disposing of the asset at the end of its useful life.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'n',
+      title: 'Useful Lifespan in Years',
+      description: 'Total accounting or statutory period over which the asset generates economic benefits.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'BV_{t-1}',
+      title: 'Opening Book Value (Written Down Value)',
+      description: 'Net carrying book value of the asset at the beginning of financial year t.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Factory CNC Machine (₹50 Lakhs over 10 Years @ 25% Tax Rate)',
+    tag: 'SLM vs WDV Comparison',
+    subtitle: 'Industrial Equipment Capitalization',
+    metrics: [
+      { label: 'Asset Cost', value: '₹50,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Year 1 SLM Depreciation', value: '₹4,75,000', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'Year 1 WDV Depreciation', value: '₹12,94,000', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Year 1 Extra Tax Shield (WDV)', value: '₹2,04,750 Saved', colorClass: 'text-semantic-success font-black' },
+      { label: 'Terminal Scrap Realization (10 Yrs)', value: '₹2,50,000', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Accelerated WDV provides ₹12.94 Lakhs in Year 1 depreciation (vs ₹4.75 Lakhs under SLM), yielding ₹2.05 Lakhs in upfront corporate tax cash flow savings.',
+  },
+  {
+    title: 'Case Study 2: IT Cloud Server Cluster (₹15 Lakhs over 3 Years using DDB)',
+    tag: 'Double Declining Balance',
+    subtitle: 'Rapid Technology Hardware Amortization',
+    metrics: [
+      { label: 'Server Cluster Cost', value: '₹15,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'DDB Depreciation Rate', value: '66.67% (2 / 3 Yrs)' },
+      { label: 'Year 1 DDB Write-off', value: '₹10,00,000', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Year 1 Corporate Tax Shield', value: '₹2,50,000', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Year 3 Closing Book Value', value: '₹30,000 Scrap', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'Under Double Declining Balance, two-thirds of the IT asset cost is expensed in Year 1, shielding ₹2.50 Lakhs in corporate taxes during peak server productivity.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Leverage Accelerated Depreciation for Immediate Cash Flow',
+    description: 'Using accelerated methods like WDV or DDB pulls depreciation tax shields forward, maximizing the net present value (NPV) of corporate cash flows.',
+  },
+  {
+    number: '02',
+    title: 'Maintain Dual Books for Companies Act vs Income Tax Act',
+    description: 'Companies Act mandates component-based SLM/WDV under Schedule II, whereas Section 32 of Indian IT Act requires mandatory WDV on asset blocks.',
+  },
+  {
+    number: '03',
+    title: 'Review Asset Impairment and Salvage Estimates Annually',
+    description: 'Under IAS 36 / Ind AS 36, test carrying amounts periodically and adjust residual salvage values if secondary equipment markets fluctuate.',
+  },
+  {
+    number: '04',
+    title: 'Factor in Section 179 / Bonus Depreciation for US Operations',
+    description: 'For US business operations, explore IRS Section 179 and MACRS bonus depreciation to write off up to 100% of qualified equipment in Year 1.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <DepreciationCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

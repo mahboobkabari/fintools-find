@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import BalanceTransferCalculatorWidget from '../calculators/BalanceTransferCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Existing Loan Details',
+    description: 'Input your outstanding loan principal balance, current interest rate (% p.a.), and remaining tenure in months.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Input Refinance Terms & Upfront Fees',
+    description: 'Specify the new lower interest rate, processing fees, balance transfer charges, and select fee payment mode (cash vs financed).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Evaluate Estimated Net Savings & Break-Even Month',
+    description: 'Review monthly EMI savings, total economic cost difference, and exact month-by-month cumulative cash-flow break-even.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Home Loan Interest Rate Switch',
+    scenario: 'Principal = ₹50 Lakhs | Current Rate = 9.5% | New Rate = 8.4% | Remaining Tenure = 15 Years',
+    recommendation: 'Net Savings = ₹6.12 Lakhs | Break-even achieved in 7 months (accounting for ₹25,000 processing fee).',
+  },
+  {
+    persona: 'Personal Loan Balance Transfer',
+    scenario: 'Balance = ₹5 Lakhs | Current Rate = 16% | New Rate = 11.5% | Tenure = 4 Years',
+    recommendation: 'Monthly EMI drops by ₹1,120/mo. Total net cost reduction = ₹43,500 after 1.5% total transfer fees.',
+  },
+  {
+    persona: 'Auto Loan Refinance',
+    scenario: 'Balance = ₹8 Lakhs | Current Rate = 11% | New Rate = 8.8% | Remaining Tenure = 3 Years',
+    recommendation: 'Net savings = ₹28,400 with immediate EMI relief of ₹820/month.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <BalanceTransferCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        How to Evaluate Loan Refinancing & Balance Transfer Offers
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        Loan refinancing or balance transfer involves replacing an existing debt obligation with a new loan under lower interest rate terms. To evaluate true financial savings, you must account for all upfront fees and cumulative cash flows.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Illustrative Refinancing Case Studies
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-blue-600 block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

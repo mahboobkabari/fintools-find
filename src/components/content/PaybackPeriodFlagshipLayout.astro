@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PaybackPeriodCalculatorWidget from '../calculators/PaybackPeriodCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Initial Outlay & Projection Type',
+    description: 'Enter your initial capital investment cost (₹) and select whether annual cash inflows are uniform or year-by-year uneven.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Project Net Cash Inflows & Discount Rate',
+    description: 'Input projected net annual cash savings or profits and set your discount rate (% p.a.) for time-value-of-money analysis.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Analyze Recovery Timeline & Capital Metrics',
+    description: 'Review Simple Payback Period (years & months), Discounted Payback Period, Net Present Value (NPV), and Profitability Index (PI).',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Machinery & Equipment Upgrade',
+    scenario: 'Initial Outlay = ₹10 Lakhs | Uniform Cash Flow = ₹3 Lakhs/yr | Discount Rate = 10%',
+    recommendation: 'Simple Payback = 3 yrs 4 mos | Discounted Payback = 4 yrs 4 mos | NPV = +₹1.37 Lakhs.',
+  },
+  {
+    persona: 'Software Workflow Automation',
+    scenario: 'Initial Outlay = ₹5 Lakhs | Scaling Cash Flows (₹1.5L, ₹2L, ₹2.5L, ₹3L) | Discount Rate = 12%',
+    recommendation: 'Simple Payback = 2.40 Years | Investment recovered in Year 3 with positive project NPV.',
+  },
+  {
+    persona: 'Commercial Solar Panel System',
+    scenario: 'Initial Outlay = ₹8 Lakhs | Electricity Savings = ₹1.6 Lakhs/yr | Discount Rate = 8%',
+    recommendation: 'Simple Payback = 5.0 Years | Discounted Payback = 6.7 Years | Long-term clean energy asset.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <PaybackPeriodCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        Understanding Simple Payback vs Discounted Payback Period
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        The Payback Period measures how long it takes for a business or project to recover its initial capital investment from future cash flows. Simple payback measures raw cash recovery time, while Discounted Payback incorporates the time value of money by discounting future cash flows.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Illustrative Capital Allocation Case Studies
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-emerald-600 block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

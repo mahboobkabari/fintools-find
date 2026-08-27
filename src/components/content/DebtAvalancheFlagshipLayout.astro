@@ -1,0 +1,90 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DebtAvalancheCalculatorWidget from '../calculators/DebtAvalancheCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'List All Current Debts & APRs',
+    description: 'Enter credit card balances, personal loans, auto loans, and student loans with their current interest rates (APR %) and minimum payments.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Sort Debts by Highest APR First',
+    description: 'The Debt Avalanche engine automatically orders your debt portfolio from highest interest rate to lowest interest rate.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Apply Extra Monthly Repayment Budget',
+    description: 'Set your additional monthly debt repayment budget. Extra funds are directed exclusively to the highest APR active debt.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Interest Savings & Snowball Comparison',
+    description: 'Track months saved, total interest saved vs minimum payments, and compare Debt Avalanche against Debt Snowball side-by-side.',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'High-APR Credit Card Debtors',
+    description: 'Borrowers carrying 36% to 42% credit card APRs looking to stop compound interest charges immediately.',
+  },
+  {
+    title: 'Mathematical Optimizers',
+    description: 'Financial planners who prioritize total interest dollars saved over psychological quick wins.',
+  },
+  {
+    title: 'Multiple Loan Borrowers',
+    description: 'Individuals juggling personal loans, auto financing, and consumer credit with a fixed extra monthly budget.',
+  },
+  {
+    title: 'Refinance & Consolidation Decision Makers',
+    description: 'Borrowers evaluating whether to consolidate debts or pay off high-rate balances aggressively.',
+  },
+];
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: ₹5.25 Lakhs Total Debt (₹5,000 Extra Payment)',
+    tag: 'Credit Card & Loan Mix',
+    subtitle: 'Debt Avalanche vs Minimum Payments Only',
+    metrics: [
+      { label: 'Total Initial Debt', value: '₹5,25,000 across 3 debts', colorClass: 'text-primary font-bold' },
+      { label: 'Minimum Only Payoff', value: '78 Months (₹3.4L Interest)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Avalanche Payoff', value: '28 Months (₹1.2L Interest)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Total Interest Saved', value: '₹2,20,000 (50 Months Saved)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Allocating ₹5,000 extra per month using Debt Avalanche eliminates ₹5.25 Lakhs in multi-debt balances over 4 years earlier and saves over ₹2.2 Lakhs in total interest.',
+  },
+  {
+    title: 'Benchmark Case Study: Avalanche vs Snowball Strategy Comparison',
+    tag: 'Strategy Tradeoff',
+    subtitle: 'Highest APR First vs Lowest Balance First',
+    metrics: [
+      { label: 'Avalanche Total Interest', value: '₹1,24,000 Interest', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Snowball Total Interest', value: '₹1,38,000 Interest', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Avalanche Interest Saved', value: '₹14,000 Extra Saved', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Debt-Free Timeline', value: '28 Months (Both Strategies)', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Debt Avalanche saves an additional ₹14,000 in interest over Debt Snowball by eliminating the 42% APR credit card balance first.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  caseStudies={caseStudies}
+>
+  <DebtAvalancheCalculatorWidget slot="calculator" client:load />
+</FlagshipLayout>

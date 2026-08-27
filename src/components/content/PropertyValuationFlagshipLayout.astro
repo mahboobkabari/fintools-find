@@ -1,0 +1,87 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import PropertyValuationCalculatorWidget from '../calculators/PropertyValuationCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Calculate Gross Potential Income (GPI)',
+    description: 'Determine total potential annual rental revenue from monthly rent and additional property income sources.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Subtract Vacancy & Operating Expenses',
+    description: 'Deduct expected vacancy loss and recurring annual property operating expenses to arrive at Net Operating Income (NOI).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Capitalize NOI at Target Yield',
+    description: 'Divide annual Net Operating Income by your target Capitalization Rate to determine the income-implied property valuation.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Single-Family Rental Home',
+    scenario: 'Rent = ₹35,000 / mo | OpEx = ₹90,000 / yr | Vacancy = 5% | Target Cap Rate = 6.5%',
+    recommendation: 'NOI = ₹3,09,000 / yr | Income-Implied Value = ₹47,53,846 | 15.38x NOI Multiple.',
+  },
+  {
+    persona: 'Multi-Family Apartment Building',
+    scenario: 'Rent = ₹1,50,000 / mo | OpEx = ₹4,20,000 / yr | Vacancy = 6% | Target Cap Rate = 6.0%',
+    recommendation: 'NOI = ₹13,32,000 / yr | Income-Implied Value = ₹2,22,00,000 | 16.67x NOI Multiple.',
+  },
+  {
+    persona: 'Commercial Retail Storefront',
+    scenario: 'Rent = ₹1,10,000 / mo | OpEx = ₹2,80,000 / yr | Vacancy = 4% | Target Cap Rate = 7.0%',
+    recommendation: 'NOI = ₹9,86,800 / yr | Income-Implied Value = ₹1,40,97,143 | 14.29x NOI Multiple.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <PropertyValuationCalculatorWidget client:load />
+
+  <section class="mt-12 space-y-8">
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        How Income-Based Property Valuation Works
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+        The Direct Capitalization Approach values commercial and income-producing real estate based on its capacity to generate Net Operating Income (NOI). By dividing expected annual NOI by a market capitalization rate, investors estimate what capital amount an investor would pay to receive that net income stream.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {timelineSteps.map((step) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <span class="text-2xl font-black text-sky-600 dark:text-sky-400">{step.stepNumber}</span>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">{step.title}</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+        Real Estate Income Valuation Case Studies
+      </h2>
+      <div class="space-y-4">
+        {benchmarkCaseStudies.map((item) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm">{item.persona}</h3>
+            <p class="text-xs font-mono text-slate-500 dark:text-slate-400">{item.scenario}</p>
+            <p class="text-xs text-slate-700 dark:text-slate-300 font-medium">{item.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

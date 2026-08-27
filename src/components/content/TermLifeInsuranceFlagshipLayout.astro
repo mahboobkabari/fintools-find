@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import TermLifeInsuranceCalculatorWidget from '../calculators/TermLifeInsuranceCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Financial Liabilities & Goal Mapping',
+    description: 'Calculate total outstanding mortgages, personal loans, and future provisions required for children education and family living expenses.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Coverage Sizing Framework (DIME vs HLV)',
+    description: 'Choose between DIME needs-based methodology, Human Life Value (economic earning capitalization), or age-tiered income multiples (15x–25x).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Actuarial Mortality & Medical Underwriting',
+    description: 'Lock in age-band mortality rates, smoker/non-smoker ratings, female longevity discounts, and optional riders like Critical Illness and Accidental Disability.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Tax Exemption & Tax-Free Family Wealth Protection',
+    description: 'Claim annual tax deductions up to ₹1,50,000 under Section 80C, ensuring the full claim payout is 100% tax-free to nominees under Section 10(10D).',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Primary Family Earners & Young Parents',
+    description: 'Breadwinners with dependent spouses and young children requiring income replacement to ensure financial continuity.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Home Loan & Mortgage Borrowers',
+    description: 'Property owners with large outstanding housing loans seeking to prevent home foreclosure in the event of untimely demise.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Self-Employed Professionals & Entrepreneurs',
+    description: 'Business founders protecting personal guarantees, commercial liabilities, and family living standards without employer group cover.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'High Net Worth Individuals (HNIs)',
+    description: 'Estate planners establishing large pure protection policies under the Married Women Property Act (MWPA) for asset ring-fencing.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Actuarial & Needs-Based Sizing Mathematical Formulas',
+  formula: '\\text{DIME Cover} = \\text{Debts} + (\\text{Expenses} \\times Y_{\\text{repl}}) + \\text{Goals} - \\text{Assets}, \\quad \\text{HLV} = E_{\\text{net}} \\times \\left[\\frac{1 - (1 + r_{\\text{real}})^{-n}}{r_{\\text{real}}}\\right]',
+  parameters: [
+    {
+      symbol: '\\text{Debts}',
+      title: 'Total Outstanding Liabilities',
+      description: 'Home loans, car loans, credit card balances, and personal debts.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Expenses} \\times Y',
+      title: 'Family Living Expense Replacement',
+      description: 'Annual living expenses multiplied by replacement duration (typically 15 to 20 years).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'E_{\\text{net}}',
+      title: 'Net Economic Earning Capacity',
+      description: 'Annual gross income minus personal consumption expenses (typically 70% net contribution).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'r_{\\text{real}}',
+      title: 'Real Inflation-Adjusted Discount Rate',
+      description: 'Net discount factor balancing investment yield against long-term inflation.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: 30-Year-Old Software Engineer (₹15 Lakhs Income @ ₹1.5 Cr Cover)',
+    tag: 'Pure Term vs TROP Analysis',
+    subtitle: 'Young Professional Family Protection',
+    metrics: [
+      { label: 'Sum Assured (Life Cover)', value: '₹1,50,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Pure Term Annual Premium', value: '₹14,500 / Year', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'TROP (Return of Premium) Cost', value: '₹31,900 / Year', colorClass: 'text-rose-600 font-bold' },
+      { label: '35-Year Maturity Wealth (SIP @ 12%)', value: '₹1.08 Crores Corpus', colorClass: 'text-semantic-success font-black' },
+      { label: 'Pure Term + SIP Advantage', value: '+₹96.6 Lakhs Ahead', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'By choosing Pure Term over TROP and investing the ₹17,400/year premium difference into an Equity Index Fund, the engineer builds an extra ₹96.6 Lakhs in liquid wealth at age 65.',
+  },
+  {
+    title: 'Case Study 2: Married Couple with ₹45 Lakhs Home Loan & 2 Children',
+    tag: 'DIME Needs-Based Cover',
+    subtitle: 'Comprehensive Family Risk Sizing',
+    metrics: [
+      { label: 'Home Loan & Liabilities', value: '₹45,00,000' },
+      { label: 'Family Living Needs (18 Yrs @ ₹8L/yr)', value: '₹1,44,00,000' },
+      { label: 'Children Higher Education Goals', value: '₹35,00,00,000' },
+      { label: 'Existing Liquid Investments', value: '-₹15,00,000' },
+      { label: 'Recommended Sum Assured', value: '₹2.09 Crores Cover', colorClass: 'text-primary font-black' },
+    ],
+    takeaway: 'The DIME method ensures that in the event of premature death, the home loan is paid off immediately, 18 years of household expenses are funded, and children education is guaranteed.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Buy Early to Lock in Lower Age-Band Premiums',
+    description: 'Term insurance premiums remain fixed for the entire policy duration. Purchasing at age 25 costs up to 60% less per year than waiting until age 40.',
+  },
+  {
+    number: '02',
+    title: 'Always Prefer Pure Term Over Return of Premium (TROP)',
+    description: 'TROP plans charge 2.2x to 2.5x higher premiums. Investing the premium savings into a diversified equity mutual fund delivers 3x to 6x higher wealth at maturity.',
+  },
+  {
+    number: '03',
+    title: 'Add Critical Illness & Waiver of Premium Riders',
+    description: 'A Comprehensive Critical Illness Rider pays out an immediate tax-free lump sum upon cancer, stroke, or heart attack diagnosis, safeguarding family savings.',
+  },
+  {
+    number: '04',
+    title: 'Register Policy Under Married Women Property Act (MWPA)',
+    description: 'Section 6 of the MWP Act 1874 legally shields your life insurance death claim from creditors, court attachments, and business liabilities for your wife and children.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <TermLifeInsuranceCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

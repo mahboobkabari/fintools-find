@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import BurnRateRunwayCalculatorWidget from '../calculators/BurnRateRunwayCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Current Bank Cash Reserves',
+    description: 'Sum all liquid bank deposits, money market funds, and accessible cash balances in the company treasury.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Calculate Gross Monthly Operating Outflows',
+    description: 'Itemize all monthly expenditures including payroll, developer salaries, AWS/GCP cloud hosting, marketing CAC, office rent, and SaaS tools.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Deduct Monthly Cash Collections & Revenue',
+    description: 'Subtract predictable monthly recurring revenue (MRR) or client invoice collections from gross expenses to determine Net Burn Rate.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Establish Zero Cash Date & Plan Runway Extensions',
+    description: 'Project the exact zero cash date (ZCD), evaluate fundraising timelines, and simulate cost-reduction measures to protect solvency.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Startup Founders & Co-Founders',
+    description: 'Early-stage entrepreneurs monitoring seed/venture capital runway, hiring velocity, and product-market fit milestones.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Chief Financial Officers & Treasury Controllers',
+    description: 'Finance executives managing scaleup working capital, monthly OpEx budgets, and capital injection timing.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Venture Capital & Angel Investors',
+    description: 'Board members and investment partners tracking portfolio company solvency, burn multiples, and bridge financing requirements.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Bootstrapped Business Owners',
+    description: 'Self-funded software agencies and e-commerce brands navigating cash flow fluctuations towards self-sustaining profitability.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Startup Burn Rate, Net Burn & Cash Runway Mathematical Formulas',
+  formula: '\\text{Gross Burn} = \\sum \\text{OpEx}, \\quad \\text{Net Burn} = \\text{Gross Burn} - \\text{Revenue}, \\quad \\text{Runway (Months)} = \\frac{\\text{Cash Reserves}}{\\text{Net Burn}}',
+  parameters: [
+    {
+      symbol: '\\text{Cash Reserves}',
+      title: 'Current Liquid Treasury Balance',
+      description: 'Total accessible bank cash and short-term liquid investments.',
+      colorClass: 'text-ink',
+    },
+    {
+      symbol: '\\text{Gross Burn}',
+      title: 'Total Monthly Operating Outflows',
+      description: 'Payroll + Servers + Marketing + Office + Administrative overhead.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Revenue}',
+      title: 'Monthly Cash Inflows',
+      description: 'Recognized recurring revenues (MRR) and customer cash receipts.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Net Burn}',
+      title: 'Net Monthly Cash Loss',
+      description: 'The net monthly cash reduction from the company treasury.',
+      colorClass: 'text-primary',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Seed-Stage B2B SaaS Startup (₹1.50 Crore Funding)',
+    tag: 'Seed SaaS Runway',
+    subtitle: 'Managing Growth & Runway Horizon',
+    metrics: [
+      { label: 'Treasury Cash Balance', value: '₹1.50 Crores' },
+      { label: 'Monthly Gross Burn', value: '₹13.60 Lakhs / Month', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Monthly Recurring Revenue (MRR)', value: '₹4.00 Lakhs / Month', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Net Monthly Burn Rate', value: '₹9.60 Lakhs / Month', colorClass: 'text-primary font-bold' },
+      { label: 'Cash Runway', value: '15.6 Months to Zero Cash Date', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'With 15.6 months of runway, the founding team has an 8-month window to hit expansion milestones before opening their Series A fundraising round.',
+  },
+  {
+    title: 'Case Study 2: Fast-Growing E-Commerce Brand Extending Runway',
+    tag: 'OpEx Optimization',
+    subtitle: 'Extending Runway via 20% Cost Cuts',
+    metrics: [
+      { label: 'Initial Runway', value: '4.8 Months (Critical Zone)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Initial Net Burn', value: '₹12.5 Lakhs / Month' },
+      { label: '20% OpEx Cut (Marketing & Contractors)', value: '-₹3.5 Lakhs / Month Savings', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Revised Net Burn', value: '₹9.0 Lakhs / Month' },
+      { label: 'Extended Runway', value: '6.7 Months (+1.9 Mo Extension)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'By trimming low-ROI paid acquisition campaigns, the company buys nearly 2 extra months of runway, safely reaching break-even without emergency dilutive bridge funding.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Start Fundraising 6 Months Before Zero Cash Date',
+    description: 'Venture fundraising typically takes 3 to 6 months from initial partner pitch to term sheet execution and bank wire transfer. Never wait until runway falls below 4 months.',
+  },
+  {
+    number: '02',
+    title: 'Monitor Gross Burn Multiples',
+    description: 'Track your Net Burn divided by Net New ARR added. A burn multiple under 1.0x indicates highly capital-efficient growth, while a multiple above 2.0x signals inefficient spend.',
+  },
+  {
+    number: '03',
+    title: 'Freeze Variable Costs Before Headcount Reductions',
+    description: 'When extending runway, immediately audit recurring SaaS subscriptions, software seat licenses, paid ad spend, and office perks before executing painful team layoffs.',
+  },
+  {
+    number: '04',
+    title: 'Model Default Alive vs Default Dead Scenarios',
+    description: 'Paul Graham’s principle: calculate if your current revenue growth rate will carry you to profitability before your cash runs out. If not, treat cost management as urgent.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <BurnRateRunwayCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

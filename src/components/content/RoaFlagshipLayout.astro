@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ReturnOnAssetsCalculatorWidget from '../calculators/ReturnOnAssetsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Net Income (Profit After Tax) & EBIT',
+    description: 'Determine bottom-line net profit after taxes, interest, and operating costs, as well as Operating Profit (EBIT) for Basic Earning Power analysis.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Aggregate Total Balance Sheet Assets',
+    description: 'Compile the total asset base across current assets (cash, receivables, inventory) and fixed assets (PP&E, equipment, intangible assets).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Execute 2-Step DuPont Decomposition',
+    description: 'Deconstruct ROA into Net Profit Margin (pricing power & cost control) and Total Asset Turnover (asset velocity and utilization).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Diagnose Capital Intensity & ROE Linkage',
+    description: 'Evaluate capital intensity ratio, fixed asset turnover, and trace how financial leverage (equity multiplier) converts ROA into shareholder ROE.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Chief Financial Officers & Treasurers',
+    description: 'Corporate finance leaders optimizing asset allocation, fixed capital expenditures, working capital efficiency, and return hurdles.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Equity Investors & Fundamental Analysts',
+    description: 'Value investors evaluating operating management efficiency, competitive moats, and asset productivity across peer benchmarks.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Operations Executives & Plant Managers',
+    description: 'Supply chain and plant directors maximizing fixed asset turnover, inventory rotation speed, and capacity utilization.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Commercial Lenders & Credit Officers',
+    description: 'Bank credit risk underwriters evaluating collateral productivity, asset earning power, and cash generation capability.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Return on Assets (ROA) & DuPont Asset Productivity Formulations',
+  formula: '\\text{Net ROA} = \\frac{\\text{Net Income}}{\\text{Total Assets}} = \\underbrace{\\left(\\frac{\\text{Net Income}}{\\text{Revenue}}\\right)}_{\\text{Net Margin}} \\times \\underbrace{\\left(\\frac{\\text{Revenue}}{\\text{Total Assets}}\\right)}_{\\text{Asset Turnover}}',
+  parameters: [
+    {
+      symbol: '\\text{Net Income}',
+      title: 'Net Profit After Tax (PAT)',
+      description: 'Bottom-line net earnings generated after all operating expenses, financing costs, and income taxes.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Total Assets}',
+      title: 'Total Balance Sheet Assets',
+      description: 'Sum of all resources owned by the business, including current assets (cash, receivables, inventory) and long-term fixed assets (PP&E).',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Net Margin}',
+      title: 'Net Profit Margin (%)',
+      description: 'Percentage of revenue retained as net profit, measuring pricing power and cost efficiency.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Asset Turnover}',
+      title: 'Total Asset Turnover Ratio (x)',
+      description: 'Revenue generated per rupee of assets deployed, measuring the speed and efficiency of asset utilization.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Asset-Light Enterprise SaaS Leader',
+    tag: 'Enterprise Software & Cloud',
+    subtitle: 'High Margin / Capital-Light Profile',
+    metrics: [
+      { label: 'Financial Scale', value: '₹50 Cr Net Income on ₹250 Cr Assets & ₹250 Cr Revenue' },
+      { label: 'Return on Assets (ROA)', value: '20.00% ROA (Tier-1 Compounder)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'DuPont Breakdown', value: '20.0% Net Margin × 1.00x Asset Turns', colorClass: 'text-primary font-bold' },
+      { label: 'Operating ROA (EBIT)', value: '30.00% Basic Earning Power', colorClass: 'text-ink font-black' },
+    ],
+    takeaway: 'With low physical capital requirements (PP&E of just 10%), the software firm generated an exceptional 20% ROA powered by high net margins.',
+  },
+  {
+    title: 'Case Study 2: High-Velocity Supermarket Retail Chain',
+    tag: 'Retail & Supermarkets',
+    subtitle: 'High Turnover / Slim Margin Powerhouse',
+    metrics: [
+      { label: 'Financial Scale', value: '₹100 Cr Net Income on ₹1,000 Cr Assets & ₹3,000 Cr Revenue' },
+      { label: 'Return on Assets (ROA)', value: '10.00% ROA' },
+      { label: 'DuPont Breakdown', value: '3.33% Net Margin × 3.00x Asset Turns', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Capital Intensity', value: '0.33x (High Asset Velocity)', colorClass: 'text-indigo-600 font-black' },
+    ],
+    takeaway: 'Despite a slim 3.33% net margin, rotating total balance sheet assets 3 times annually delivered a robust 10% ROA and 20% ROE.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Diagnose Your Business Model: Margin vs Turnover Strategy',
+    description: 'Companies succeed either by commanding premium pricing (high margin, lower turnover) or by dominating volume logistics (slim margin, ultra-high turnover). Avoid the trap of low margins with low asset turnover.',
+  },
+  {
+    number: '02',
+    title: 'Rationalize Idle & Underperforming Fixed Assets',
+    description: 'Divesting non-core real estate, obsolete machinery, or excess plant capacity directly shrinks the asset denominator, lifting ROA without requiring revenue growth.',
+  },
+  {
+    number: '03',
+    title: 'Optimize Working Capital Velocity',
+    description: 'Accelerate accounts receivable collection and reduce inventory holding days to shrink current assets needed to support daily operations.',
+  },
+  {
+    number: '04',
+    title: 'Distinguish Operating ROA from Net ROA',
+    description: 'Operating ROA (EBIT / Assets) reveals the raw earning power of core operations before financial leverage choices and tax structures distort the picture.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <ReturnOnAssetsCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

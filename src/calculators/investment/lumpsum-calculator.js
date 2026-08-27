@@ -86,7 +86,7 @@ export function calculateLumpsumTool(inputs = {}) {
 
   // 7. Investment Health Score (0 - 100)
   let healthScore = 100;
-  if (netRealReturn <= 0) healthScore -= 40;
+  if (netRealReturn <= 0) healthScore -= 50;
   else if (netRealReturn < 3) healthScore -= 20;
   if (tenure < 3) healthScore -= 15;
   if (multiplier >= 2.5) healthScore += 10;
@@ -99,7 +99,7 @@ export function calculateLumpsumTool(inputs = {}) {
   if (healthScore >= 60 && healthScore < 80) {
     healthStatus = 'Moderate Growth';
     healthColor = 'text-accent-sky';
-    healthDesc = `Positive real return of +${netRealReturn}%. Beats inflation inflation rate of ${infRate}%.`;
+    healthDesc = `Positive real return of +${netRealReturn}%. Beats inflation rate of ${infRate}%.`;
   } else if (healthScore < 60) {
     healthStatus = 'Inflation Risk';
     healthColor = 'text-semantic-danger';
@@ -126,7 +126,9 @@ export function calculateLumpsumTool(inputs = {}) {
       savings: purchasingPowerLoss,
       action: `Targeting ${rate}% return preserves ₹${inflationAdjustedVal.toLocaleString('en-IN')} in real purchasing power.`,
     },
-  ].sort((a, b) => b.savings - a.savings);
+  ]
+    .sort((a, b) => b.savings - a.savings)
+    .map((rec, idx) => ({ ...rec, rank: idx + 1 }));
 
   // 9. Hero Decision Text
   const heroText = `Investing ₹${principal.toLocaleString('en-IN')} today at ${rate}% grows your wealth to ₹${maturityValue.toLocaleString('en-IN')} in ${tenure} years (${multiplier}x Wealth Multiplier).`;
@@ -157,5 +159,8 @@ export function calculateLumpsumTool(inputs = {}) {
     healthDesc,
     recommendations,
     heroText,
+    primaryOutput: maturityValue,
   };
 }
+
+export const calculateLumpsumCalculator = calculateLumpsumTool;

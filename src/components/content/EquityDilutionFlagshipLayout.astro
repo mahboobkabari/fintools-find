@@ -1,0 +1,158 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import EquityDilutionCalculatorWidget from '../calculators/EquityDilutionCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Pre-Round Cap Table & Ownership',
+    description: 'Establish initial founder equity percentages, existing shareholder stakes, and fully diluted share counts prior to new financing.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Model Pre-Money Valuation & Capital Raised',
+    description: 'Input agreed pre-money valuation and the primary capital injection to establish the exact post-money company valuation.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Calculate Option Pool Expansion & Shuffle Mechanics',
+    description: 'Analyze whether the target unallocated ESOP pool (e.g. 10%) is carved out pre-money (founder-diluting shuffle) or post-money (pro-rata).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Post-Round Ownership & Shareholder Value Creation',
+    description: 'Examine final founder equity percentage, effective round dilution, new price per share, and founder stake value appreciation.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Startup Founders & Co-Founding Teams',
+    description: 'Entrepreneurs negotiating term sheets, protecting cap table ownership, and evaluating option pool shuffle clauses.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Angel Investors & Syndicate Leads',
+    description: 'Early-stage investors calculating pro-rata rights, SAFE conversion dilution, and downstream Series A dilution.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Venture Capital Associates & Principals',
+    description: 'Investment analysts modeling investment round ownership targets (e.g. 15-20%) and share issuance pricing.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Startup Legal Counsel & CFOs',
+    description: 'Corporate finance advisors structuring clean cap tables, unallocated option pools, and multi-round waterfalls.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Post-Money Valuation, Option Pool Shuffle & Share Price Mathematical Formulas',
+  formula: 'V_{\\text{post}} = V_{\\text{pre}} + I, \\quad O_{\\text{investor}} = \\frac{I}{V_{\\text{post}}}, \\quad O_{\\text{founder}} = 1 - O_{\\text{investor}} - P_{\\text{esop}}, \\quad \\text{Price/Share} = \\frac{V_{\\text{pre}}}{S_{\\text{effective}}}',
+  parameters: [
+    {
+      symbol: 'V_{\\text{post}}',
+      title: 'Post-Money Valuation',
+      description: 'Total company equity valuation after receiving investment proceeds (Pre-Money + Investment).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'O_{\\text{investor}}',
+      title: 'New Investor Ownership %',
+      description: 'Investment capital divided by Post-Money Valuation.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'P_{\\text{esop}}',
+      title: 'Target ESOP Option Pool %',
+      description: 'Unallocated employee equity reserve required by incoming institutional investors.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Price/Share}',
+      title: 'Share Issuance Price',
+      description: 'Pre-Money Valuation divided by effective pre-round fully diluted shares.',
+      colorClass: 'text-ink',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Seed Round Cap Table with 10% Option Pool Shuffle',
+    tag: 'Seed Financing',
+    subtitle: 'Pre-Money ESOP Impact',
+    metrics: [
+      { label: 'Round Terms', value: '₹5.00 Crores Raised on ₹20.00 Crores Pre-Money' },
+      { label: 'Post-Money Valuation', value: '₹25.00 Crores Post-Money', colorClass: 'text-primary font-bold' },
+      { label: 'Option Pool Clause', value: '10.0% Unallocated Pre-Money ESOP Pool', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Post-Round Ownership', value: '70.0% Founders · 20.0% Investors · 10.0% ESOP', colorClass: 'text-semantic-success font-black' },
+      { label: 'Founder Equity Value', value: '₹17.50 Crores Stake Value (30.0% Round Dilution)', colorClass: 'text-ink font-bold' },
+    ],
+    takeaway: 'Under standard pre-money option pool terms, the entire 10% ESOP reserve comes out of the founders equity, increasing round dilution from 20% to 30%.',
+  },
+  {
+    title: 'Case Study 2: Series A Up-Round Unlocking 4.5x Founder Stake Value',
+    tag: 'Series A Growth',
+    subtitle: 'Compounding Net Equity Wealth',
+    metrics: [
+      { label: 'Series A Terms', value: '₹25.00 Crores Raised on ₹100.00 Crores Pre-Money' },
+      { label: 'Post-Money Valuation', value: '₹125.00 Crores Post-Money', colorClass: 'text-primary font-bold' },
+      { label: 'Founder Equity %', value: '70.0% Initial → 51.5% Post-Series A', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Founder Stake Value', value: '₹64.38 Crores (+₹46.88 Cr Net Wealth Added)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'While founders diluted by 26.4%, the value of their equity increased by more than 3.6x due to the substantial enterprise valuation expansion.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Negotiate the Option Pool Size Based on a 18-Month Hiring Plan',
+    description: 'Investors routinely request a standard 10-15% unallocated ESOP pool. Create a detailed 18-month hiring budget to justify a smaller 5-8% pool, saving founders 5-7% in unneeded dilution.',
+  },
+  {
+    number: '02',
+    title: 'Watch for the Option Pool Shuffle Timing',
+    description: 'A pre-money option pool forces existing shareholders to absorb 100% of the employee option pool dilution. Push for a post-money option pool where incoming investors share pool dilution pro-rata.',
+  },
+  {
+    number: '03',
+    title: 'Monitor Cumulative Founder Dilution Across Multi-Round Waterfalls',
+    description: 'Founders should aim to retain at least 50-60% post-Series A and 35-45% post-Series B to preserve strong equity alignment and board governance.',
+  },
+  {
+    number: '04',
+    title: 'Prioritize Valuation Expansion Over Absolute Ownership Percentage',
+    description: 'A smaller percentage of a high-growth, highly valued enterprise is worth exponentially more than 100% of a stagnant bootstrapped business.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <EquityDilutionCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

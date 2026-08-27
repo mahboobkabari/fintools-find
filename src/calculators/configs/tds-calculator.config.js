@@ -1,10 +1,103 @@
-import { calculateTdsCalculator } from '../tax/tds-calculator.js';
+import { calculateTdsCalculator, TDS_SECTIONS } from '../tax/tds-calculator.js';
+
+export const TDS_PRESETS = [
+  {
+    id: 'freelancer_prof',
+    name: 'Freelancer / CA / Doctor (194J)',
+    description: '₹1 Lakh Professional Invoice @ 10% TDS with valid PAN',
+    badge: 'Popular',
+    values: {
+      amount: 100000,
+      sectionKey: '194J_PROF',
+      hasPan: true,
+      recipientTaxSlab: 20,
+    },
+  },
+  {
+    id: 'tech_contractor',
+    name: 'Tech Services / BPO (194J)',
+    description: '₹2.5 Lakhs Technical / IT Services @ 2% concessional TDS',
+    badge: 'Tech & BPO',
+    values: {
+      amount: 250000,
+      sectionKey: '194J_TECH',
+      hasPan: true,
+      recipientTaxSlab: 30,
+    },
+  },
+  {
+    id: 'contractor_corp',
+    name: 'Corporate Contractor (194C)',
+    description: '₹5 Lakhs Work Contract @ 2% TDS for Company / Firm',
+    badge: 'B2B Vendor',
+    values: {
+      amount: 500000,
+      sectionKey: '194C_CORP',
+      hasPan: true,
+      recipientTaxSlab: 30,
+    },
+  },
+  {
+    id: 'commercial_rent',
+    name: 'Commercial Office Rent (194I)',
+    description: '₹60,000 / Month (₹7.2L/yr) Office Lease @ 10% TDS',
+    badge: 'Real Estate',
+    values: {
+      amount: 720000,
+      sectionKey: '194I_RENT_PROP',
+      hasPan: true,
+      recipientTaxSlab: 30,
+    },
+  },
+  {
+    id: 'bank_fd_interest',
+    name: 'Bank FD Interest (194A)',
+    description: '₹80,000 Annual Fixed Deposit Interest @ 10% TDS',
+    badge: 'Deposits',
+    values: {
+      amount: 80000,
+      sectionKey: '194A_FD',
+      hasPan: true,
+      isSeniorCitizen: false,
+      recipientTaxSlab: 10,
+    },
+  },
+  {
+    id: 'property_sale',
+    name: 'Property Purchase (194IA)',
+    description: '₹75 Lakhs Flat Purchase @ 1% TDS by Buyer to Seller',
+    badge: 'Property Sale',
+    values: {
+      amount: 7500000,
+      sectionKey: '194IA_PROP_SALE',
+      hasPan: true,
+      recipientTaxSlab: 30,
+    },
+  },
+  {
+    id: 'no_pan_penalty',
+    name: 'No PAN Penalty (Sec 206AA)',
+    description: '₹1 Lakh invoice with Missing PAN triggering penal 20% TDS',
+    badge: 'Non-PAN 20%',
+    values: {
+      amount: 100000,
+      sectionKey: '194J_PROF',
+      hasPan: false,
+      recipientTaxSlab: 30,
+    },
+  },
+];
 
 export const tdsCalculatorConfig = {
   title: 'TDS Deduction Details',
   currency: 'INR',
   currencySymbol: '₹',
   calculateFn: calculateTdsCalculator,
+  presets: TDS_PRESETS,
+  sections: TDS_SECTIONS,
+  defaultAmount: 100000,
+  defaultSectionKey: '194J_PROF',
+  defaultTaxSlab: 30,
   primaryResult: {
     key: 'tdsAmount',
     label: 'Total Tax Deducted at Source (TDS)',
@@ -32,16 +125,26 @@ export const tdsCalculatorConfig = {
       default: 100000,
     },
     {
-      id: 'tdsRate',
+      id: 'sectionKey',
+      type: 'select',
+      label: 'Statutory TDS Section',
+      default: '194J_PROF',
+    },
+    {
+      id: 'hasPan',
+      type: 'boolean',
+      label: 'Valid PAN Furnished by Deductee',
+      default: true,
+    },
+    {
+      id: 'recipientTaxSlab',
       type: 'number',
-      label: 'Prescribed TDS Rate (%)',
-      min: 0.1,
+      label: 'Recipient Income Tax Slab (%)',
+      min: 0,
       max: 30,
-      step: 0.5,
+      step: 5,
       suffix: '%',
-      minLabel: '0.1%',
-      maxLabel: '30%',
-      default: 10,
+      default: 30,
     },
   ],
   hasAmortizationTable: false,

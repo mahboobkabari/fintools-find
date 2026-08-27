@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CurrentRatioCalculatorWidget from '../calculators/CurrentRatioCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit All Current Assets',
+    description: 'Sum cash & bank balances, marketable securities, trade receivables, raw/WIP/finished inventory, and operational prepaids due within 12 months.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Aggregate All Current Liabilities',
+    description: 'Consolidate accounts payable to suppliers, short-term bank debt, current portion of long-term debt (CPLTD), and accrued operating liabilities.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Compute Working Capital Ratio & Benchmarks',
+    description: 'Divide total current assets by total current liabilities to derive your Current Ratio and compare against institutional standards (1.50x to 2.50x).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Determine Net Working Capital (NWC) Headroom',
+    description: 'Calculate net dollar liquidity buffer (Current Assets - Current Liabilities) and evaluate borrowing capacity under commercial lending covenants.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Chief Financial Officers & Treasurers',
+    description: 'Executive officers managing corporate working capital cycles, debt covenants, and short-term treasury investments.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Commercial Credit Underwriters & Lenders',
+    description: 'Bankers and underwriters assessing short-term credit risk, loan sizing, and borrower working capital facilities.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Business Owners & Managing Directors',
+    description: 'Entrepreneurs ensuring sufficient cash and receivables exist to pay vendor invoices, staff payroll, and taxes on time.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Financial Analysts & Equity Investors',
+    description: 'Analysts measuring balance sheet liquidity health, inventory efficiency, and solvency risk across competitive peers.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Current Ratio (Working Capital Ratio) Mathematical Formulation',
+  formula: '\\text{Current Ratio} = \\frac{\\text{Total Current Assets}}{\\text{Total Current Liabilities}} = \\frac{\\text{Cash} + \\text{Securities} + \\text{AR} + \\text{Inventory} + \\text{Prepaids}}{\\text{Accounts Payable} + \\text{Short-Term Debt} + \\text{CPLTD} + \\text{Accrued Expenses}}',
+  parameters: [
+    {
+      symbol: '\\text{Total Current Assets}',
+      title: 'Current Assets',
+      description: 'All assets expected to be converted into cash, sold, or consumed within one year or normal operating cycle.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Total Current Liabilities}',
+      title: 'Current Liabilities',
+      description: 'All debts and obligations due to be settled within one year using current assets or short-term financing.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{NWC}',
+      title: 'Net Working Capital',
+      description: 'Dollar surplus of current assets over current liabilities (Current Assets - Current Liabilities).',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Quick Ratio}',
+      title: 'Quick (Acid-Test) Ratio',
+      description: 'Instant liquidity excluding inventory and prepaids ((Current Assets - Inventory - Prepaids) / Current Liabilities).',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Industrial Manufacturer Managing Seasonal Working Capital',
+    tag: 'Industrial Manufacturing',
+    subtitle: 'Healthy 2.00x Solvency Buffer',
+    metrics: [
+      { label: 'Current Assets vs Liabilities', value: '₹1.50 Cr Current Assets · ₹75 Lakhs Current Liabilities' },
+      { label: 'Current Ratio', value: '2.00x Current Ratio', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Working Capital (NWC)', value: '₹75 Lakhs Working Capital Cushion', colorClass: 'text-ink font-bold' },
+      { label: 'Quick Ratio (Acid-Test)', value: '1.20x Quick Ratio (₹50 Lakhs Inventory Deducted)', colorClass: 'text-primary font-black' },
+    ],
+    takeaway: 'With a 2.00x Current Ratio and ₹75 Lakhs in Net Working Capital, the manufacturer comfortably met all bank covenants while funding seasonal raw material orders.',
+  },
+  {
+    title: 'Case Study 2: Fast-Growing Retail Chain Facing Working Capital Strain',
+    tag: 'Retail Store & E-Commerce',
+    subtitle: 'Low Buffer & Supplier Pressure',
+    metrics: [
+      { label: 'Current Position', value: '₹80 Lakhs Current Assets · ₹65 Lakhs Current Liabilities' },
+      { label: 'Current Ratio', value: '1.23x Current Ratio (Tight Buffer)', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Inventory Concentration', value: '₹45 Lakhs Tied in Inventory (56.3% of Assets)' },
+      { label: 'Quick Ratio (Acid-Test)', value: '0.46x Quick Ratio (Solvency Risk)', colorClass: 'text-rose-600 font-black' },
+    ],
+    takeaway: 'Although the Current Ratio appeared marginally positive at 1.23x, heavy inventory concentration drove the Quick Ratio down to 0.46x, requiring debt refinancing.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Target a Benchmark Current Ratio Between 1.50x and 2.00x',
+    description: 'Maintaining a Current Ratio of 1.50x to 2.00x provides adequate buffer against receivable defaults without creating idle cash drag.',
+  },
+  {
+    number: '02',
+    title: 'Refinance Short-Term Borrowings into Long-Term Debt',
+    description: 'Transferring short-term credit lines into 5-to-7 year term facilities reduces Current Liabilities, immediately boosting your Current Ratio.',
+  },
+  {
+    number: '03',
+    title: 'Optimize the Cash Conversion Cycle (CCC)',
+    description: 'Shortening Days Sales Outstanding (DSO) and accelerating inventory turnover generates operating cash flow to pay down trade creditors.',
+  },
+  {
+    number: '04',
+    title: 'Avoid Excessive Idle Working Capital Above 3.00x',
+    description: 'A Current Ratio exceeding 3.00x may indicate poor capital allocation, uninvested cash balances, or bloated slow-moving inventory.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CurrentRatioCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

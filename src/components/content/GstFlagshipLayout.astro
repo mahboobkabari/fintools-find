@@ -1,0 +1,161 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import GstCalculatorWidget from '../calculators/GstCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Identify Product / Service HSN or SAC Code',
+    description: 'Determine the statutory GST slab rate (0%, 5%, 12%, 18%, or 28%) prescribed by the GST Council for your item or service.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Calculation Mode (Add or Remove GST)',
+    description: 'Choose exclusive mode to calculate tax on net price, or inclusive mode to extract base taxable value from consumer MRP.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Determine Supply Jurisdiction (Intrastate vs Interstate)',
+    description: 'If buyer and supplier are in the same state, split tax into CGST (50%) + SGST (50%). If across state borders, apply 100% IGST.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Issue Tax Invoice & Claim Input Tax Credit (ITC)',
+    description: 'Generate B2B invoice with buyer GSTIN to enable seamless Input Tax Credit reconciliation on GSTR-2B and GSTR-3B monthly filings.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'E-commerce & Retail Business Owners',
+    description: 'Online merchants, D2C brands, and shopkeepers calculating gross customer pricing and reverse-extracting taxable base value.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'B2B Manufacturers & Wholesalers',
+    description: 'Suppliers calculating interstate IGST vs intrastate CGST+SGST tax liabilities and generating compliant B2B tax invoices.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Chartered Accountants & Tax Practitioners',
+    description: 'Finance professionals verifying client GSTR-1 and GSTR-3B filings, ITC eligibility, and reverse charge calculations.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Freelancers, Consultants & Service Agencies',
+    description: 'Service providers billing corporate clients at 18% GST and claiming input credit on laptops, SaaS, and office expenses.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Statutory GST Calculation & Reverse Extraction Formulas',
+  formula: '\\text{GST (Exclusive)} = P_{\\text{net}} \\times \\frac{r}{100}, \\quad P_{\\text{gross}} = P_{\\text{net}} + \\text{GST}, \\quad P_{\\text{net (Inclusive)}} = \\frac{P_{\\text{gross}}}{1 + \\frac{r}{100}}',
+  parameters: [
+    {
+      symbol: 'P_{\\text{net}}',
+      title: 'Net Base Taxable Value',
+      description: 'Original cost of the good or service before indirect tax is levied.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Statutory GST Slab Rate',
+      description: 'Applicable GST percentage slab (5%, 12%, 18%, or 28%).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'P_{\\text{gross}}',
+      title: 'Gross Invoice Total / MRP',
+      description: 'Final consumer price including all statutory GST components.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{CGST / SGST}',
+      title: 'Intrastate 50/50 Split',
+      description: 'Central GST (50% of total tax) and State GST (50% of total tax) on local sales.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: B2B IT Software Invoice (₹1,00,000 Base @ 18% Intrastate GST)',
+    tag: '18% Standard Slab',
+    subtitle: 'Intrastate Supply (CGST + SGST Split)',
+    metrics: [
+      { label: 'Taxable Base Amount', value: '₹1,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Applicable GST Rate', value: '18% Standard' },
+      { label: 'Central GST (CGST @ 9%)', value: '₹9,000', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'State GST (SGST @ 9%)', value: '₹9,000', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Total GST Levied', value: '₹18,000', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Total Gross Invoice Amount', value: '₹1,18,000', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Buyer Input Tax Credit (ITC)', value: '₹18,000 Claimable', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'The supplier bills ₹1,18,000, remitting ₹9,000 to CGST and ₹9,000 to SGST. The registered corporate buyer claims back the entire ₹18,000 as Input Tax Credit against their own output tax.',
+  },
+  {
+    title: 'Case Study 2: Retail Consumer Electronics (₹50,000 MRP Inclusive Reverse Extraction)',
+    tag: 'Reverse GST Extraction',
+    subtitle: '18% Tax Included in Retail MRP',
+    metrics: [
+      { label: 'Customer Retail MRP', value: '₹50,000 (Tax Included)', colorClass: 'text-primary font-bold' },
+      { label: 'Applicable GST Rate', value: '18%' },
+      { label: 'Extracted Base Price', value: '₹42,373', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'Extracted GST Amount', value: '₹7,627', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Effective Tax Burden on MRP', value: '15.25%', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'From a ₹50,000 retail price tag, ₹42,373 represents the merchant revenue and ₹7,627 is collected for government GST remittance.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Always Claim Eligible Input Tax Credit (ITC)',
+    description: 'Ensure your suppliers upload invoices to GSTR-1 so they appear in your GSTR-2B. Unclaimed ITC directly erodes business profit margins.',
+  },
+  {
+    number: '02',
+    title: 'Verify Interstate vs Intrastate Rules to Avoid Penalties',
+    description: 'Charging CGST+SGST instead of IGST on out-of-state supplies requires refund applications and repaying correct taxes under Section 77.',
+  },
+  {
+    number: '03',
+    title: 'Opt for Composition Scheme if Annual Turnover < ₹1.5 Cr',
+    description: 'Small retailers and manufacturers can pay a flat 1% to 5% turnover tax with simplified quarterly compliance instead of regular GST.',
+  },
+  {
+    number: '04',
+    title: 'Separate Taxable from Exempt Supplies on Invoices',
+    description: 'Mixed supplies or composite contracts must itemize separate HSN/SAC codes to prevent higher peak slab rates being applied to the entire bill.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <GstCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

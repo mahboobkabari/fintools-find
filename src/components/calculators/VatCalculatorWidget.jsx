@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { vatCalculatorConfig } from '../../calculators/configs/vat-calculator.config.js';
+import VatFlagshipWidget from './primitives/VatFlagshipWidget';
 
 export default function VatCalculatorWidget() {
-  return <UniversalCalculatorWidget config={vatCalculatorConfig} />;
+  return <VatFlagshipWidget />;
 }

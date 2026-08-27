@@ -1,10 +1,71 @@
 import { calculateLumpsumTool } from '../investment/lumpsum-calculator.js';
 
+export const LUMPSUM_PRESETS = [
+  {
+    id: 'fd',
+    name: 'Fixed Deposit Alternative (7.5%)',
+    description: '₹1 Lakh One-Time Deposit over 5 Years @ 7.5% p.a.',
+    badge: 'Bank FD',
+    values: {
+      initialInvestment: 100000,
+      expectedReturnRate: 7.5,
+      tenureYears: 5,
+      compoundingFrequency: 'annually',
+      inflationRate: 6,
+    },
+  },
+  {
+    id: 'index',
+    name: 'Index Mutual Fund (12%)',
+    description: '₹2 Lakhs Nifty 50 Index Fund over 10 Years @ 12% p.a.',
+    badge: 'Index Fund',
+    values: {
+      initialInvestment: 200000,
+      expectedReturnRate: 12.0,
+      tenureYears: 10,
+      compoundingFrequency: 'annually',
+      inflationRate: 6,
+    },
+  },
+  {
+    id: 'multiasset',
+    name: 'Aggressive Equity Growth (15%)',
+    description: '₹5 Lakhs Diversified Equity Growth Portfolio over 15 Years @ 15% p.a.',
+    badge: 'Equity Growth',
+    values: {
+      initialInvestment: 500000,
+      expectedReturnRate: 15.0,
+      tenureYears: 15,
+      compoundingFrequency: 'annually',
+      inflationRate: 6,
+    },
+  },
+  {
+    id: 'retirement',
+    name: 'Retirement Corpus Compounder (12%)',
+    description: '₹10 Lakhs Long-Term Retirement Corpus over 20 Years @ 12% p.a.',
+    badge: 'Retirement',
+    values: {
+      initialInvestment: 1000000,
+      expectedReturnRate: 12.0,
+      tenureYears: 20,
+      compoundingFrequency: 'annually',
+      inflationRate: 6,
+    },
+  },
+];
+
 export const lumpsumCalculatorConfig = {
   title: 'Lumpsum Investment Details',
   currency: 'INR',
   currencySymbol: '₹',
   calculateFn: calculateLumpsumTool,
+  presets: LUMPSUM_PRESETS,
+  defaultAmount: 100000,
+  defaultReturnRate: 12,
+  defaultTenureYears: 10,
+  defaultCompoundingFrequency: 'annually',
+  defaultInflationRate: 6,
   primaryResult: {
     key: 'maturityValue',
     label: 'Expected Maturity Value',
@@ -54,6 +115,22 @@ export const lumpsumCalculatorConfig = {
       minLabel: '1 Yr',
       maxLabel: '40 Yrs',
       default: 10,
+    },
+    {
+      id: 'compoundingFrequency',
+      type: 'select',
+      label: 'Compounding Frequency',
+      default: 'annually',
+    },
+    {
+      id: 'inflationRate',
+      type: 'number',
+      label: 'Estimated Inflation Rate (%)',
+      min: 0,
+      max: 15,
+      step: 0.5,
+      suffix: '%',
+      default: 6,
     },
   ],
   hasYearlySchedule: true,

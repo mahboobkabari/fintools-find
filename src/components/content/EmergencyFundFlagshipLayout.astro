@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import EmergencyFundCalculatorWidget from '../calculators/EmergencyFundCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Essential Monthly Expenses',
+    description: 'Enter recurring non-discretionary commitments: rent/mortgage, utilities, basic groceries, insurance, and minimum EMIs.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Profile & Target Reserve Months',
+    description: 'Specify your employment stability, dependents, and target planning period (3, 6, 9, 12, or custom target months).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Enter Savings & Savings Contribution Plan',
+    description: 'Input existing liquid savings balances and planned monthly emergency savings to calculate your funding gap and target date.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Single Corporate Earner (Stable Income)',
+    scenario: 'Monthly essential expenses = ₹35,000 | Selected target = 3 Months',
+    recommendation: 'Target Reserve = ₹1,05,000. 100% maintained in high-yield liquid savings account for instant penalty-free access.',
+  },
+  {
+    persona: 'Family Household with Home Loan EMI',
+    scenario: 'Monthly essential expenses = ₹75,000 | Selected target = 6 Months',
+    recommendation: 'Target Reserve = ₹4,50,000. 50% in instant liquid savings (₹2.25L) + 50% in short-term bank sweep-in FDs (₹2.25L).',
+  },
+  {
+    persona: 'Freelancer / Independent Consultant',
+    scenario: 'Monthly essential expenses = ₹60,000 | Selected target = 9 Months',
+    recommendation: 'Target Reserve = ₹5,40,000. High buffer for irregular client invoice payment cycles; 40% liquid savings / 60% short-term deposits.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <EmergencyFundCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        How to Estimate & Build Your Emergency Reserve Target
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        Building a personal emergency fund protects long-term investments from forced liquidation during unexpected financial shocks. Follow these three practical steps to calculate and fund your liquid reserve buffer.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Household Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Illustrative Household Reserve Benchmark Scenarios
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-primary block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import IrrCalculatorWidget from '../calculators/IrrCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Year 0 Capital Outlay Mapping',
+    description: 'Quantify initial CapEx, acquisition costs, inventory investments, and project setup expenses occurring at Time 0.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Forecast Multi-Year Net Cash Inflows',
+    description: 'Project post-tax operating cash flows (EBITDA - Tax + Depreciation adjustments - Working Capital shifts) across the operating lifecycle.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Solve Polynomial Root for Internal Rate of Return (IRR)',
+    description: 'Determine the exact discount rate where Net Present Value (NPV) equals zero via iterative Newton-Raphson polynomial algorithms.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Evaluate Hurdle Rate Spread & MIRR Reinvestment Realism',
+    description: 'Compare IRR against WACC hurdle rate, calculate Modified IRR (MIRR) with realistic reinvestment assumptions, and formalize capital allocation decisions.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Corporate CFOs & Treasury Executives',
+    description: 'Finance leaders screening capital expenditure budgets, plant automation projects, and commercial ROI hurdles.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Private Equity & Venture Capital Investors',
+    description: 'Fund managers underwriting buyout returns, venture portfolio syndication IRRs, and waterfall distributions.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Commercial Real Estate Developers',
+    description: 'Property syndicators evaluating rental cash yields combined with year 5-10 terminal exit valuations.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Renewable Infrastructure & Energy Sponsors',
+    description: 'Infrastructure project developers evaluating multi-decade Power Purchase Agreement (PPA) cash flows against hurdle rates.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Internal Rate of Return (IRR) & Modified IRR (MIRR) Formulas',
+  formula: '\\sum_{t=0}^n \\frac{C_t}{(1 + \\text{IRR})^t} = 0, \\quad \\text{MIRR} = \\left( \\frac{\\text{FV}(\\text{Inflows}, r_r)}{\\text{PV}(\\text{Outflows}, r_f)} \\right)^{1/n} - 1',
+  parameters: [
+    {
+      symbol: 'C_0',
+      title: 'Initial Outlay (CapEx)',
+      description: 'The net cash outflow required at project inception (Time t = 0).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'C_t',
+      title: 'Annual Net Cash Flows',
+      description: 'Net cash inflows generated in each operating year (t = 1, 2, ..., n).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{IRR}',
+      title: 'Internal Rate of Return',
+      description: 'The annualized compound rate of return that makes project NPV equal to zero.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'r_r, r_f',
+      title: 'Reinvestment & Financing Rates',
+      description: 'Explicit rates used in MIRR to replace the flawed standard IRR reinvestment rate assumption.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: ₹50 Lakhs Factory Automation Project (5-Year Horizon @ 12% WACC)',
+    tag: 'Industrial Automation',
+    subtitle: 'Robotics CapEx Approval',
+    metrics: [
+      { label: 'Initial CapEx Outlay', value: '₹50,00,000', colorClass: 'text-rose-600 font-bold' },
+      { label: '5-Year Undiscounted Inflows', value: '₹87,00,000' },
+      { label: 'Internal Rate of Return (IRR)', value: '21.6% IRR', colorClass: 'text-primary font-black' },
+      { label: 'Modified IRR (MIRR @ 10%)', value: '16.9% MIRR', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'NPV @ 12% Hurdle Rate', value: '+₹12,41,624', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'With an IRR of 21.6% exceeding the 12% WACC by +9.6% and generating ₹12.4 Lakhs in positive NPV, corporate treasury approved immediate CapEx deployment.',
+  },
+  {
+    title: 'Case Study 2: ₹1 Crore Commercial Real Estate Acquisition with Terminal Sale',
+    tag: 'Real Estate Syndication',
+    subtitle: 'Rental Yield + Year 5 Exit Sale',
+    metrics: [
+      { label: 'Acquisition Outlay', value: '₹1,00,00,000' },
+      { label: '5-Year Rental + Exit Inflows', value: '₹1,74,00,000' },
+      { label: 'Internal Rate of Return (IRR)', value: '13.6% IRR', colorClass: 'text-primary font-bold' },
+      { label: 'Hurdle Rate (Cost of Capital)', value: '9.0% Hurdle' },
+      { label: 'NPV @ 9% Hurdle Rate', value: '+₹18,52,380', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'The commercial property yields an IRR of 13.6%, offering a comfortable +4.6% spread over the 9% cost of funds, creating ₹18.5 Lakhs in surplus present value.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Pair IRR with Net Present Value (NPV)',
+    description: 'Never rely on IRR in isolation. When comparing mutually exclusive projects of different scale, always prioritize the project with the highest absolute NPV.',
+  },
+  {
+    number: '02',
+    title: 'Use MIRR for Reinvestment Realism',
+    description: 'Standard IRR unrealistically assumes interim cash flows are reinvested at the project IRR. MIRR provides a far more accurate corporate return based on your actual WACC.',
+  },
+  {
+    number: '03',
+    title: 'Check for Non-Conventional Sign Reversals',
+    description: 'Projects with alternating positive and negative cash flows (e.g., major mid-life overhauls or decommissioning costs) can have multiple mathematical IRRs. Rely on NPV in such cases.',
+  },
+  {
+    number: '04',
+    title: 'Incorporate Margin of Safety Over Hurdle Rates',
+    description: 'Always require an IRR premium of at least 300–500 bps above your corporate WACC to absorb supply chain inflation, delayed timelines, and execution slippage.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <IrrCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ImportDutyCalculatorWidget from '../calculators/ImportDutyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Order Value & Commercial IncoTerms',
+    description: 'Input your item unit price, order quantity, freight shipping charges, and marine/transit cargo insurance.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Customs Valuation Method (CIF vs FOB)',
+    description: 'Choose CIF (Cost, Insurance & Freight for India/EU/UK/GCC) or FOB (Free on Board for US CBP) valuation standard.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Specify Tariff Slabs & Compounded Taxes',
+    description: 'Input the Basic Customs Duty (BCD) rate, additional surcharges (e.g. 10% SWS), and import VAT / IGST rates.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Landed Cost & Effective Tax Burden',
+    description: 'Review the complete landed cost schedule, duty shares, cost per unit, and Input Tax Credit (ITC) eligibility.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Cross-Border E-Commerce & Retail Importers',
+    description: 'Estimating customs clearance duties and courier brokerage on international consumer purchases from Amazon, AliExpress, and overseas vendors.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'D2C Brands & Amazon FBA Sellers',
+    description: 'Accurately pricing landed cost per unit to protect gross profit margins and budget international supply chain logistics.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'B2B Procurement & Supply Chain Managers',
+    description: 'Modeling large-scale container shipments, customs surcharges, and statutory Input Tax Credit (ITC) recovery.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Customs Brokers & Freight Forwarders',
+    description: 'Generating instant landed cost estimates and transparent tariff audit schedules for commercial cargo clients.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Customs Valuation & Landed Cost Compounding Sequence',
+  formula: '\\text{Total Landed Cost} = \\text{Product Value} + \\text{Freight} + \\text{Insurance} + \\text{BCD} + \\text{SWS} + \\text{Import VAT/GST} + \\text{Handling}',
+  parameters: [
+    {
+      symbol: '\\text{Assessable Value (CIF)}',
+      title: 'Customs Assessable Base',
+      description: 'The statutory base for duty assessment: (Unit Price × Quantity) + Freight + Insurance under WTO CIF valuation.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{BCD}',
+      title: 'Basic Customs Duty',
+      description: 'The standard tariff duty levied as a percentage of the assessable customs value: Assessable Value × (Duty Rate %).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{SWS}',
+      title: 'Social Welfare Surcharge / Customs Levy',
+      description: 'An additional statutory surcharge (typically 10% in India) calculated on the Basic Customs Duty amount.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Import VAT / IGST}',
+      title: 'Compounded Import Sales Tax',
+      description: 'Statutory import tax calculated on the compounded base: (Assessable Value + BCD + SWS) × (GST/VAT Rate %).',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Importing a High-End Laptop to India (CIF Valuation)',
+    tag: 'Consumer Electronics & Gadgets',
+    subtitle: '₹1,00,000 Retail Invoice with 10% BCD & 18% IGST',
+    metrics: [
+      { label: 'Base CIF Assessable Value', value: '₹1,05,000 (₹1L Laptop + ₹5k Shipping)' },
+      { label: 'Basic Customs Duty (10%)', value: '₹10,500' },
+      { label: 'Social Welfare Surcharge (10%)', value: '₹1,050 (10% on BCD)' },
+      { label: 'Import IGST (18%)', value: '₹20,979 (18% on ₹1,16,550 base)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Total Landed Cost', value: '₹1,39,029 (+39.0% effective tax burden)', colorClass: 'text-primary font-black' },
+    ],
+    takeaway: 'Because import IGST is charged on top of customs duty and freight (compounded base), the total tax burden is 39.03%, not simply 10% + 18% = 28%.',
+  },
+  {
+    title: 'Case Study 2: Commercial Machinery Parts to US (FOB Valuation)',
+    tag: 'B2B Commercial Import',
+    subtitle: '$20,000 FOB Order with 3.5% US CBP Tariff',
+    metrics: [
+      { label: 'FOB Product Value', value: '$20,000 (100 units @ $200)' },
+      { label: 'Ocean Freight & Insurance', value: '$2,500' },
+      { label: 'US Customs Duty (3.5%)', value: '$700 (3.5% of $20,000 FOB)' },
+      { label: 'Brokerage Entry Fee', value: '$150' },
+      { label: 'Total Landed Cost', value: '$23,350 ($233.50 per unit)', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Under US FOB rules, shipping ($2,500) was excluded from duty assessment, saving $87.50 in customs duties compared to CIF valuation.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Claim Input Tax Credit (ITC) on B2B Commercial Imports',
+    description: 'If importing for a registered business under GST/VAT regimes, the import IGST/VAT paid at customs can be fully claimed as an input tax credit to offset domestic sales tax liabilities.',
+  },
+  {
+    number: '02',
+    title: 'Verify Free Trade Agreement (FTA) Concessions',
+    description: 'Check if your imported goods qualify for zero or reduced preferential tariffs under bilateral trade pacts (e.g. India-UAE CEPA, India-Australia ECTA, EU trade agreements) by obtaining a valid Certificate of Origin.',
+  },
+  {
+    number: '03',
+    title: 'Understand Compounded Tax Base vs Flat Addition',
+    description: 'Never add tariff percentages directly (e.g. 10% Duty + 18% GST ≠ 28%). Import VAT/GST is applied to the gross sum of (Assessable Value + Duty + Surcharges), resulting in higher effective tax burdens.',
+  },
+  {
+    number: '04',
+    title: 'Optimize Packaging to Lower CIF Freight Valuation',
+    description: 'In CIF jurisdictions, express courier shipping adds to the customs duty base. For high-value shipments, optimizing dimensional weight can lower both freight charges and customs duty.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <ImportDutyCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

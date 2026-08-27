@@ -1,6 +1,5 @@
-import UniversalCalculatorWidget from './framework/UniversalCalculatorWidget';
-import { tdsCalculatorConfig } from '../../calculators/configs/tds-calculator.config.js';
+import TdsFlagshipWidget from './primitives/TdsFlagshipWidget';
 
 export default function TdsCalculatorWidget() {
-  return <UniversalCalculatorWidget config={tdsCalculatorConfig} />;
+  return <TdsFlagshipWidget />;
 }

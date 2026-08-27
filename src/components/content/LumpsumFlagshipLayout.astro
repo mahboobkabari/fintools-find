@@ -1,0 +1,166 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import LumpsumCalculatorWidget from '../calculators/LumpsumCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Deploy Initial Capital Surplus',
+    description: 'Allocate one-time surplus funds (annual bonus, inheritance, property sale gains, or maturity proceeds) into your chosen investment vehicle.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Harness Compounding Growth Velocity',
+    description: 'During intermediate years, reinvested compounding returns outpace original principal deposits, exponentially accelerating wealth accumulation.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Rebalance & Risk-Mitigate Over Time',
+    description: 'As your target horizon nears, gradually rebalance equity holdings into stable fixed-income debt funds or FDs to protect accumulated gains.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Tax-Optimized Maturity Redemption',
+    description: 'Harvest capital gains strategically or initiate a Systematic Withdrawal Plan (SWP) to generate regular, tax-efficient retirement cash flows.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Professionals with Windfall Bonuses',
+    description: 'Corporate employees deploying annual performace bonuses, ESOP liquidity, or retention grants into long-term mutual fund wealth engines.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Retirees & Voluntary Separation Beneficiaries',
+    description: 'Senior citizens investing retirement gratuity, EPF corpus, or VRS payouts to generate safe returns beating inflation.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'High-Net-Worth Individuals & Asset Sellers',
+    description: 'Real estate sellers and business owners reinvesting asset sale proceeds into diversified equity or debt portfolios.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Long-Term Financial Goal Planners',
+    description: 'Parents planning lumpsum education funds for newborn children (15–18 year horizon) or funding dream home down payments.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Compound Interest & Future Value Formulas',
+  formula: 'A = P \\left(1 + \\frac{r}{n}\\right)^{n \\times t}, \\quad I = A - P, \\quad A_{\\text{real}} = \\frac{A}{(1 + i)^t}',
+  parameters: [
+    {
+      symbol: 'A',
+      title: 'Final Maturity Corpus',
+      description: 'Total future value accumulated at the end of the investment duration.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'P',
+      title: 'Principal Investment Amount',
+      description: 'Initial one-time lumpsum capital deployed.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Expected Annual Return Rate',
+      description: 'Annualized rate of capital appreciation or interest yield.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 't',
+      title: 'Investment Tenure (Years)',
+      description: 'Total time horizon allowing compounding math to multiply wealth.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'A_{\\text{real}}',
+      title: 'Real Purchasing Power',
+      description: 'Future corpus discounted by estimated annual inflation rate (i).',
+      colorClass: 'text-rose-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: ₹5 Lakhs in Nifty 50 Index Fund over 15 Years @ 12% p.a.',
+    tag: '12% Index Growth',
+    subtitle: '15-Year Long-Term Horizon',
+    metrics: [
+      { label: 'Initial Capital Invested', value: '₹5,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Expected Return Rate', value: '12.0% p.a.' },
+      { label: 'Estimated Wealth Gain', value: '₹22,36,783', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Total Maturity Corpus', value: '₹27,36,783', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Wealth Multiplier', value: '5.47x Capital', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Real Value (6% Inflation)', value: '₹11,41,967', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'A one-time ₹5 Lakh investment multiplies over 5.4x in 15 years, generating over ₹22.3 Lakhs in pure capital gains without needing any additional deposits.',
+  },
+  {
+    title: 'Case Study 2: The Cost of Delay (Investing ₹10 Lakhs Today vs 5-Year Wait)',
+    tag: 'Opportunity Cost',
+    subtitle: '20-Year Horizon @ 12% p.a.',
+    metrics: [
+      { label: 'Initial Capital', value: '₹10,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Value if Invested Today (20 Yrs)', value: '₹96,46,293', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Value if Delayed 5 Years (15 Yrs)', value: '₹54,73,566', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'Opportunity Wealth Lost to Delay', value: '₹41,72,727', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Multiplier Drop', value: '9.65x down to 5.47x', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Delaying a ₹10 Lakh lumpsum investment by just 5 years destroys over ₹41.7 Lakhs in compounding gains. Time in the market is significantly more impactful than timing the market.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Maximize Time in the Market (Avoid Market Timing)',
+    description: 'Historically, missing just the 10 best trading days in a decade cuts portfolio returns by more than half. Stay invested through market cycles.',
+  },
+  {
+    number: '02',
+    title: 'Use STP (Systematic Transfer Plan) in Volatile Markets',
+    description: 'If deploying large sums during all-time market highs, park funds in liquid debt and STP into equity over 6–12 months to rupee-cost average.',
+  },
+  {
+    number: '03',
+    title: 'Account for Inflation to Protect Real Purchasing Power',
+    description: 'Always benchmark returns against 5%–7% consumer inflation. Nominal returns in low-yield FDs often produce negative real wealth growth after taxes.',
+  },
+  {
+    number: '04',
+    title: 'Optimize Section 112A LTCG Equity Taxation',
+    description: 'Long-Term Capital Gains on listed equities are taxed at 12.5% on gains exceeding ₹1.25 Lakh per financial year (Budget 2024 revised rules).',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <LumpsumCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

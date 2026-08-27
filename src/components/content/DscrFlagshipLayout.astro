@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DebtServiceCoverageRatioCalculatorWidget from '../calculators/DebtServiceCoverageRatioCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Net Operating Income (NOI) or Gross Operating Cash Flows',
+    description: 'Establish normalized annual earnings before debt service, accounting for gross scheduled rents, historical vacancy/credit losses, and recurring OPEX.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Aggregate Total Annual Debt Service Obligations',
+    description: 'Sum up mandatory annual principal amortization payments, annual interest expenses, and any binding capital equipment or real estate lease obligations.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Compute DSCR & Compare Against Lender Covenants',
+    description: 'Calculate the exact coverage multiplier (DSCR = NOI / Debt Service) and evaluate compliance against commercial bank minimum underwriting benchmarks (1.20x–1.35x).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Run Multi-Shock Stress Tests & Estimate Max Borrowing Capacity',
+    description: 'Simulate revenue declines, vacancy spikes, and interest rate hikes while modeling maximum senior debt capacity supported by operating cash flow.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Commercial Real Estate (CRE) Investors',
+    description: 'Property owners, syndicators, and multifamily landlords underwriting acquisition financing, refinance terms, and Fannie Mae/Freddie Mac DSCR covenants.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Corporate CFOs & Finance Directors',
+    description: 'Enterprise financial leaders monitoring bank credit facilities, capex term loans, and debt covenants to maintain investment-grade coverage.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Commercial Loan Officers & Credit Underwriters',
+    description: 'Banking underwriters assessing borrower creditworthiness, stress-testing debt repayment capacity, and setting loan-to-value (LTV) limits.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Small Business Owners & MSME Borrowers',
+    description: 'Entrepreneurs applying for working capital loans, machinery finance, or SBA term debt to verify repayment viability.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Debt Service Coverage Ratio (DSCR) Mathematical Formulation',
+  formula: '\\text{DSCR} = \\frac{\\text{Net Operating Income (NOI)}}{\\text{Annual Principal} + \\text{Annual Interest} + \\text{Lease Obligations}}',
+  parameters: [
+    {
+      symbol: '\\text{NOI}',
+      title: 'Net Operating Income',
+      description: 'Gross Revenue less Vacancy Loss and Operating Expenses (excluding depreciation, amortization, and interest).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Debt Service}',
+      title: 'Total Annual Debt Service',
+      description: 'Sum of mandatory annual principal payments, annual interest expenses, and financing leases.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Max Loan}',
+      title: 'Maximum Supportable Loan Capacity',
+      description: 'Present value of the maximum allowable annual debt service (NOI / Target DSCR) discounted at the loan interest rate.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{ICR}',
+      title: 'Interest Coverage Ratio',
+      description: 'Operating income divided specifically by annual interest expense (NOI / Interest).',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Multifamily Property Refinance Underwriting',
+    tag: 'Commercial Real Estate',
+    subtitle: '50-Unit Apartment Complex',
+    metrics: [
+      { label: 'Rental Income & OPEX', value: '₹1.20 Cr Gross Rent · ₹35 Lakhs OPEX (5% Vacancy)' },
+      { label: 'Net Operating Income (NOI)', value: '₹79.00 Lakhs Annual NOI', colorClass: 'text-primary font-bold' },
+      { label: 'Annual Debt Service', value: '₹40.00 Lakhs (₹25L Principal + ₹15L Interest)', colorClass: 'text-muted font-bold' },
+      { label: 'Achieved DSCR & Free Cash Flow', value: '1.98x DSCR · ₹39.0 Lakhs Annual Free Cash Flow', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'With a 1.98x DSCR well above the 1.25x bank threshold, the borrower secured favorable interest rate spreads and maximum loan proceeds.',
+  },
+  {
+    title: 'Case Study 2: Manufacturing Capex Term Loan Underwriting',
+    tag: 'Corporate Lending',
+    subtitle: 'Equipment Expansion Loan',
+    metrics: [
+      { label: 'Operating Earnings (EBITDA)', value: '₹80.00 Lakhs Cash Flow Available for Debt Service' },
+      { label: 'Proposed Debt Service', value: '₹63.00 Lakhs (₹45L Principal + ₹18L Interest)' },
+      { label: 'Calculated DSCR', value: '1.27x DSCR (Bank Minimum 1.25x)', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Stress Test Result', value: '-10% Revenue shock causes DSCR to drop to 1.14x (Covenant Breach)', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: 'Stress testing revealed vulnerable headroom, prompting the company to extend loan amortization tenure from 5 to 7 years to protect liquidity.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Target a DSCR of at Least 1.25x to 1.35x for Commercial Loans',
+    description: 'Commercial banks and institutional lenders rarely approve senior debt with a DSCR below 1.20x. Aiming for 1.35x ensures strong covenant headroom.',
+  },
+  {
+    number: '02',
+    title: 'Extend Loan Amortization Tenure to Relieve Principal Pressure',
+    description: 'Increasing loan repayment tenure from 7 to 10 or 15 years reduces annual principal obligations, immediately boosting your calculated DSCR.',
+  },
+  {
+    number: '03',
+    title: 'Maintain Multi-Month Debt Service Reserves',
+    description: 'Establish a Dedicated Debt Service Reserve Account (DSRA) holding 3 to 6 months of principal and interest to withstand temporary revenue shocks.',
+  },
+  {
+    number: '04',
+    title: 'Optimize Property Management & Controllable OPEX',
+    description: 'Reducing operating expenses by 5% flows directly into Net Operating Income, increasing both DSCR and total maximum borrowing capacity.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <DebtServiceCoverageRatioCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

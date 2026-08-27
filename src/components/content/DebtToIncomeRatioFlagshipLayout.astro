@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DebtToIncomeRatioCalculatorWidget from '../calculators/DebtToIncomeRatioCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Gross Monthly Income',
+    description: 'Enter your total monthly earnings before tax deductions including base salary, bonuses, and side income.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Monthly Housing Obligations',
+    description: 'Specify your monthly home loan EMI or rent, property tax, homeowners insurance, and maintenance fees.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Itemize Non-Housing Debt EMIs',
+    description: 'Input monthly car loan EMIs, personal loans, education loans, and credit card minimum payments.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Back-End & Front-End DTI Ratios',
+    description: 'Evaluate your overall underwriting risk zone (Healthy ≤ 36%, Manageable ≤ 43%, High Risk > 43%) and safe borrowing capacity.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Home Loan & Mortgage Applicants',
+    description: 'Prospective home buyers calculating Front-End vs Back-End DTI ratios before submitting formal mortgage applications.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Personal Loan & Auto Loan Borrowers',
+    description: 'Individuals checking if adding a new vehicle or personal loan EMI will push total debt obligations beyond bank ceilings.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Debt Reduction & Consolidation Seekers',
+    description: 'Credit card holders and multi-loan borrowers tracking monthly debt reduction progress back into healthy limits.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Financial Planners & Wealth Managers',
+    description: 'Advisors conducting holistic debt capacity audits to ensure clients maintain adequate cash flow buffers.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Retail Credit Underwriting DTI Formulas',
+  formula: '\\text{Front-End DTI} = \\frac{\\text{Housing Obligations}}{\\text{Gross Income}} \\times 100, \\quad \\text{Back-End DTI} = \\frac{\\sum \\text{All Monthly Debts}}{\\text{Gross Income}} \\times 100',
+  parameters: [
+    {
+      symbol: '\\text{Front-End DTI}',
+      title: 'Housing Ratio',
+      description: 'Percentage of gross monthly income committed strictly to housing obligations (Mortgage/Rent, Tax, Insurance).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Back-End DTI}',
+      title: 'Total Debt Ratio',
+      description: 'Percentage of gross monthly income committed to ALL monthly debt obligations (Housing + Car + Personal + Credit Cards).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{Ideal Limit (36%)}',
+      title: 'Healthy Benchmark',
+      description: 'Conservative banking benchmark threshold for preferred underwriting and competitive interest rates.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Ceiling (43%)}',
+      title: 'Underwriting Cap',
+      description: 'Upper DTI limit commonly enforced for conventional home loan approval without special exceptions.',
+      colorClass: 'text-rose-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Home Loan Applicant (₹1 Lakh Monthly Gross Income)',
+    tag: 'Mortgage Underwriting Benchmark',
+    subtitle: 'Mortgage ₹30,000 + Car Loan ₹6,000 + Cards ₹2,000',
+    metrics: [
+      { label: 'Gross Monthly Income', value: '₹100,000 / month', colorClass: 'text-primary font-bold' },
+      { label: 'Front-End (Housing) DTI', value: '30.0% (₹30,000 Housing)', colorClass: 'text-blue-600 font-bold' },
+      { label: 'Back-End (Total) DTI', value: '38.0% (₹38,000 Total Debt)', colorClass: 'text-indigo-600 font-bold' },
+      { label: 'Underwriting Health Status', value: 'Manageable Risk (below 43% ceiling)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'With a 38% Back-End DTI, the borrower is in a manageable position. Additional safe borrowing capacity is ₹5,000/mo before reaching the 43% underwriting ceiling.',
+  },
+  {
+    title: 'Benchmark Case Study: Overleveraged Consumer (Heavy Credit Cards)',
+    tag: 'High Risk Alert',
+    subtitle: 'Income ₹80,000/mo vs Debt Obligations ₹44,000',
+    metrics: [
+      { label: 'Gross Monthly Income', value: '₹80,000 / month', colorClass: 'text-primary font-bold' },
+      { label: 'Rent + Personal Loan + Cards', value: '₹44,000 / month Total Debt', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Back-End (Total) DTI', value: '55.0% (Exceeds 50% Safety Zone)', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Recommended Action', value: 'Aggressive Credit Card Payoff before new loans', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: '55% of gross monthly income is committed to recurring debts, classifying the household as overleveraged. Debt payoff via Debt Snowball or Avalanche is strongly recommended.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <DebtToIncomeRatioCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

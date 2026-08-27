@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ProfitMarginCalculatorWidget from '../calculators/ProfitMarginCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter COGS & Revenue',
+    description: 'Input your direct cost of goods sold (COGS) and unit selling price or total revenue.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Include OPEX & Tax Slabs',
+    description: 'Add operating expenses (rent, payroll, marketing) and business income tax rate.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Evaluate Margins & Target Price',
+    description: 'Review Gross Profit Margin %, Net Profit Margin %, Cost-Plus Markup %, and target selling prices.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'E-Commerce Product Seller',
+    scenario: 'COGS = ₹600 | Selling Price = ₹1,000 | Marketing OPEX = ₹200',
+    recommendation: 'Gross Profit = ₹400 (40% Gross Margin) | Cost-Plus Markup = 66.7% | Net Profit = ₹150 (15% Net Margin).',
+  },
+  {
+    persona: 'Software / SaaS Company',
+    scenario: 'COGS = ₹15,000 | Revenue = ₹1,00,000 | R&D & Sales OPEX = ₹50,000',
+    recommendation: 'Gross Margin = 85% | Cost-Plus Markup = 566.7% | Net Profit = ₹24,000 (24% Net Margin).',
+  },
+  {
+    persona: 'Restaurant & Food Service',
+    scenario: 'Food COGS = ₹35,000 | Revenue = ₹1,00,000 | Rent & Staff OPEX = ₹45,000',
+    recommendation: 'Gross Margin = 65% | Cost-Plus Markup = 185.7% | Target 70% Margin Price = ₹1,16,667.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <ProfitMarginCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        Understanding Product Unit Economics, Profit Margins & Markups
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        Maintaining healthy unit economics is the cornerstone of sustainable commercial operations. While **Gross Margin %** evaluates the direct profit earned on selling price, **Cost-Plus Markup %** calculates the profit percentage added over cost.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Industry Profit Margin Benchmarks & Scenarios
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-indigo-600 block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

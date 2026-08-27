@@ -1,10 +1,90 @@
 import { calculateGst } from '../tax/gst-calculator.js';
 
+export const GST_PRESETS = [
+  {
+    id: 'restaurant',
+    name: 'Restaurant & Essential Food (5%)',
+    description: '₹2,000 Dining / Food Bill @ 5% GST (2.5% CGST + 2.5% SGST)',
+    badge: '5% Slab',
+    values: {
+      amount: 2000,
+      gstRate: 5,
+      gstType: 'exclusive',
+      txType: 'intrastate',
+    },
+  },
+  {
+    id: 'clothing',
+    name: 'Apparel & Footwear (12%)',
+    description: '₹5,000 Clothing Purchase @ 12% Standard GST',
+    badge: '12% Slab',
+    values: {
+      amount: 5000,
+      gstRate: 12,
+      gstType: 'exclusive',
+      txType: 'intrastate',
+    },
+  },
+  {
+    id: 'electronics',
+    name: 'Electronics & IT Services (18%)',
+    description: '₹25,000 Laptop / SaaS Subscription @ 18% Standard GST',
+    badge: '18% Standard',
+    values: {
+      amount: 25000,
+      gstRate: 18,
+      gstType: 'exclusive',
+      txType: 'intrastate',
+    },
+  },
+  {
+    id: 'luxury_auto',
+    name: 'Luxury Goods & Automobiles (28%)',
+    description: '₹50,000 High-End Electronics / Luxury @ 28% Peak GST',
+    badge: '28% Peak',
+    values: {
+      amount: 50000,
+      gstRate: 28,
+      gstType: 'exclusive',
+      txType: 'intrastate',
+    },
+  },
+  {
+    id: 'interstate_b2b',
+    name: 'Interstate B2B Supply (18% IGST)',
+    description: '₹1,00,000 Out-of-State Cross-Border B2B Supply @ 18% IGST',
+    badge: 'IGST B2B',
+    values: {
+      amount: 100000,
+      gstRate: 18,
+      gstType: 'exclusive',
+      txType: 'interstate',
+    },
+  },
+  {
+    id: 'reverse_gst_extraction',
+    name: 'Tax-Inclusive MRP Reverse Extraction',
+    description: 'Extract Base Taxable Value from ₹11,800 Tax-Inclusive Invoice',
+    badge: 'Reverse GST',
+    values: {
+      amount: 11800,
+      gstRate: 18,
+      gstType: 'inclusive',
+      txType: 'intrastate',
+    },
+  },
+];
+
 export const gstCalculatorConfig = {
   title: 'GST Amount & Rate Details',
   currency: 'INR',
   currencySymbol: '₹',
   calculateFn: calculateGst,
+  presets: GST_PRESETS,
+  defaultAmount: 10000,
+  defaultRate: 18,
+  defaultType: 'exclusive',
+  defaultTxType: 'intrastate',
   primaryResult: {
     key: 'grossAmount',
     label: 'Total Gross Amount (incl. GST)',
@@ -44,6 +124,18 @@ export const gstCalculatorConfig = {
       minLabel: '0%',
       maxLabel: '40%',
       default: 18,
+    },
+    {
+      id: 'gstType',
+      type: 'select',
+      label: 'GST Calculation Mode',
+      default: 'exclusive',
+    },
+    {
+      id: 'txType',
+      type: 'select',
+      label: 'Transaction Jurisdiction',
+      default: 'intrastate',
     },
   ],
   hasAmortizationTable: false,

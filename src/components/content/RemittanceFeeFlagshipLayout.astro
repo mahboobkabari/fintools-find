@@ -1,0 +1,158 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import RemittanceFeeCalculatorWidget from '../calculators/RemittanceFeeCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Transfer Amount & Corridor',
+    description: 'Select your sending currency, destination receiving currency, and the gross amount you wish to remit.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Audit Upfront vs Hidden Transfer Fees',
+    description: 'Enter any fixed transfer fees ($0 - $35) and percentage charges levied by your bank or transfer provider.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Evaluate Exchange Rate Spread',
+    description: 'Compare the offered customer FX rate against the institutional mid-market benchmark to expose hidden currency markup.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Verify Net Beneficiary Payout',
+    description: 'Account for receiving bank fees and intermediary correspondent deductions to know exactly what arrives in your recipient account.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Expatriates & Non-Resident Workers (NRIs / Expats)',
+    description: 'Sending regular family remittances, bill payments, and overseas mortgage EMIs back to home countries across North America, Europe, and the Middle East.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'International Freelancers & Remote Contractors',
+    description: 'Auditing cross-border client invoices, PayPal/Payoneer withdrawal fees, and dealer spreads to maximize net earnings.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'International Students & Education Sponsors',
+    description: 'Wiring university tuition fees and semester living allowances while avoiding hefty traditional SWIFT wire surcharges.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Small Businesses & Cross-Border Importers',
+    description: 'Paying foreign suppliers, software vendors, and overseas commercial logistics with transparent foreign exchange pricing.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Remittance Costing & True Foreign Exchange Compounding Sequence',
+  formula: '\\text{Total Remittance Cost} = \\text{Transfer Fee} + \\left(\\frac{\\text{Ideal Payout} - \\text{Actual Payout}}{\\text{Mid-Market Rate}}\\right) + \\frac{\\text{Recipient Fees}}{\\text{Mid-Market Rate}}',
+  parameters: [
+    {
+      symbol: 'R_{\\text{mid}}',
+      title: 'Mid-Market Reference Rate',
+      description: 'The pure interbank exchange rate representing the midpoint between global buy and sell rates without dealer markups.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'R_{\\text{offered}}',
+      title: 'Dealer Offered FX Rate',
+      description: 'The discounted exchange rate provided to retail customers: R_{\\text{offered}} = R_{\\text{mid}} \\times (1 - \\text{Spread \\%}).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'F_{\\text{sender}}',
+      title: 'Explicit Transfer Fee',
+      description: 'The upfront fixed transfer fee plus variable percentage fee charged by the remittance provider.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Effective FX Rate}',
+      title: 'Net Realized Exchange Rate',
+      description: 'The true rate of value delivery: Net Recipient Amount divided by the Gross Send Principal.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Sending $1,000 from USA to India (Fintech vs "Zero-Fee" Kiosk)',
+    tag: 'US → India Remittance Corridor',
+    subtitle: 'Exposing the $15 Hidden FX Markup in "Free" Transfers',
+    metrics: [
+      { label: 'Mid-Market Benchmark', value: '1 USD = ₹87.50 (Ideal Payout: ₹87,500)' },
+      { label: 'Fintech (0.9% Spread + $0 Fee)', value: '₹86,712.50 delivered ($9.00 total friction)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Traditional Kiosk ("$0 Fee" + 2.5% Spread)', value: '₹85,312.50 delivered ($25.00 hidden markup)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Disclosed Difference', value: '₹1,400 extra cash delivered to beneficiary', colorClass: 'text-primary font-black' },
+    ],
+    takeaway: 'Providers advertising "Zero Transfer Fees" often inflate their FX spread to 2.5% or more, costing the sender more than a transparent service with a small upfront fee.',
+  },
+  {
+    title: 'Case Study 2: $5,000 University Tuition Wire via Traditional Bank SWIFT',
+    tag: 'Education Tuition Wire',
+    subtitle: 'Outflow Wire + Intermediary Deductions + 2.0% FX Spread',
+    metrics: [
+      { label: 'Gross Send Amount', value: '$5,000 USD' },
+      { label: 'Bank Outgoing Wire Fee', value: '$35.00' },
+      { label: 'SWIFT Correspondent Intermediary Fee', value: '$15.00 deducted along the route' },
+      { label: '2.0% FX Spread Cost', value: '$100.00' },
+      { label: 'Total Remittance Friction', value: '$150.00 (3.0% effective fee)', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: 'On larger tuition payments, SWIFT intermediary correspondent deductions and dealer FX spreads dominate total friction, requiring careful channel selection.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Beware of "Zero-Fee" Marketing Claims',
+    description: 'When a money transfer provider advertises zero transaction fees, they almost always monetize through a higher foreign exchange spread. Always compare the offered exchange rate against the live mid-market rate.',
+  },
+  {
+    number: '02',
+    title: 'Batch Small Transfers into Larger Consignments',
+    description: 'Fixed upfront fees (e.g. $10-$25) create massive percentage drag on small transfers (e.g. 10% fee on $100). Batching monthly transfers into single transactions reduces fixed fee erosion.',
+  },
+  {
+    number: '03',
+    title: 'Opt for Local Clearing Networks (ACH / IMPS / UPI / SEPA)',
+    description: 'Instead of traditional SWIFT wires which pass through multiple intermediary correspondent banks, use modern digital corridors that deposit directly via domestic payment networks with zero recipient deductions.',
+  },
+  {
+    number: '04',
+    title: 'Verify SWIFT Charge Codes (OUR vs BEN vs SHA)',
+    description: 'If using bank wire transfers, choose OUR (sender pays all fees) if the beneficiary must receive an exact amount (such as university tuition), or SHA (shared) for regular personal transfers.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <RemittanceFeeCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

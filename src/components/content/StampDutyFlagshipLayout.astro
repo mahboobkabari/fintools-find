@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import StampDutyCalculatorWidget from '../calculators/StampDutyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Verify Circle Rate / Ready Reckoner Valuation',
+    description: 'Check the government benchmark circle rate per sq. ft. in your municipal zone to establish the minimum taxable consideration value.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Calculate State Stamp Duty & Concessions',
+    description: 'Apply statutory state stamp duty rates (e.g. 5%–7%), local metro cesses, and check for 1%–2% female/joint ownership rebates.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Pay E-Stamp Duty & Register Sale Deed',
+    description: 'Complete e-stamp duty payment through SHCIL/IGR portals and schedule an appointment at the Sub-Registrar Office (SRO) for biometric deed execution.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Claim Section 80C Income Tax Deductions',
+    description: 'Submit stamp duty and registration fee receipts in your annual income tax return to claim up to ₹1,50,000 tax deduction under Section 80C (Old Tax Regime).',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'First-Time Residential Homebuyers',
+    description: 'Individuals and families purchasing apartments, villas, or builder floors calculating total upfront cash required beyond home loan disbursals.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Commercial Property & Plot Investors',
+    description: 'Real estate investors evaluating acquisition overheads, transfer duties, and statutory registration fees for commercial assets and land parcels.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Property Lawyers, Advocates & Conveyancers',
+    description: 'Legal practitioners drafting sale deeds, agreements to sell, and verifying circle rate compliance against Section 56(2)(x) tax scrutiny.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Chartered Accountants & Wealth Planners',
+    description: 'Advisors structuring joint real estate purchases to maximize female stamp duty concessions and Section 80C tax rebates.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Statutory Real Estate Stamp Duty & Registration Formulas',
+  formula: '\\text{Consideration} = \\max(P_{\\text{agree}}, P_{\\text{circle}}), \\quad \\text{Stamp Duty} = \\text{Consideration} \\times (r_{\\text{stamp}} + r_{\\text{cess}}), \\quad \\text{Registration} = \\min(\\text{Consideration} \\times r_{\\text{reg}}, \\text{Cap})',
+  parameters: [
+    {
+      symbol: 'P_{\\text{agree}}',
+      title: 'Agreement Consideration Value',
+      description: 'Transaction price mutually agreed between buyer and seller as stated in the registered agreement to sell.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'P_{\\text{circle}}',
+      title: 'Ready Reckoner / Circle Rate Minimum Valuation',
+      description: 'Minimum government property valuation threshold below which stamp duty cannot be assessed.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'r_{\\text{stamp}}',
+      title: 'Statutory State Stamp Duty Rate',
+      description: 'State government fiscal tax rate levied on property deed conveyance (ranges from 4% to 7%).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'r_{\\text{reg}}',
+      title: 'Registration Charge Rate & Statutory Cap',
+      description: 'Legal registration fee (typically 1% of consideration, capped at ₹30,000 in MH and ₹20,000 in UP).',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Mumbai 2BHK Apartment (₹1.20 Crore Purchase in Maharashtra)',
+    tag: 'Maharashtra 5% + 1% Cess',
+    subtitle: 'Urban Residential Flat Acquisition',
+    metrics: [
+      { label: 'Agreement Price', value: '₹1,20,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Effective Stamp Duty (6%)', value: '₹7,20,000', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Registration Fee (Capped)', value: '₹30,000', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Total Government Charges', value: '₹7,50,000', colorClass: 'text-slate-900 dark:text-white font-black' },
+      { label: 'Sec 80C Tax Savings (30% Slab)', value: '₹46,800', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'The buyer pays ₹7.50 Lakhs in government levies (6.25% overhead). By capping registration charges at ₹30,000 in Maharashtra, high-value purchasers save substantial capital.',
+  },
+  {
+    title: 'Case Study 2: Delhi Builder Floor with Female Buyer Concession (₹80 Lakhs Consideration)',
+    tag: 'Delhi 4% Female Rebate',
+    subtitle: 'Sole Female Ownership Concession',
+    metrics: [
+      { label: 'Agreement Price', value: '₹80,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Female Stamp Duty (4%)', value: '₹3,20,000', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Male Stamp Duty Equivalent (6%)', value: '₹4,80,000', colorClass: 'text-muted' },
+      { label: 'Direct Female Stamp Duty Rebate', value: '₹1,60,000 Saved', colorClass: 'text-semantic-success font-black' },
+      { label: 'Registration Fee (1%)', value: '₹80,000', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Registering under sole female ownership in Delhi reduces stamp duty from 6% to 4%, saving a massive ₹1.60 Lakhs in upfront government outgo.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Leverage Women and Joint Ownership Concessions',
+    description: 'States like Delhi, UP, Maharashtra, and Haryana provide 1% to 2% stamp duty discounts for female sole or joint purchasers, translating to ₹1L–₹3L instant cash savings.',
+  },
+  {
+    number: '02',
+    title: 'Always Check Circle Rate to Prevent Section 56(2)(x) Penalties',
+    description: 'If agreement value is lower than circle rate by more than 10%, the gap is treated as deemed taxable income for the buyer and full stamp duty is assessed on circle rate.',
+  },
+  {
+    number: '03',
+    title: 'Claim Stamp Duty and Registration Under Section 80C',
+    description: 'Up to ₹1,50,000 paid towards stamp duty and registration can be claimed as a deduction under Section 80C in the financial year of purchase (Old Tax Regime).',
+  },
+  {
+    number: '04',
+    title: 'Account for Legal, Notary and Title Search Overheads',
+    description: 'Budget an extra ₹20,000 to ₹50,000 for advocate title verification, encumbrance certificates (EC), and municipal mutation fees.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <StampDutyCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

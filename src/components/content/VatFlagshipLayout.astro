@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import VatCalculatorWidget from '../calculators/VatCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Determine Applicable VAT Rate Category',
+    description: 'Check whether your supply falls under the Standard rate (20% UK / 19% DE), Reduced rate (5% / 7%), Zero rate (0%), or Exempt classification.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select Calculation Mode (Add or Remove VAT)',
+    description: 'Choose exclusive mode to add tax to your net quote, or inclusive mode to extract merchant revenue and tax components from retail shelf prices.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Generate Compliant Commercial Tax Invoice',
+    description: 'Issue an itemized VAT invoice displaying your VAT registration number, net subtotal, applicable tax rate, and gross payable total.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Quarterly VAT Return & Input Tax Reclaim',
+    description: 'Reconcile collected Output VAT against Input VAT paid on allowable business purchases on your quarterly tax return (e.g. HMRC Making Tax Digital).',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'UK & European E-Commerce Merchants',
+    description: 'Online retailers, Amazon sellers, and Shopify store owners calculating gross prices and reverse-extracting VAT for EU/UK customers.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Cross-Border B2B Exporters & Service Agencies',
+    description: 'Agencies and software providers billing international corporate clients under reverse-charge or standard VAT rules.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Chartered Certified Accountants & Bookkeepers',
+    description: 'Finance teams preparing quarterly VAT returns, reconciling input tax deductions, and verifying incoming supplier invoices.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Contractors, Freelancers & Small Business Owners',
+    description: 'Self-employed professionals registered for VAT adding standard 20% tax to client billings and tracking input tax recovery.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Statutory Value Added Tax & Reverse Extraction Formulas',
+  formula: '\\text{VAT (Exclusive)} = P_{\\text{net}} \\times \\frac{r}{100}, \\quad P_{\\text{gross}} = P_{\\text{net}} + \\text{VAT}, \\quad P_{\\text{net (Inclusive)}} = \\frac{P_{\\text{gross}}}{1 + \\frac{r}{100}}',
+  parameters: [
+    {
+      symbol: 'P_{\\text{net}}',
+      title: 'Net Base Taxable Price',
+      description: 'Pre-tax commercial value of the good or service before Value Added Tax is applied.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r',
+      title: 'Statutory VAT Rate Percentage',
+      description: 'Statutory percentage tax rate (e.g., 20% UK Standard, 19% Germany, 5% UAE).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'P_{\\text{gross}}',
+      title: 'Gross Total Invoice / Retail MRP',
+      description: 'Final price payable by the buyer, including all Value Added Tax charges.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Tax Factor}',
+      title: 'Reverse VAT Extraction Multiplier',
+      description: 'Multiplier calculated as r / (100 + r) to directly extract VAT from inclusive totals.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: UK B2B IT Consulting Invoice (£5,000 Base @ 20% UK VAT)',
+    tag: '20% Standard Rate',
+    subtitle: 'Standard Commercial VAT Invoice',
+    metrics: [
+      { label: 'Net Taxable Fee', value: '£5,000', colorClass: 'text-primary font-bold' },
+      { label: 'Applicable VAT Rate', value: '20.0% Standard' },
+      { label: 'Value Added Tax (VAT)', value: '£1,000', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Gross Invoice Total', value: '£6,000', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Client Input VAT Recovery', value: '£1,000 Claimable', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'The agency invoices £6,000, remitting £1,000 output tax to HMRC. The VAT-registered corporate client reclaims the full £1,000 as input tax, neutralizing the tax impact.',
+  },
+  {
+    title: 'Case Study 2: Retail Consumer Electronics (£1,200 Inclusive Price Reverse Extraction)',
+    tag: 'Reverse VAT Extraction',
+    subtitle: '20% Tax Included in Retail Price',
+    metrics: [
+      { label: 'Customer Retail Price (Gross)', value: '£1,200', colorClass: 'text-primary font-bold' },
+      { label: 'Applicable VAT Rate', value: '20%' },
+      { label: 'Extracted Net Base Revenue', value: '£1,000', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'Extracted VAT Liability', value: '£200', colorClass: 'text-rose-600 font-extrabold' },
+      { label: 'Effective Tax Share of Retail', value: '16.67%', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'From a £1,200 consumer receipt, £1,000 is retained merchant revenue and £200 must be set aside for the quarterly HMRC VAT return.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Always Retain Valid VAT Invoices to Reclaim Input Tax',
+    description: 'HMRC and EU tax authorities disallow input tax deductions if incoming receipts lack the supplier VAT registration number and full breakdown.',
+  },
+  {
+    number: '02',
+    title: 'Distinguish Zero-Rated Supplies from Exempt Supplies',
+    description: 'Zero-rated items (0% tax) allow you to reclaim input VAT on business costs, whereas exempt items prohibit input tax recovery.',
+  },
+  {
+    number: '03',
+    title: 'Evaluate the UK Flat Rate VAT Scheme',
+    description: 'Small businesses with turnover under £150,000 can pay a fixed percentage of turnover and keep the difference between charged and remitted VAT.',
+  },
+  {
+    number: '04',
+    title: 'Monitor Compulsory VAT Registration Thresholds',
+    description: 'Track rolling 12-month taxable turnover closely to ensure timely registration once exceeding £90,000 in the UK or local EU thresholds.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <VatCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

@@ -1,0 +1,156 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CurrencyConverterCalculatorWidget from '../calculators/CurrencyConverterCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Source & Destination Currencies',
+    description: 'Choose your base originating currency and the desired quote/target currency from 20 global reserve and trade currencies.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Conversion Amount & FX Spread',
+    description: 'Specify the transaction amount and optionally enter your credit card or bank forex spread fee (typically 1.5% to 3.5%).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Calculate Triangulated Cross-Rate',
+    description: 'Our pure financial engine evaluates mid-market reference exchange rates via standard USD cross-currency triangular arbitrage.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Inspect Conversion Matrix & Hidden Costs',
+    description: 'Review instant converted totals, inverse conversion rates, denomination schedule tables, and bank dealer markup costs.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'International Freelancers & Remote Workers',
+    description: 'Contractors receiving client payments in USD, EUR, or GBP calculating exact home currency bank deposits and wire transfer fees.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Global Travelers & Digital Nomads',
+    description: 'Tourists and international travelers budgeting foreign expenses, avoiding Dynamic Currency Conversion (DCC), and checking ATM rates.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'NRI & Expatriate Remittance Senders',
+    description: 'Diaspora workers in the US, UK, UAE, Canada, and Gulf regions timing overseas family remittances and evaluating FX spreads.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Import/Export Traders & E-Commerce Sellers',
+    description: 'Cross-border business owners and merchant importers pricing international inventory, supplier invoices, and foreign exchange hedging.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Foreign Exchange & Cross-Currency Triangulation Formulations',
+  formula: '\\text{Converted Amount} = \\text{Amount} \\times \\left(\\frac{\\text{USD Rate}(\\text{Target})}{\\text{USD Rate}(\\text{Source})}\\right) \\times \\left(1 - \\frac{\\text{Bank Spread \\%}}{100}\\right)',
+  parameters: [
+    {
+      symbol: '\\text{Amount}',
+      title: 'Principal Source Currency Sum',
+      description: 'The amount of originating base currency you intend to exchange or transfer.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Cross Rate}',
+      title: 'Triangulated Mid-Market Rate',
+      description: 'The direct unit exchange rate between two foreign currencies derived from international USD baseline quotes.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Bank Spread \\%}',
+      title: 'Dealer Markup / FX Spread',
+      description: 'Percentage fee added by commercial banks, credit cards, or remittance services above the mid-market rate.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Inverse Rate}',
+      title: 'Reciprocal Exchange Rate',
+      description: 'The exact mathematical inverse (1 / Rate) indicating how many source currency units 1 target unit buys.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Software Freelancer USD Remittance to India',
+    tag: 'Freelance & Remote Work',
+    subtitle: 'USD to INR Mid-Market vs Bank Wire',
+    metrics: [
+      { label: 'Invoice Amount', value: '$5,000 USD Client Milestone' },
+      { label: 'Mid-Market Baseline', value: '₹4,37,500.00 INR (1 USD = ₹87.50)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Standard Bank 2.5% Spread', value: '₹4,26,562.50 Net (₹10,937.50 Bank Markup)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Optimization', value: 'Using specialized fintech remittance saves ₹10,937 on transfer', colorClass: 'text-primary font-black' },
+    ],
+    takeaway: 'Auditing the mid-market baseline exchange rate revealed that standard retail bank wire markups would quietly siphon off over ₹10,900 in hidden dealer spreads on a $5,000 invoice.',
+  },
+  {
+    title: 'Case Study 2: International Tourist Credit Card Spending in Europe',
+    tag: 'Travel & Forex Cards',
+    subtitle: 'Avoiding Dynamic Currency Conversion (DCC)',
+    metrics: [
+      { label: 'Hotel Booking Cost', value: '€1,200 EUR Paris Stay' },
+      { label: 'Local Currency Billing', value: '$1,304.35 USD (0.92 EUR/USD + 0% Forex Card)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'DCC Merchant Terminal (6% Markup)', value: '$1,382.61 USD ($78.26 DCC Hidden Surcharge)', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: 'By rejecting the POS terminal offer to be billed in USD and choosing local EUR, the traveler avoided an aggressive 6% DCC merchant conversion penalty.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Always Decline Dynamic Currency Conversion (DCC)',
+    description: 'When swiping your card or withdrawing cash at an overseas ATM, always select billing in local destination currency. Choosing home currency triggers DCC markups of 3% to 7%.',
+  },
+  {
+    number: '02',
+    title: 'Utilize Zero-Forex-Markup Credit & Debit Cards',
+    description: 'Standard credit cards charge foreign transaction fees of 2.5% to 3.5% plus GST. Premium zero-markup travel cards convert at interbank visa/mastercard rates with 0% dealer margin.',
+  },
+  {
+    number: '03',
+    title: 'Understand the Mid-Market vs Retail Spread Gap',
+    description: 'The mid-market rate is the real midpoint between global buy and sell orders. Commercial banks, airport exchange booths, and money changers embed their profit margin into a skewed retail rate.',
+  },
+  {
+    number: '04',
+    title: 'Compare Total Transfer Cost (Fee + Spread)',
+    description: 'Remittance providers often advertise "$0 Transfer Fees" while hiding a steep 2% to 4% margin in their exchange rate quote. Calculate the final received amount in target currency.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CurrencyConverterCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

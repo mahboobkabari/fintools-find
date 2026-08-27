@@ -36,6 +36,11 @@ faqs:
 calculatorModule: "tax/tds-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
+relatedTools:
+  - "income-tax-calculator"
+  - "gst-calculator"
+  - "take-home-salary-calculator"
+  - "capital-gains-tax-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute Central Board of Direct Taxes (CBDT) statutory TDS rate provisions under Income Tax Act, 1961."

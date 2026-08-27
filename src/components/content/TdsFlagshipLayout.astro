@@ -1,0 +1,160 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import TdsCalculatorWidget from '../calculators/TdsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Identify Payment Nature & Statutory Section',
+    description: 'Determine whether the payment relates to professional fees (194J), contract work (194C), rent (194I), FD interest (194A), or property purchase (194IA).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Verify Exemption Thresholds & Collect PAN',
+    description: 'Check statutory exemption limits (e.g. ₹30K for 194J, ₹2.4L for 194I). Ensure valid PAN to avoid 20% Section 206AA penal withholding.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Deduct Tax & Remit Net Balance to Deductee',
+    description: 'Deduct exact statutory TDS from gross invoice and disburse the net payout receivable to the recipient vendor or professional.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Deposit TDS to Central Govt & Issue Form 16A',
+    description: 'Deposit TDS via Challan ITNS 281 by the 7th of next month, file quarterly e-TDS returns (Form 26Q), and download Form 16A from TRACES.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Freelancers & Independent Consultants',
+    description: 'Designers, developers, CAs, and legal consultants verifying 10% TDS deductions under Section 194J before billing clients.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Corporate Accounts & Finance Teams',
+    description: 'Finance managers ensuring compliant TDS withholding on vendor bills, contractor payments, and commercial lease agreements.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Property Buyers & Commercial Tenants',
+    description: 'Real estate buyers deducting 1% TDS (194IA) on properties above ₹50L, and tenants deducting 10% rent TDS (194I).',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Fixed Deposit Investors & Senior Citizens',
+    description: 'Bank depositors evaluating net interest cash flows and submitting Form 15G/15H to prevent bank TDS deductions.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Statutory TDS Withholding & Net Payout Formulas',
+  formula: '\\text{TDS} = P \\times \\frac{r_{\\text{effective}}}{100}, \\quad \\text{Net Payout} = P - \\text{TDS}, \\quad r_{\\text{effective}} = \\begin{cases} r_{\\text{statutory}}, & \\text{if PAN is furnished} \\\\ \\max(20\\%, r_{\\text{statutory}}), & \\text{if PAN is missing (Sec 206AA)} \\end{cases}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Gross Invoice / Payment Amount',
+      description: 'Total contracted consideration or bill value before statutory tax withholding.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'r_{\\text{statutory}}',
+      title: 'Prescribed Section Rate',
+      description: 'Standard statutory rate prescribed under the Income Tax Act (1% to 10%).',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'Sec 206AA',
+      title: 'Non-PAN Penal Rate (20%)',
+      description: 'Mandatory minimum 20% TDS rate levied when the deductee fails to furnish a valid PAN.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'Sec 201(1A)',
+      title: 'Late Deposit Interest (1.5%/Mo)',
+      description: 'Penal simple interest charged per month or part of a month for delay in depositing TDS to the government.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Professional Consultancy Fee (₹1.5 Lakh Invoice with PAN)',
+    tag: 'Section 194J(b)',
+    subtitle: '10% Professional Withholding with Valid PAN',
+    metrics: [
+      { label: 'Gross Bill Amount', value: '₹1,50,000', colorClass: 'text-primary font-bold' },
+      { label: 'Applicable Section', value: 'Section 194J(b)' },
+      { label: 'Statutory TDS Rate', value: '10%' },
+      { label: 'TDS Deducted & Deposited', value: '₹15,000', colorClass: 'text-indigo-600 font-extrabold' },
+      { label: 'Net Cash Received by Consultant', value: '₹1,35,000', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Form 26AS Tax Credit Generated', value: '₹15,000', colorClass: 'text-blue-600 font-bold' },
+    ],
+    takeaway: 'The client deducts ₹15,000 and remits ₹1,35,000 to the consultant. The ₹15,000 credit appears on Form 26AS/AIS and can be claimed against annual tax liability or refunded via ITR.',
+  },
+  {
+    title: 'Case Study 2: Non-PAN Penalty Scenario (₹1 Lakh Invoice without PAN)',
+    tag: 'Section 206AA Penalty',
+    subtitle: '20% Penal Rate vs 10% Normal Rate',
+    metrics: [
+      { label: 'Gross Invoice Value', value: '₹1,00,000' },
+      { label: 'Normal Section 194J Rate', value: '10% (₹10,000)' },
+      { label: 'Section 206AA Penal Rate', value: '20% (₹20,000)', colorClass: 'text-rose-600 font-black' },
+      { label: 'Extra Cash Flow Loss', value: '₹10,000 Penalty Drag', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Net Payout Received', value: '₹80,000', colorClass: 'text-slate-900 dark:text-white font-bold' },
+    ],
+    takeaway: 'Failing to furnish a PAN doubles TDS from ₹10,000 to ₹20,000, creating an unnecessary 10% working capital blockage.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Submit Form 15G / 15H Early in the Financial Year',
+    description: 'Bank fixed deposit holders whose total annual income is below basic exemption should submit Form 15G/15H in April to prevent 10% TDS on FD interest.',
+  },
+  {
+    number: '02',
+    title: 'Apply for Lower TDS Certificate under Section 197',
+    description: 'Freelancers or businesses with low profit margins can apply on TRACES for a Form 13 Lower Deduction Certificate to reduce TDS rates to 0% - 2%.',
+  },
+  {
+    number: '03',
+    title: 'Reconcile Form 26AS & AIS Quarterly',
+    description: 'Always cross-verify that deductors have deposited your TDS before the return filing deadline to ensure full tax credit and avoid ITR mismatch notices.',
+  },
+  {
+    number: '04',
+    title: 'Pay Advance Tax on Balance Tax Liabilities',
+    description: 'If your total tax bracket (e.g. 30%) exceeds the TDS deducted (e.g. 10%), pay quarterly advance tax to avoid Section 234B and 234C penal interest.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <TdsCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

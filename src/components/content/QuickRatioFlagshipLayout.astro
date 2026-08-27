@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import QuickRatioCalculatorWidget from '../calculators/QuickRatioCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Balance Sheet Liquid Current Assets',
+    description: 'Isolate cash & cash equivalents, short-term marketable securities, and collectible accounts receivable while filtering out inventory and illiquid prepaids.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Aggregate Total Current Liabilities',
+    description: 'Sum all obligations due within 12 months, including trade accounts payable, short-term bank debt, working capital lines, and accrued operating expenses.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Compute Quick Ratio & Compare Against Sector Benchmarks',
+    description: 'Calculate the acid-test ratio (Quick Assets / Current Liabilities) and evaluate compliance against institutional lending baselines (1.0x to 1.5x).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Analyze Defensive Runway & Working Capital Headroom',
+    description: 'Determine the Defensive Interval Ratio (DIR days of operational burn) and calculate exact liquidity surplus or deficit to maintain solvency.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Corporate CFOs & Treasurers',
+    description: 'Financial officers monitoring corporate liquidity buffers, working capital covenants, and treasury asset allocations.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Commercial Credit Underwriters & Bankers',
+    description: 'Lenders evaluating borrower short-term solvency, working capital facility sizing, and covenant compliance.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Equity Analysts & Portfolio Managers',
+    description: 'Investment professionals assessing balance sheet strength, inventory risk, and operational resilience across industry peers.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Small Business Owners & Suppliers',
+    description: 'Entrepreneurs and procurement managers verifying cash solvency to settle vendor invoices and payroll on time.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Quick Ratio (Acid-Test Ratio) Mathematical Formulation',
+  formula: '\\text{Quick Ratio} = \\frac{\\text{Cash} + \\text{Marketable Securities} + \\text{Accounts Receivable (Net)}}{\\text{Current Liabilities}} = \\frac{\\text{Current Assets} - \\text{Inventory} - \\text{Prepaid Expenses}}{\\text{Current Liabilities}}',
+  parameters: [
+    {
+      symbol: '\\text{Quick Assets}',
+      title: 'Total Quick Assets',
+      description: 'Cash, marketable securities, and accounts receivable convertible to cash within 90 days without price discounts.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Current Liabilities}',
+      title: 'Current Liabilities',
+      description: 'Accounts payable, short-term debt notes, taxes payable, and accrued expenses due within one year.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Current Ratio}',
+      title: 'Current Ratio',
+      description: 'Total current assets (including inventory) divided by current liabilities.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{DIR}',
+      title: 'Defensive Interval Ratio',
+      description: 'Days of operating expenses coverable by quick assets without additional revenue (Quick Assets / Daily OPEX).',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Manufacturing Company Managing Inventory Surge',
+    tag: 'Industrial Manufacturing',
+    subtitle: 'Current vs Quick Ratio Divergence',
+    metrics: [
+      { label: 'Balance Sheet Position', value: '₹1.20 Cr Total Current Assets · ₹50 Lakhs Current Liabilities' },
+      { label: 'Current Ratio', value: '2.40x Current Ratio (Appears Healthy)', colorClass: 'text-muted font-bold' },
+      { label: 'Excluded Inventory & Prepaids', value: '₹40 Lakhs Raw Materials/WIP · ₹5 Lakhs Prepaid' },
+      { label: 'True Quick Ratio (Acid-Test)', value: '1.50x Quick Ratio · ₹25 Lakhs Liquid Cushion', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Excluding slow-moving inventory revealed that the manufacturer had a healthy 1.50x quick ratio, securing an unencumbered credit facility.',
+  },
+  {
+    title: 'Case Study 2: Retail Supermarket Chain Facing Liquidity Strain',
+    tag: 'Retail & Supermarket',
+    subtitle: 'High Inventory Concentration',
+    metrics: [
+      { label: 'Current Assets vs Liabilities', value: '₹1.02 Cr Current Assets · ₹40 Lakhs Current Liabilities' },
+      { label: 'Current Ratio', value: '2.55x Current Ratio' },
+      { label: 'Inventory Concentration', value: '₹80 Lakhs Tied Up in Grocery/Store Stock' },
+      { label: 'Acid-Test Ratio', value: '0.50x Quick Ratio (Critical Deficit of ₹20 Lakhs)', colorClass: 'text-rose-600 font-black' },
+    ],
+    takeaway: 'While the Current Ratio looked pristine, the 0.50x Quick Ratio signaled extreme reliance on daily inventory turnover to pay trade creditors.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Target a Minimum Quick Ratio of 1.0x for Baseline Solvency',
+    description: 'A Quick Ratio of 1.0x ensures that your company can pay off 100% of short-term creditors tomorrow using liquid cash and receivables alone.',
+  },
+  {
+    number: '02',
+    title: 'Accelerate Accounts Receivable Collections to Boost Liquidity',
+    description: 'Offering 2/10 net 30 early payment discounts accelerates cash inflows, transforming receivables into instant cash without increasing debt.',
+  },
+  {
+    number: '03',
+    title: 'Adopt Just-In-Time (JIT) Inventory Management',
+    description: 'Excess inventory consumes cash and inflates the Current Ratio while offering zero protection in an Acid-Test liquidity crunch.',
+  },
+  {
+    number: '04',
+    title: 'Convert Short-Term Credit Lines into Long-Term Debt',
+    description: 'Refinancing short-term working capital borrowings into 5-to-10 year term loans reduces Current Liabilities, immediately improving your Quick Ratio.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <QuickRatioCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

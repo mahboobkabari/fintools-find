@@ -1,0 +1,103 @@
+/**
+ * Configuration module for Health Insurance Premium & Coverage Needs Calculator
+ */
+
+export const HEALTH_INSURANCE_CONFIG = {
+  meta: {
+    title: 'Health Insurance Premium & Coverage Needs Calculator',
+    description: 'Calculate recommended health insurance sum insured, medical inflation impact, employer cover gap, super top-up split, and Section 80D tax deductions.',
+    category: 'insurance',
+    categoryName: 'Insurance & Healthcare Calculators',
+    slug: 'health-insurance-calculator',
+  },
+
+  defaultInputs: {
+    cityTier: 'tier1',
+    hasSpouse: true,
+    numChildren: 1,
+    hasParents: false,
+    hasSeniorParents: false,
+    existingEmployerCover: 500000,
+    medicalInflationPercent: 12,
+    planningHorizonYears: 5,
+    taxRegime: 'old',
+    marginalTaxRatePercent: 30,
+    actualRoomRent: 10000,
+    roomRentCap: 5000,
+    totalHospitalBill: 200000,
+    copayPercent: 10,
+  },
+
+  fieldBoundaries: {
+    existingEmployerCover: { min: 0, max: 25000000, step: 100000 },
+    medicalInflationPercent: { min: 0, max: 30, step: 1 },
+    planningHorizonYears: { min: 0, max: 20, step: 1 },
+    numChildren: { min: 0, max: 10, step: 1 },
+    marginalTaxRatePercent: { min: 0, max: 30, step: 5 },
+  },
+
+  disclaimers: {
+    educationalNotice: 'This calculator provides an illustrative scenario analysis based on user-entered healthcare costs, family parameters, and financial assumptions. Results are for educational guidance and do not constitute insurance underwriting quotes, guaranteed coverage levels, or tax advice.',
+    premiumNotice: 'Premium estimates are illustrative scenario benchmarks and do not represent actual quotes from insurance companies. Actual premiums vary based on age, pre-existing health conditions, policy riders, and insurer underwriting approval.',
+    section80DNotice: 'Section 80D tax deduction applies under the Old Tax Regime of the Income Tax Act. Section 80D is generally not available under the New Tax Regime (Section 115BAC).',
+  },
+
+  scenarios: {
+    youngSingle: {
+      title: 'Young Single Professional (25 Yrs)',
+      description: 'Single individual in Tier-1 Metro evaluating retail health policy to supplement basic employer cover.',
+      cityTier: 'tier1',
+      hasSpouse: false,
+      numChildren: 0,
+      hasParents: false,
+      hasSeniorParents: false,
+      existingEmployerCover: 300000,
+      medicalInflationPercent: 12,
+      planningHorizonYears: 5,
+      taxRegime: 'old',
+      marginalTaxRatePercent: 30,
+    },
+    nuclearFamily: {
+      title: 'Young Nuclear Family (Couple + 1 Child)',
+      description: 'Family floater cover for couple and one child with 5-year medical inflation horizon.',
+      cityTier: 'tier1',
+      hasSpouse: true,
+      numChildren: 1,
+      hasParents: false,
+      hasSeniorParents: false,
+      existingEmployerCover: 500000,
+      medicalInflationPercent: 12,
+      planningHorizonYears: 5,
+      taxRegime: 'old',
+      marginalTaxRatePercent: 30,
+    },
+    familyWithSeniorParents: {
+      title: 'Family with Senior Citizen Parents',
+      description: 'Comprehensive family protection including senior citizen parents eligible for higher Section 80D limits.',
+      cityTier: 'tier1',
+      hasSpouse: true,
+      numChildren: 2,
+      hasParents: true,
+      hasSeniorParents: true,
+      existingEmployerCover: 500000,
+      medicalInflationPercent: 12,
+      planningHorizonYears: 5,
+      taxRegime: 'old',
+      marginalTaxRatePercent: 30,
+    },
+    comprehensiveShield: {
+      title: 'High Net Worth Comprehensive Shield',
+      description: 'High sum insured protection utilizing base cover + super top-up combination strategy.',
+      cityTier: 'tier1',
+      hasSpouse: true,
+      numChildren: 2,
+      hasParents: true,
+      hasSeniorParents: true,
+      existingEmployerCover: 1000000,
+      medicalInflationPercent: 12,
+      planningHorizonYears: 10,
+      taxRegime: 'old',
+      marginalTaxRatePercent: 30,
+    },
+  },
+};

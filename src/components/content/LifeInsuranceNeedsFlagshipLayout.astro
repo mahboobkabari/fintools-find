@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import LifeInsuranceNeedsCalculatorWidget from '../calculators/LifeInsuranceNeedsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Household Income & Target Period',
+    description: 'Specify your current annual take-home income and the number of years your family requires income continuity.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Itemize Debt Obligations & Future Goals',
+    description: 'Enter outstanding mortgage balances, loans, children education funds, and family milestone reserves.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Subtract Active Policies & Savings',
+    description: 'Offset gross protection needs by deducting active term insurance policies, bank savings, and investment assets.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Review Estimated Additional Cover Need',
+    description: 'Analyze your net coverage gap and component breakdowns to plan an appropriate term life insurance policy.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Young Couples & Single Earners',
+    description: 'Early-career earners establishing initial term life protection to cover personal debts and basic family support.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Parents with Young Children',
+    description: 'Families securing long-term income replacement, mortgage payoff, and college education reserves for dependents.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Homeowners with Active Mortgages',
+    description: 'Borrowers ensuring high home loan balances are fully indemnified so family members retain home ownership.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Pre-Retirement Households',
+    description: 'Mature earners reviewing remaining insurance gaps as accumulated investments increase and dependency years decrease.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Human Life Value (HLV) & DIME Needs Analysis Formulas',
+  formula: '\\text{Gross Need} = \\text{PV}(\\text{Income}) + \\sum \\text{Debts} + \\sum \\text{Future Goals}, \\quad \\text{Net Cover} = \\max(0, \\text{Gross Need} - \\text{Existing Resources})',
+  parameters: [
+    {
+      symbol: '\\text{Income Replacement}',
+      title: 'Income PV Need',
+      description: 'Inflation-adjusted present value of annual take-home income over the replacement period.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Debt Settlement}',
+      title: 'Gross Liabilities',
+      description: 'Sum of outstanding home loans, personal debts, and estimated final administrative expenses.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Milestone Goals}',
+      title: 'Future Reserves',
+      description: 'Funds required for children higher education and major family life milestones.',
+      colorClass: 'text-purple-600',
+    },
+    {
+      symbol: '\\text{Asset Credit}',
+      title: 'Resource Offsets',
+      description: 'Existing active term life insurance, bank savings, and investment assets.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Young Family with ₹45 Lakhs Mortgage',
+    tag: 'Family Protection Benchmark',
+    subtitle: 'Income ₹15 Lakhs/yr vs 18-Year Replacement Period',
+    metrics: [
+      { label: 'Income Replacement Need', value: '₹1.72 Crores (18 Yrs @ 5% Growth)', colorClass: 'text-primary font-bold' },
+      { label: 'Debt & Mortgage Payoff', value: '₹49.5 Lakhs (Mortgage + Personal)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Future Education Fund', value: '₹30.0 Lakhs (Children Higher Edu)', colorClass: 'text-purple-600 font-bold' },
+      { label: 'Estimated Additional Cover Needed', value: '₹1.83 Crores (after ₹68L Offset)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Existing resources (₹50L term cover + ₹18L savings) offset 27% of total needs, leaving a net additional term life cover requirement of ₹1.83 Crores.',
+  },
+  {
+    title: 'Benchmark Case Study: Pre-Retirement Household (High Liquid Wealth)',
+    tag: 'Pre-Retirement Review',
+    subtitle: 'Income ₹35 Lakhs/yr vs ₹1.45 Crores Liquid Wealth',
+    metrics: [
+      { label: 'Income Need (8 Yrs)', value: '₹2.31 Crores', colorClass: 'text-primary font-bold' },
+      { label: 'Remaining Mortgage', value: '₹10.0 Lakhs', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Total Existing Resources', value: '₹2.95 Crores (₹1.5Cr Ins + ₹1.45Cr Wealth)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Estimated Additional Cover Needed', value: '₹0 (Fully Covered)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Accumulated investment wealth and existing term insurance exceed total gross protection needs, resulting in zero additional term life coverage required.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <LifeInsuranceNeedsCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

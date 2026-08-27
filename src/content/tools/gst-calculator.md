@@ -36,6 +36,11 @@ faqs:
 calculatorModule: "tax/gst-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
+relatedTools:
+  - "tds-calculator"
+  - "income-tax-calculator"
+  - "take-home-salary-calculator"
+  - "capital-gains-tax-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute official Central Board of Indirect Taxes and Customs (CBIC) GST tax formulation rules."

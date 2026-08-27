@@ -1,0 +1,131 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import NetWorthCalculatorWidget from '../calculators/NetWorthCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Liquid & Fixed Assets',
+    description: 'List your cash, bank balances, mutual funds, EPF/PPF retirement balances, real estate, and vehicle values.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter All Outstanding Liabilities',
+    description: 'Itemize short-term credit cards, personal loans, auto loans, and long-term home mortgages.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Review Financial & Liquidity Ratios',
+    description: 'Analyze your Net Worth / Assets Ratio, Debt-to-Asset Ratio, and Emergency Liquidity Coverage.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Simulate Multi-Year Wealth Trajectory',
+    description: 'Project your future net worth across 5, 10, and 20-year horizons based on asset compounding and annual savings.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Young Professionals & Early Savers',
+    description: 'Individuals building initial liquid savings and tracking wealth growth away from early consumer debts.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Mid-Career Families',
+    description: 'Households juggling home mortgages, EPF retirement funds, children education savings, and equity investments.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Real Estate & Business Investors',
+    description: 'Property owners tracking illiquid asset appreciation vs leveraged commercial/mortgage debt obligations.',
+    bgClass: 'bg-purple-50',
+    textClass: 'text-purple-600',
+  },
+  {
+    title: 'Debt Elimination Seekers',
+    description: 'Borrowers working aggressively to achieve positive net worth by systematically reducing high-interest debt.',
+    bgClass: 'bg-rose-50',
+    textClass: 'text-rose-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Net Worth & Financial Position Formulas',
+  formula: '\\text{Net Worth} = \\sum \\text{Assets} - \\sum \\text{Liabilities}, \\quad \\text{Net Worth / Assets} = \\frac{\\text{Net Worth}}{\\text{Total Assets}} \\times 100',
+  parameters: [
+    {
+      symbol: '\\text{Net Worth}',
+      title: 'Total Equity Value',
+      description: 'Difference between total owned assets and total owed debt liabilities.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Total Assets}',
+      title: 'Gross Assets',
+      description: 'Sum of liquid cash, stock portfolios, retirement accounts, property, and vehicles.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Total Liabilities}',
+      title: 'Gross Debt Owed',
+      description: 'Sum of credit card balances, personal loans, auto loans, and mortgages.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Liquidity Months}',
+      title: 'Emergency Reserve',
+      description: 'Liquid cash and stocks divided by monthly essential living expenses.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Benchmark Case Study: Mid-Career Family Balance Sheet (₹72 Lakhs Gross Assets)',
+    tag: 'Wealth Analysis Benchmark',
+    subtitle: 'Net Worth vs Debt-to-Asset Ratio Evaluation',
+    metrics: [
+      { label: 'Total Gross Assets', value: '₹72,000,000 (Home, EPF, SIP)', colorClass: 'text-primary font-bold' },
+      { label: 'Total Liabilities', value: '₹24,500,000 (Home & Auto Loan)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Net Worth Equity', value: '₹47,500,000 (66.0% Net Worth / Assets)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Emergency Liquidity', value: '7.2 Months Expenses Covered', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Even with ₹24.5 Lakhs in home loan debt, the family maintains a healthy 66.0% Net Worth / Assets ratio and 7.2 months of liquid emergency coverage.',
+  },
+  {
+    title: 'Benchmark Case Study: Young Professional Debt Reduction Trajectory',
+    tag: 'Early Career Path',
+    subtitle: 'Transitioning from Negative to Positive Net Worth',
+    metrics: [
+      { label: 'Initial Assets', value: '₹350,000 (Bank & SIP)', colorClass: 'text-primary font-bold' },
+      { label: 'Initial Student & Credit Debt', value: '₹500,000', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Initial Net Worth', value: '-₹150,000 (Negative NW)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Projected 5-Yr Net Worth', value: '+₹850,000 (Positive NW)', colorClass: 'text-emerald-600 font-extrabold' },
+    ],
+    takeaway: 'Systematic debt reduction of ₹1 Lakh/year alongside ₹1.2 Lakhs/year in SIP savings transitions net worth from -₹1.5 Lakhs to +₹8.5 Lakhs in 5 years.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+>
+  <NetWorthCalculatorWidget slot="calculator" client:visible />
+</FlagshipLayout>

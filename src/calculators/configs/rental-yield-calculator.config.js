@@ -1,0 +1,178 @@
+/**
+ * Rental Yield & Property ROI Calculator Configuration Module
+ * 
+ * Defines metadata, input boundaries, classifications, reference bands, and illustrative presets.
+ */
+
+export const RENTAL_YIELD_CONFIG = {
+  metadata: {
+    title: 'Rental Yield & Property ROI Calculator',
+    slug: 'rental-yield-calculator',
+    category: 'real-estate',
+    categoryName: 'Real Estate Calculators',
+    lastUpdated: '2026-08-09',
+    financialAuthority: 'Educational Real Estate Investment Performance Standard',
+    disclosure: 'Rental income, property appreciation, and cash flows are estimates based on user inputs and market assumptions. Actual rental yields, vacancy rates, operating costs, and financing terms vary by property, location, and market conditions.',
+  },
+
+  financialMethodology: 'Gross Rental Yield = Annual Gross Rent / Purchase Price * 100. Net Rental Yield = NOI / Purchase Price * 100. Cap Rate = NOI / Property Value * 100. Cash-on-Cash Return = Annual Pre-Tax Cash Flow / Initial Cash Invested * 100.',
+
+  classifications: {
+    statutory: [],
+    userInputs: [
+      'Property Purchase Price & Current Property Value',
+      'Monthly Rent & Vacancy Loss Rate',
+      'Property Taxes, Insurance, Maintenance & Management Fees',
+      'Mortgage Financing (Loan Amount, Interest Rate, Tenure)',
+      'Down Payment, Stamp Duty / Acquisition Costs & Renovation'
+    ],
+    marketAssumptions: [
+      { name: '2% – 4% Residential Yield Benchmark', description: 'Typical residential gross rental yield range across major Indian metropolitan cities.' },
+      { name: '6% – 9% Commercial Yield Benchmark', description: 'Typical gross rental yield range for commercial office and retail real estate assets.' }
+    ],
+    lenderAssumptions: [
+      { name: 'Mortgage Interest & LTV Limits', description: 'Home loan interest rates, maximum loan-to-value (LTV) limits, and processing charges vary by individual bank.' }
+    ]
+  },
+
+  defaultInputs: {
+    propertyPurchasePrice: 6000000,
+    currentPropertyValue: 6000000,
+    monthlyRent: 25000,
+    annualRentInput: 0,
+    vacancyRatePercent: 5,
+    propertyTax: 8000,
+    monthlyMaintenance: 2000,
+    insurance: 3000,
+    managementFees: 0,
+    otherExpenses: 2000,
+    isFinanced: true,
+    loanAmount: 4500000,
+    interestRatePercent: 8.5,
+    loanTenureYears: 20,
+    existingMonthlyEmi: 0,
+    downPayment: 1500000,
+    acquisitionCosts: 360000, // 6% stamp duty/reg
+    initialRenovation: 100000,
+    annualAppreciationRatePercent: 5,
+    holdingYears: 10,
+  },
+
+  scenarios: {
+    metroApartment: {
+      id: 'metroApartment',
+      title: 'Tier-1 Metro Apartment',
+      description: 'Illustrative 2BHK apartment in a major metro with moderate rent and 5% vacancy rate.',
+      propertyPurchasePrice: 7500000,
+      currentPropertyValue: 7500000,
+      monthlyRent: 28000,
+      vacancyRatePercent: 5,
+      propertyTax: 10000,
+      monthlyMaintenance: 2500,
+      insurance: 4000,
+      managementFees: 0,
+      otherExpenses: 3000,
+      isFinanced: false,
+      loanAmount: 0,
+      interestRatePercent: 0,
+      loanTenureYears: 0,
+      existingMonthlyEmi: 0,
+      downPayment: 7500000,
+      acquisitionCosts: 450000,
+      initialRenovation: 150000,
+      annualAppreciationRatePercent: 5,
+      holdingYears: 10,
+    },
+    suburbanResidential: {
+      id: 'suburbanResidential',
+      title: 'Suburban Residential House',
+      description: 'Illustrative suburban property with low maintenance fees and steady occupancy.',
+      propertyPurchasePrice: 4500000,
+      currentPropertyValue: 4500000,
+      monthlyRent: 20000,
+      vacancyRatePercent: 3,
+      propertyTax: 5000,
+      monthlyMaintenance: 1200,
+      insurance: 2500,
+      managementFees: 0,
+      otherExpenses: 1500,
+      isFinanced: false,
+      loanAmount: 0,
+      interestRatePercent: 0,
+      loanTenureYears: 0,
+      existingMonthlyEmi: 0,
+      downPayment: 4500000,
+      acquisitionCosts: 270000,
+      initialRenovation: 80000,
+      annualAppreciationRatePercent: 6,
+      holdingYears: 10,
+    },
+    commercialOffice: {
+      id: 'commercialOffice',
+      title: 'Commercial Office Space',
+      description: 'Illustrative commercial asset offering higher 7.5% gross yield with professional management fees.',
+      propertyPurchasePrice: 12000000,
+      currentPropertyValue: 12000000,
+      monthlyRent: 75000,
+      vacancyRatePercent: 8,
+      propertyTax: 25000,
+      monthlyMaintenance: 4000,
+      insurance: 8000,
+      managementFees: 36000, // 4% of annual rent
+      otherExpenses: 5000,
+      isFinanced: false,
+      loanAmount: 0,
+      interestRatePercent: 0,
+      loanTenureYears: 0,
+      existingMonthlyEmi: 0,
+      downPayment: 12000000,
+      acquisitionCosts: 720000,
+      initialRenovation: 300000,
+      annualAppreciationRatePercent: 4,
+      holdingYears: 10,
+    },
+    financedInvestment: {
+      id: 'financedInvestment',
+      title: 'Financed Rental (75% Home Loan)',
+      description: 'Illustrative leveraged property using a home loan to model Cash-on-Cash Return %.',
+      propertyPurchasePrice: 6000000,
+      currentPropertyValue: 6000000,
+      monthlyRent: 25000,
+      vacancyRatePercent: 5,
+      propertyTax: 8000,
+      monthlyMaintenance: 2000,
+      insurance: 3000,
+      managementFees: 0,
+      otherExpenses: 2000,
+      isFinanced: true,
+      loanAmount: 4500000,
+      interestRatePercent: 8.5,
+      loanTenureYears: 20,
+      existingMonthlyEmi: 0, // auto-calculated EMI
+      downPayment: 1500000,
+      acquisitionCosts: 360000,
+      initialRenovation: 100000,
+      annualAppreciationRatePercent: 5,
+      holdingYears: 10,
+    }
+  },
+
+  fieldLimits: {
+    propertyPurchasePrice: { min: 0, max: 1000000000, step: 100000, label: 'Property Purchase Price (₹)' },
+    currentPropertyValue: { min: 0, max: 1000000000, step: 100000, label: 'Current Estimated Property Value (₹)' },
+    monthlyRent: { min: 0, max: 5000000, step: 1000, label: 'Monthly Rent (₹)' },
+    vacancyRatePercent: { min: 0, max: 50, step: 1, label: 'Estimated Vacancy Loss Rate (%)' },
+    propertyTax: { min: 0, max: 1000000, step: 1000, label: 'Annual Property Tax (₹)' },
+    monthlyMaintenance: { min: 0, max: 200000, step: 500, label: 'Monthly Society / Maintenance Charges (₹)' },
+    insurance: { min: 0, max: 500000, step: 1000, label: 'Annual Property Insurance (₹)' },
+    managementFees: { min: 0, max: 1000000, step: 1000, label: 'Annual Management / Brokerage Fees (₹)' },
+    loanAmount: { min: 0, max: 1000000000, step: 100000, label: 'Home Loan Amount (₹)' },
+    interestRatePercent: { min: 0, max: 30, step: 0.1, label: 'Loan Interest Rate (% p.a.)' },
+    loanTenureYears: { min: 1, max: 30, step: 1, label: 'Loan Tenure (Years)' },
+    downPayment: { min: 0, max: 1000000000, step: 50000, label: 'Down Payment (₹)' },
+    acquisitionCosts: { min: 0, max: 50000000, step: 10000, label: 'Acquisition / Stamp Duty Costs (₹)' },
+    initialRenovation: { min: 0, max: 50000000, step: 10000, label: 'Initial Renovation & Setup (₹)' },
+    annualAppreciationRatePercent: { min: 0, max: 25, step: 0.5, label: 'Annual Property Appreciation (% p.a.)' },
+    holdingYears: { min: 1, max: 40, step: 1, label: 'Holding Period (Years)' },
+  }
+};

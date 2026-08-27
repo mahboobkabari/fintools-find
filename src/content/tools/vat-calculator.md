@@ -35,7 +35,12 @@ faqs:
     answer: "To extract 20% VAT from a gross price, divide the gross total by 1.2. The result is the net base price. Subtracting the net base price from the gross total gives the exact VAT tax amount."
 calculatorModule: "tax/vat-calculator.js"
 publishDate: 2026-08-06
-priority: "P1"
+priority: "P0"
+relatedTools:
+  - "gst-calculator"
+  - "tds-calculator"
+  - "income-tax-calculator"
+  - "profit-margin-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations follow standard international Time Value of Money & Value Added Tax (VAT) consumption formulations."

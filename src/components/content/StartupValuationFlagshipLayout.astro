@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import StartupValuationCalculatorWidget from '../calculators/StartupValuationCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Valuation Framework & Baseline Region',
+    description: 'Determine whether to model pre-revenue milestones (Berkus), weighted angel factors (Scorecard), venture exit hurdles (VC Method), or ARR multiples.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Calibrate Qualitative & Quantitative Risk Drivers',
+    description: 'Adjust management team strength (30% weight), market size (25% weight), prototype stage, competitive barriers, and current recurring revenue.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Synthesize Multi-Method Valuation Range',
+    description: 'Evaluate the blended valuation average alongside the minimum and maximum boundaries across all standard venture frameworks.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Determine Investment Round Dilution & Founder Retained Stake',
+    description: 'Calculate post-money valuation, incoming investor equity percentage, and founder retained equity value post-round.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Early-Stage Founders & Co-Founders',
+    description: 'Entrepreneurs raising Pre-Seed, Seed, or Bridge rounds looking to justify pre-money valuation targets on term sheets.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Angel Investors & Syndicate Leads',
+    description: 'Individual angel investors scoring early-stage deal opportunities using the Bill Payne Scorecard and Berkus methods.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Venture Capital Associates & Principals',
+    description: 'Institutional VC analysts calculating terminal exit values, required ROI hurdle rates, and dilution reserve buffers.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Startup Incubators & Accelerators',
+    description: 'Program directors mentoring cohort founders on market-standard valuation norms and cap table preservation.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Scorecard, Berkus, VC Exit & ARR Multiple Mathematical Formulas',
+  formula: 'V_{\\text{scorecard}} = V_{\\text{base}} \\times \\sum (S_i \\times W_i), \\quad V_{\\text{berkus}} = \\sum M_i, \\quad V_{\\text{vc}} = \\frac{V_{\\text{exit}} \\times (1 - D_{\\text{future}})}{\\text{ROI Hurdle}} - I',
+  parameters: [
+    {
+      symbol: 'V_{\\text{scorecard}}',
+      title: 'Scorecard Valuation (Payne)',
+      description: 'Regional baseline pre-money valuation multiplied by weighted factor scores (Team 30%, Market 25%, Product 15%).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'V_{\\text{berkus}}',
+      title: 'Berkus 5-Milestone Method',
+      description: 'Sum of 5 qualitative risk reduction milestones up to standard cap.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'V_{\\text{vc}}',
+      title: 'Venture Capital Exit Method',
+      description: 'Terminal exit valuation adjusted for future dilution and discounted by target investor ROI hurdle.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: 'V_{\\text{arr}}',
+      title: 'Revenue Multiple Method',
+      description: 'Current Annual Recurring Revenue multiplied by industry peer multiple.',
+      colorClass: 'text-ink',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Seed SaaS Startup Triangulating Pre-Money Valuation',
+    tag: 'Seed Financing',
+    subtitle: 'Scorecard & ARR Synthesis',
+    metrics: [
+      { label: 'Baseline & Financials', value: '₹2.00 Cr Regional Base · ₹1.20 Cr ARR' },
+      { label: 'Scorecard Valuation', value: '₹2.15 Crores (107.5% Score Factor)', colorClass: 'text-primary font-bold' },
+      { label: 'ARR Multiple (8x)', value: '₹9.60 Crores ARR Valuation', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Agreed Pre-Money & Round', value: '₹2.50 Cr Pre-Money Raised ₹50 Lakhs (16.7% Dilution)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Triangulating between qualitative scorecard metrics and recurring revenue multiples gave the founders defensible negotiation leverage.',
+  },
+  {
+    title: 'Case Study 2: Pre-Revenue DeepTech Startup Using Berkus Framework',
+    tag: 'Pre-Revenue Angel',
+    subtitle: 'Milestone Risk De-risking',
+    metrics: [
+      { label: 'Idea & Prototype Value', value: '₹80 Lakhs (Patented Tech Prototype)' },
+      { label: 'Team & Alliances Value', value: '₹60 Lakhs (Ph.D. Team & Research Alliance)' },
+      { label: 'Total Berkus Pre-Money', value: '₹1.50 Crores Pre-Money Valuation', colorClass: 'text-primary font-bold' },
+      { label: 'Angel Investment Raised', value: '₹25 Lakhs for 14.3% Investor Stake', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Using the Berkus framework eliminated contentious revenue projection debates, enabling a smooth pre-seed angel closing.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Triangulate Across at Least Three Valuation Methodologies',
+    description: 'Never rely on a single valuation formula. Presenting a blended synthesis across Scorecard, Berkus, and VC Exit frameworks proves financial maturity to investors.',
+  },
+  {
+    number: '02',
+    title: 'Focus Heavily on Management Team and Market Size',
+    description: 'In the Bill Payne Scorecard method, team quality (30%) and addressable market opportunity (25%) account for more than half the total valuation weight.',
+  },
+  {
+    number: '03',
+    title: 'Right-Size Valuation to Match 18-Month Milestones',
+    description: 'An artificially high valuation in an early round creates extreme down-round risk for subsequent Series A financing. Aim for market-standard 15-25% dilution.',
+  },
+  {
+    number: '04',
+    title: 'Anchor Negotiations to Terminal Exit Realism',
+    description: 'Demonstrate how a target ₹100 Cr Year-5 exit at a 10x ROI hurdle realistically supports your current ₹20 Cr pre-money valuation.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <StartupValuationCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

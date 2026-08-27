@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CryptoProfitLossCalculatorWidget from '../calculators/CryptoProfitLossCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Acquisition Details & Quantity',
+    description: 'Input the exact number of coins/tokens purchased and your average entry price in your chosen fiat currency.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Input Exchange & Blockchain Gas Fees',
+    description: 'Specify maker/taker exchange fee percentages and on-chain network gas fees paid during purchase and disposal.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Select Position Status (Realized vs Unrealized)',
+    description: 'Toggle between a closed trade (sold at exit price) or an active holding position evaluated against current market valuation.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Net P/L & Break-Even Targets',
+    description: 'Review your net return on investment (ROI %), break-even exit price target, and full transaction fee audit schedule.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Active Crypto Spot & Swing Traders',
+    description: 'Calculating net risk-to-reward ratios, exchange fee deductions, and precise break-even exit levels on cryptocurrency trades.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Long-Term HODLers & DCA Investors',
+    description: 'Tracking unrealized paper portfolio gains across multiple market cycles and measuring effective dollar-cost-average entry prices.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'DeFi & On-Chain Protocol Participants',
+    description: 'Accounting for volatile layer-1 Ethereum gas fees, decentralized exchange (DEX) slippage, and smart contract execution costs.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Crypto Tax Planners & Accountants',
+    description: 'Isolating gross capital gains from non-deductible exchange spreads and preparing itemized transaction histories for tax reporting.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Cryptocurrency Cost Basis & Net Profit/Loss Methodology',
+  formula: '\\text{Net P/L} = (Q \\times P_{\\text{sell}} - F_{\\text{sell}} - G_{\\text{sell}}) - (Q \\times P_{\\text{buy}} + F_{\\text{buy}} + G_{\\text{buy}})',
+  parameters: [
+    {
+      symbol: '\\text{Total Cost Basis}',
+      title: 'Adjusted Acquisition Capital',
+      description: 'Gross purchase principal plus upfront trading fees and blockchain network gas fees: (Quantity × Buy Price) + Buy Fees + Buy Gas.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Net Proceeds}',
+      title: 'Net Realizable Capital',
+      description: 'Gross exit liquidation value minus disposal trading fees and exit gas fees: (Quantity × Sell Price) - Sell Fees - Sell Gas.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{ROI \\%}',
+      title: 'Return on Investment',
+      description: 'Percentage yield earned on total capital invested: (Net Profit/Loss / Total Cost Basis) × 100.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'P_{\\text{be}}',
+      title: 'Analytical Break-Even Price',
+      description: 'The minimum exit price needed to fully recover capital and cover all trading fees: (Total Cost Basis + Exit Gas) / [Quantity × (1 - Exit Fee %)].',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Swing Trading 0.5 BTC on Centralized Exchange',
+    tag: 'Bitcoin Spot Trading',
+    subtitle: 'Bought @ $50,000 and Sold @ $65,000 with 0.1% Spot Fees',
+    metrics: [
+      { label: 'Gross Acquisition Cost', value: '$25,000.00 (0.5 BTC @ $50,000)' },
+      { label: 'Total Trading & Gas Fees', value: '$67.50 ($25 buy fee + $32.50 sell fee + $10 gas)' },
+      { label: 'Net Sale Proceeds', value: '$32,457.50 (Gross $32,500 - $42.50 exit costs)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Profit / Loss', value: '+$7,432.50 (+29.70% Net ROI)', colorClass: 'text-emerald-600 font-black' },
+    ],
+    takeaway: 'Low exchange fees preserved 99.1% of the $7,500 gross price appreciation, yielding a strong net return.',
+  },
+  {
+    title: 'Case Study 2: Small DeFi Trade Impacted by Heavy Layer-1 Gas',
+    tag: 'DeFi & On-Chain DEX',
+    subtitle: 'Buying $500 of ETH Tokens with $50 Round-Trip Gas Fees',
+    metrics: [
+      { label: 'Gross Trade Capital', value: '$500.00 invested' },
+      { label: 'Gross Price Increase', value: '+10% ($550 exit valuation)' },
+      { label: 'Gas & DEX Fees', value: '$55.00 ($25 entry gas + $25 exit gas + $5 swap fee)' },
+      { label: 'Net Result', value: '-$5.00 Net Loss (-1.0% ROI)', colorClass: 'text-rose-600 font-bold' },
+    ],
+    takeaway: 'Fixed blockchain gas fees wiped out a 10% market gain on a small position, underscoring the necessity of calculating break-even price before executing on-chain swaps.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Always Factor In Round-Trip Transaction Friction',
+    description: 'Cryptocurrency exchanges charge trading fees on both entry and exit. On high-frequency trades, a 0.2% maker/taker fee plus slippage means you need at least a 0.5% price gain just to break even.',
+  },
+  {
+    number: '02',
+    title: 'Batch On-Chain Transfers to Minimize Gas Impact',
+    description: 'Because blockchain gas fees are fixed per transaction (not proportional to dollar value), transacting small amounts on layer-1 networks creates severe fee drag. Utilize layer-2 rollups or batch transactions.',
+  },
+  {
+    number: '03',
+    title: 'Distinguish Realized vs Unrealized Gains for Tax Preparation',
+    description: 'Unrealized paper gains are not taxable until a disposal occurs. However, in most jurisdictions, crypto-to-crypto swaps (e.g. BTC to ETH) and stablecoin conversions count as taxable realized disposals.',
+  },
+  {
+    number: '04',
+    title: 'Establish Clear Profit-Taking and Stop-Loss Targets',
+    description: 'Use the analytical break-even price to set realistic stop-losses above your total cost basis, protecting your capital from sudden market drawdowns.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CryptoProfitLossCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

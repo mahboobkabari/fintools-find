@@ -38,6 +38,11 @@ faqs:
 calculatorModule: "investment/inflation-calculator.js"
 publishDate: 2026-08-08
 priority: "P0"
+relatedTools:
+  - "currency-converter"
+  - "compound-interest-calculator"
+  - "sip-calculator"
+  - "fire-calculator"
 eeat:
   reviewedBy: "Fintools Find Quantitative Finance & Engineering Team"
   methodology: "Calculations execute exact compound price inflation equations (FV = PV × (1 + i)ⁿ) and Fisher real rate equations."

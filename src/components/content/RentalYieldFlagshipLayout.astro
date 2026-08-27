@@ -1,0 +1,92 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import RentalYieldCalculatorWidget from '../calculators/RentalYieldCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Property Cost & Rental Collection',
+    description: 'Enter original property purchase price, current estimated value, and expected monthly gross rent collection.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Itemize Annual Operating Costs',
+    description: 'Specify property taxes, maintenance fees, insurance, vacancy loss rate %, and management commissions.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Configure Financing & Cash Invested',
+    description: 'Input down payment, home loan terms, and acquisition costs to calculate net cash flow and Cash-on-Cash Return %.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Tier-1 Metro Residential 2BHK',
+    scenario: 'Purchase Price = ₹75,00,000 | Rent = ₹28,000 / mo | 5% Vacancy',
+    recommendation: 'Gross Yield = 4.48% | Net Yield = 3.65% | Cap Rate = 3.65%. Moderate residential rental yield with potential capital appreciation.',
+  },
+  {
+    persona: 'Commercial Office Suite',
+    scenario: 'Purchase Price = ₹1.20 Crore | Rent = ₹75,000 / mo | 8% Vacancy',
+    recommendation: 'Gross Yield = 7.50% | Net Yield = 5.88% | Cap Rate = 5.88%. High cash flow asset requiring active property management.',
+  },
+  {
+    persona: 'Leveraged Residential (75% Home Loan)',
+    scenario: 'Price = ₹60,00,000 | Down Payment = ₹15,00,000 | Loan EMI = ₹34,713',
+    recommendation: 'Gross Yield = 5.00% | Pre-Tax Cash Flow = −₹1.41L / yr. Leveraged negative cash flow offset by long-term principal paydown.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <RentalYieldCalculatorWidget client:load />
+
+  {/* Educational Guidance Section */}
+  <section class="mt-12 space-y-8 border-t border-hairline pt-8">
+    <div class="space-y-3">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink">
+        How to Evaluate Real Estate Rental Yield & Cash Flow Performance
+      </h2>
+      <p class="text-sm text-muted leading-relaxed">
+        Evaluating a rental property requires distinguishing between top-line gross yield, net operating income (NOI), capitalization rate (Cap Rate), and leveraged cash-on-cash return. Follow these three steps to model your property.
+      </p>
+    </div>
+
+    {/* 3-Step Process Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {timelineSteps.map((step) => (
+        <div class="p-6 bg-canvas border border-hairline rounded-2xl space-y-3 shadow-soft">
+          <span class="text-xs font-mono font-black px-2.5 py-1 bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 rounded-md inline-block">
+            Step {step.stepNumber}
+          </span>
+          <h3 class="text-base font-bold text-ink">{step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Benchmark Household Case Studies */}
+    <div class="space-y-4 pt-6 border-t border-hairline">
+      <h3 class="text-lg font-bold text-ink">
+        Illustrative Real Estate Yield Benchmarks
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {benchmarkCaseStudies.map((cs) => (
+          <div class="p-5 bg-surface-soft border border-hairline rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-primary block">{cs.persona}</span>
+            <p class="text-xs font-semibold text-ink">{cs.scenario}</p>
+            <p class="text-xs text-muted leading-relaxed">{cs.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import MiningProfitabilityCalculatorWidget from '../calculators/MiningProfitabilityCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Specify Miner Hashrate & Unit',
+    description: 'Enter your hardware hashrate capacity across standard units (H/s, kH/s, MH/s, GH/s, TH/s, PH/s).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Input Power Consumption & Energy Rate',
+    description: 'Enter total wattage drawn at the wall and your local industrial or residential electricity cost per kilowatt-hour ($/kWh).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Set Network Difficulty & Block Subsidy',
+    description: 'Review or customize total network hashrate, block subsidy reward (e.g. 3.125 BTC), block frequency, and pool fee %.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Evaluate Payback & Shutdown Price',
+    description: 'Audit net daily, monthly, and annual cashflows alongside hardware payback period (months) and break-even coin price.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Institutional & Industrial Mining Farms',
+    description: 'Modeling multi-megawatt ASIC deployments, energy rate arbitrage ($0.03-$0.06/kWh), and fleet thermodynamic efficiency (J/TH).',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Home & Retail ASIC Miners',
+    description: 'Calculating net profitability under residential utility tiers ($0.10-$0.18/kWh) and estimating realistic hardware payback horizons.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Scrypt, Kaspa & Altcoin Miners',
+    description: 'Evaluating alternative PoW algorithms (Litecoin/Dogecoin Scrypt, Kaspa kHeavyHash, Monero RandomX) with custom block parameters.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Infrastructure & Energy Investors',
+    description: 'Assessing the economic viability of stranded gas, flared methane, hydro power, or solar installations dedicated to crypto mining.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Proof-of-Work (PoW) Mining Economics & Thermodynamic Profitability',
+  formula: '\\text{Net Profit}_{\\text{daily}} = \\left(\\frac{H_{\\text{miner}}}{H_{\\text{network}}} \\times \\text{Blocks}_{\\text{24h}} \\times R_{\\text{block}} \\times P_{\\text{coin}}\\right) - \\left(\\frac{W}{1000} \\times 24 \\times \\text{Rate}_{\\text{kWh}}\\right) - \\text{Fee}_{\\text{pool}}',
+  parameters: [
+    {
+      symbol: 'H_{\\text{miner}} / H_{\\text{network}}',
+      title: 'Network Hashrate Share',
+      description: 'Your hardware hash rate divided by the total PoW network difficulty-adjusted hash rate.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Elec Cost}_{\\text{daily}}',
+      title: 'Daily Power Consumption',
+      description: 'Energy consumed in 24 hours multiplied by your local electricity tariff: (Watts / 1000) × 24 × Electricity Rate ($/kWh) × Uptime.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'P_{\\text{shutdown}}',
+      title: 'Break-Even Shutdown Price',
+      description: 'The minimum cryptocurrency price needed to cover electricity and pool fees: (Daily Power Cost + Daily OPEX) / [Daily Coins × (1 - Pool Fee %)].',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Payback Months}',
+      title: 'Capital Payback Horizon',
+      description: 'Total hardware acquisition cost divided by average monthly net cashflow.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Industrial 234 TH/s ASIC at $0.05/kWh Power',
+    tag: 'Industrial Bitcoin Mining',
+    subtitle: 'Antminer S21 Pro (15 J/TH) operating in institutional data center',
+    metrics: [
+      { label: 'Daily Energy Consumption', value: '83.4 kWh/day ($4.17 electricity cost)' },
+      { label: 'Daily Bitcoin Output', value: '~0.000162 BTC ($10.53 gross revenue @ $65k)' },
+      { label: 'Daily Net Profit', value: '+$6.20/day (+$188.60/month)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Hardware Payback Period', value: '22.3 Months ($4,200 hardware cost)', colorClass: 'text-emerald-600 font-black' },
+    ],
+    takeaway: 'Low power costs ($0.05/kWh) combined with 15 J/TH high efficiency allow the rig to operate with a 59% net operating margin and a resilient shutdown price of ~$26,000.',
+  },
+  {
+    title: 'Case Study 2: Retail Home Miner Operating at $0.16/kWh Utility Rate',
+    tag: 'Residential Power Drag',
+    subtitle: '110 TH/s older-generation ASIC running on standard home grid',
+    metrics: [
+      { label: 'Daily Electricity Cost', value: '$12.48/day (78 kWh @ $0.16/kWh)' },
+      { label: 'Daily Gross Revenue', value: '$4.95/day (0.000076 BTC @ $65k)' },
+      { label: 'Daily Net Cashflow', value: '-$7.53/day Net Loss (-$229/month)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Break-Even Coin Price', value: '$164,200 per BTC required to break even', colorClass: 'text-rose-600 font-black' },
+    ],
+    takeaway: 'Because electricity cost exceeds gross crypto revenue by 250%, running this rig produces an ongoing cash loss. It is more cost-effective to buy Bitcoin directly on spot markets than to mine at residential power rates.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Electricity Rate is the Ultimate Determinant of Long-Term Survival',
+    description: 'Hardware depreciates, but power rates dictate whether a machine can stay plugged in during market drawdowns. Tier-1 industrial miners target under $0.05/kWh.',
+  },
+  {
+    number: '02',
+    title: 'Monitor Thermodynamic Efficiency (J/TH) Across Generations',
+    description: 'Every Bitcoin halving cuts block rewards in half. Upgrading from 30 J/TH machines to 15 J/TH machines cuts power cost per mined coin by 50%, doubling operational lifespan.',
+  },
+  {
+    number: '03',
+    title: 'Always Account for Network Difficulty Growth',
+    description: 'Static mining calculators assume difficulty remains constant. In practice, as global hashrate expands, your percentage share of the network naturally decreases over time.',
+  },
+  {
+    number: '04',
+    title: 'Know Your Facility Shutdown / Curtailment Price',
+    description: 'Establish automated firmware controls that power down or curtail ASICs when spot energy prices spike above your calculated break-even threshold.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <MiningProfitabilityCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

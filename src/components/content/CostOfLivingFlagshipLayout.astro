@@ -1,0 +1,156 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CostOfLivingCalculatorWidget from '../calculators/CostOfLivingCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Establish Your Baseline Location & Budget',
+    description: 'Itemize your current living expenses across housing, groceries, utilities, transit, healthcare, and lifestyle.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Enter Target Location Projections',
+    description: 'Input expected or researched rental prices, commuter costs, and local living estimates for your target city or relocation destination.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Audit Category Differentials & Housing Burden',
+    description: 'Our financial engine computes monthly and annual cost variances, percentage changes, and housing budget ratios.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Evaluate Salary Parity & Geo-Arbitrage',
+    description: 'Determine the exact target salary offer required to preserve your existing living standard or maximize surplus savings.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Job Seekers & Corporate Relocators',
+    description: 'Evaluating new job offers in metro cities (Mumbai, Bengaluru, NYC, London) against higher living costs and rent.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Remote Workers & Digital Nomads',
+    description: 'Executing geo-arbitrage by moving from expensive tech capitals to low-cost coastal towns, tier-2 cities, or abroad.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Growing Families & Homebuyers',
+    description: 'Planning upgrades from small inner-city apartments to larger suburban homes with childcare and private schooling.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Retirees & FIRE Aspirants',
+    description: 'Downsizing post-retirement living expenses by relocating to peaceful, cost-effective communities.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Cost of Living & Salary Parity Formulations',
+  formula: '\\text{Target Equivalent Income} = \\text{Current Income} \\times \\left(\\frac{\\sum \\text{Target Category Costs}}{\\sum \\text{Current Category Costs}}\\right)',
+  parameters: [
+    {
+      symbol: '\\sum \\text{Current Costs}',
+      title: 'Current Monthly Living Outflow',
+      description: 'Sum of all monthly expenditures across housing, utilities, food, transit, healthcare, and discretionary categories.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\sum \\text{Target Costs}',
+      title: 'Target Monthly Living Outflow',
+      description: 'Projected total monthly expenditures required to sustain your lifestyle in the destination location.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Cost Delta \\%}',
+      title: 'Percentage Living Cost Variance',
+      description: 'The net percentage increase or decrease in living costs: ((Target Total - Current Total) / Current Total) × 100.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Housing Share \\%}',
+      title: 'Housing Burden Ratio',
+      description: 'The proportion of total monthly spending dedicated to housing/rent (recommended under 30% - 35%).',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Tier-2 (Pune) to Tier-1 Metro (Bengaluru) Job Switch',
+    tag: 'Career & Relocation',
+    subtitle: '₹12 LPA to ₹16.8 LPA Salary Offer Analysis',
+    metrics: [
+      { label: 'Current Living Cost', value: '₹62,000 / month in Pune' },
+      { label: 'Target Living Cost', value: '₹99,000 / month in Bengaluru (+59.7%)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Equivalent Salary Needed', value: '₹1,59,700 / month (₹19.16 LPA CTC)', colorClass: 'text-primary font-bold' },
+      { label: 'Financial Verdict', value: '₹16.8 LPA offer leaves less discretionary savings than ₹12 LPA in Pune', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'Because housing and commute costs in Bengaluru were ~60% higher, a 40% headline salary increase (₹12L to ₹16.8L) actually decreased the candidate’s net monthly savings rate.',
+  },
+  {
+    title: 'Case Study 2: Remote Geo-Arbitrage (Gurugram to Dehradun)',
+    tag: 'Remote Work & Geo-Arbitrage',
+    subtitle: 'Preserving Metro Salary in a Tier-2 Town',
+    metrics: [
+      { label: 'Starting Metro Cost', value: '₹1,11,000 / month in Gurugram' },
+      { label: 'Target Hometown Cost', value: '₹56,000 / month in Dehradun (−49.5%)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Monthly Surplus Freed', value: '+₹55,000 / month (+₹6.6 Lakhs/year)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'By shifting to remote work in a tier-2 city, the household slashed monthly expenses by nearly 50%, redirecting ₹6.6 Lakhs annually into aggressive retirement SIPs.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Evaluate Salary Offers in Net Real Purchasing Terms',
+    description: 'Never evaluate an interstate or international job offer based purely on headline CTC. Always calculate the target equivalent income required to match your existing housing and grocery standards.',
+  },
+  {
+    number: '02',
+    title: 'Keep Housing Costs Below 30% to 35% of Gross Pay',
+    description: 'Housing is typically 40% to 60% of total living costs in tier-1 metros. Expanding your transit commute radius by 15-20 minutes can frequently lower rent by 25% - 35%.',
+  },
+  {
+    number: '03',
+    title: 'Audit Fixed vs Discretionary Expenses',
+    description: 'Fixed essentials (rent, utilities, groceries, healthcare) cannot be easily reduced in an emergency. Ensure your fixed expenses do not consume more than 50%-60% of your take-home pay.',
+  },
+  {
+    number: '04',
+    title: 'Account for Hidden Relocation Costs',
+    description: 'Factor in security deposits (up to 6-10 months rent in cities like Bengaluru/Mumbai), moving logistics, school admission registration fees, and local commute passes.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CostOfLivingCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

@@ -1,0 +1,87 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CashOnCashCalculatorWidget from '../calculators/CashOnCashCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Input Purchase & Financing Costs',
+    description: 'Specify the property purchase price, down payment %, closing costs %, initial rehab outlay, and mortgage loan terms.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Itemize Gross Rent & Operating Costs',
+    description: 'Enter monthly gross rental income, vacancy rate %, and annual property operating expenses to calculate Net Operating Income (NOI).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Analyze Cash-on-Cash Return & Leverage',
+    description: 'Review your annual pre-tax cash flow, Cash-on-Cash Return %, total out-of-pocket cash outlay, and Cap Rate spread.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Single-Family Rental Property',
+    scenario: '₹50 Lakhs Price | 20% Down Payment (₹10L) | Rent = ₹48,000 / mo | 5% Vacancy | OpEx = ₹1,20,000',
+    recommendation: 'Total Outlay = ₹12.50 Lakhs | Annual Pre-Tax Cash Flow = ₹22,044 | Cash-on-Cash Return = 1.76% | Cap Rate = 8.55%.',
+  },
+  {
+    persona: 'Multi-Family Residential Building',
+    scenario: '₹1.50 Crore Price | 25% Down Payment (₹37.5L) | Rent = ₹1,40,000 / mo | 6% Vacancy | OpEx = ₹3,60,000',
+    recommendation: 'Total Outlay = ₹45.00 Lakhs | Annual Pre-Tax Cash Flow = ₹91,244 | Cash-on-Cash Return = 2.03% | Cap Rate = 8.16%.',
+  },
+  {
+    persona: 'Fixer-Upper BRRRR Project',
+    scenario: '₹40 Lakhs Price | 20% Down | ₹5 Lakhs Rehab Outlay | Rent = ₹42,000 / mo | OpEx = ₹95,000',
+    recommendation: 'Total Outlay = ₹14.20 Lakhs | Annual Pre-Tax Cash Flow = ₹50,244 | Cash-on-Cash Return = 3.54% | High Post-Rehab Rent Yield.',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <CashOnCashCalculatorWidget client:load />
+
+  <section class="mt-12 space-y-8">
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        How to Analyze Real Estate Cash-on-Cash Return
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+        Cash-on-Cash Return measures the annual pre-tax cash flow earned by a real estate investor relative to the total out-of-pocket cash invested upfront. Unlike Cap Rate—which evaluates property yield independent of mortgage debt—Cash-on-Cash Return evaluates investor equity performance incorporating mortgage leverage.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {timelineSteps.map((step) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <span class="text-2xl font-black text-sky-600 dark:text-sky-400">{step.stepNumber}</span>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">{step.title}</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+        Real Estate Investment Case Studies
+      </h2>
+      <div class="space-y-4">
+        {benchmarkCaseStudies.map((item) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm">{item.persona}</h3>
+            <p class="text-xs font-mono text-slate-500 dark:text-slate-400">{item.scenario}</p>
+            <p class="text-xs text-slate-700 dark:text-slate-300 font-medium">{item.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</FlagshipLayout>

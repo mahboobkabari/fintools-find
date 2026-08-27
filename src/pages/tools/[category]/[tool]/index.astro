@@ -44,6 +44,54 @@ import RentVsBuyFlagshipLayout from '@components/content/RentVsBuyFlagshipLayout
 import FdVsDebtFundFlagshipLayout from '@components/content/FdVsDebtFundFlagshipLayout.astro';
 import HomeAffordabilityFlagshipLayout from '@components/content/HomeAffordabilityFlagshipLayout.astro';
 import DebtSnowballFlagshipLayout from '@components/content/DebtSnowballFlagshipLayout.astro';
+import NetWorthFlagshipLayout from '@components/content/NetWorthFlagshipLayout.astro';
+import BreakEvenFlagshipLayout from '@components/content/BreakEvenFlagshipLayout.astro';
+import LifeInsuranceNeedsFlagshipLayout from '@components/content/LifeInsuranceNeedsFlagshipLayout.astro';
+import DebtToIncomeRatioFlagshipLayout from '@components/content/DebtToIncomeRatioFlagshipLayout.astro';
+import EmergencyFundFlagshipLayout from '@components/content/EmergencyFundFlagshipLayout.astro';
+import RentalYieldFlagshipLayout from '@components/content/RentalYieldFlagshipLayout.astro';
+import DcfFlagshipLayout from '@components/content/DcfFlagshipLayout.astro';
+import CreditCardPayoffFlagshipLayout from '@components/content/CreditCardPayoffFlagshipLayout.astro';
+import BalanceTransferFlagshipLayout from '@components/content/BalanceTransferFlagshipLayout.astro';
+import NpvFlagshipLayout from '@components/content/NpvFlagshipLayout.astro';
+import HealthInsuranceFlagshipLayout from '@components/content/HealthInsuranceFlagshipLayout.astro';
+import ProfitMarginFlagshipLayout from '@components/content/ProfitMarginFlagshipLayout.astro';
+import CtcFlagshipLayout from '@components/content/CtcFlagshipLayout.astro';
+import CapRateFlagshipLayout from '@components/content/CapRateFlagshipLayout.astro';
+import PaybackPeriodFlagshipLayout from '@components/content/PaybackPeriodFlagshipLayout.astro';
+import DebtAvalancheFlagshipLayout from '@components/content/DebtAvalancheFlagshipLayout.astro';
+import CashOnCashFlagshipLayout from '@components/content/CashOnCashFlagshipLayout.astro';
+import PropertyValuationFlagshipLayout from '@components/content/PropertyValuationFlagshipLayout.astro';
+import GRMFlagshipLayout from '@components/content/GRMFlagshipLayout.astro';
+import TdsFlagshipLayout from '@components/content/TdsFlagshipLayout.astro';
+import GstFlagshipLayout from '@components/content/GstFlagshipLayout.astro';
+import LumpsumFlagshipLayout from '@components/content/LumpsumFlagshipLayout.astro';
+import VatFlagshipLayout from '@components/content/VatFlagshipLayout.astro';
+import StampDutyFlagshipLayout from '@components/content/StampDutyFlagshipLayout.astro';
+import DepreciationFlagshipLayout from '@components/content/DepreciationFlagshipLayout.astro';
+import WorkingCapitalFlagshipLayout from '@components/content/WorkingCapitalFlagshipLayout.astro';
+import TermLifeInsuranceFlagshipLayout from '@components/content/TermLifeInsuranceFlagshipLayout.astro';
+import IrrFlagshipLayout from '@components/content/IrrFlagshipLayout.astro';
+import Budget503020FlagshipLayout from '@components/content/Budget503020FlagshipLayout.astro';
+import BurnRateRunwayFlagshipLayout from '@components/content/BurnRateRunwayFlagshipLayout.astro';
+import CustomerLifetimeValueFlagshipLayout from '@components/content/CustomerLifetimeValueFlagshipLayout.astro';
+import CustomerAcquisitionCostFlagshipLayout from '@components/content/CustomerAcquisitionCostFlagshipLayout.astro';
+import MrrArrFlagshipLayout from '@components/content/MrrArrFlagshipLayout.astro';
+import EquityDilutionFlagshipLayout from '@components/content/EquityDilutionFlagshipLayout.astro';
+import StartupValuationFlagshipLayout from '@components/content/StartupValuationFlagshipLayout.astro';
+import DscrFlagshipLayout from '@components/content/DscrFlagshipLayout.astro';
+import QuickRatioFlagshipLayout from '@components/content/QuickRatioFlagshipLayout.astro';
+import CurrentRatioFlagshipLayout from '@components/content/CurrentRatioFlagshipLayout.astro';
+import RoeFlagshipLayout from '@components/content/RoeFlagshipLayout.astro';
+import RoaFlagshipLayout from '@components/content/RoaFlagshipLayout.astro';
+import CurrencyConverterFlagshipLayout from '@components/content/CurrencyConverterFlagshipLayout.astro';
+import PurchasingPowerFlagshipLayout from '@components/content/PurchasingPowerFlagshipLayout.astro';
+import CostOfLivingFlagshipLayout from '@components/content/CostOfLivingFlagshipLayout.astro';
+import ImportDutyFlagshipLayout from '@components/content/ImportDutyFlagshipLayout.astro';
+import RemittanceFeeFlagshipLayout from '@components/content/RemittanceFeeFlagshipLayout.astro';
+import CryptoProfitLossFlagshipLayout from '@components/content/CryptoProfitLossFlagshipLayout.astro';
+import MiningProfitabilityFlagshipLayout from '@components/content/MiningProfitabilityFlagshipLayout.astro';
+import StakingRewardsFlagshipLayout from '@components/content/StakingRewardsFlagshipLayout.astro';
 import HomeLoanCalculatorWidget from '@components/calculators/HomeLoanCalculatorWidget';
 import PersonalLoanCalculatorWidget from '@components/calculators/PersonalLoanCalculatorWidget';
 import LoanAmortizationCalculatorWidget from '@components/calculators/LoanAmortizationCalculatorWidget';
@@ -177,6 +225,102 @@ const data = entry.data;
   <HomeAffordabilityFlagshipLayout data={data} slug={slug} />
 ) : slug === 'debt-snowball-calculator' ? (
   <DebtSnowballFlagshipLayout data={data} slug={slug} />
+) : slug === 'net-worth-calculator' ? (
+  <NetWorthFlagshipLayout data={data} slug={slug} />
+) : slug === 'break-even-calculator' ? (
+  <BreakEvenFlagshipLayout data={data} slug={slug} />
+) : slug === 'life-insurance-needs-calculator' ? (
+  <LifeInsuranceNeedsFlagshipLayout data={data} slug={slug} />
+) : slug === 'debt-to-income-ratio-calculator' ? (
+  <DebtToIncomeRatioFlagshipLayout data={data} slug={slug} />
+) : slug === 'emergency-fund-calculator' ? (
+  <EmergencyFundFlagshipLayout data={data} slug={slug} />
+) : slug === 'rental-yield-calculator' ? (
+  <RentalYieldFlagshipLayout data={data} slug={slug} />
+) : slug === 'discounted-cash-flow-calculator' ? (
+  <DcfFlagshipLayout data={data} slug={slug} />
+) : slug === 'credit-card-payoff-calculator' ? (
+  <CreditCardPayoffFlagshipLayout data={data} slug={slug} />
+) : slug === 'balance-transfer-calculator' ? (
+  <BalanceTransferFlagshipLayout data={data} slug={slug} />
+) : slug === 'npv-calculator' ? (
+  <NpvFlagshipLayout data={data} slug={slug} />
+) : slug === 'health-insurance-calculator' ? (
+  <HealthInsuranceFlagshipLayout data={data} slug={slug} />
+) : slug === 'profit-margin-calculator' ? (
+  <ProfitMarginFlagshipLayout data={data} slug={slug} />
+) : slug === 'ctc-calculator' ? (
+  <CtcFlagshipLayout data={data} slug={slug} />
+) : slug === 'cap-rate-calculator' ? (
+  <CapRateFlagshipLayout data={data} slug={slug} />
+) : slug === 'payback-period-calculator' ? (
+  <PaybackPeriodFlagshipLayout data={data} slug={slug} />
+) : slug === 'debt-avalanche-calculator' ? (
+  <DebtAvalancheFlagshipLayout data={data} slug={slug} />
+) : slug === 'cash-on-cash-return-calculator' ? (
+  <CashOnCashFlagshipLayout data={data} slug={slug} />
+) : slug === 'property-valuation-calculator' ? (
+  <PropertyValuationFlagshipLayout data={data} slug={slug} />
+) : slug === 'gross-rent-multiplier-calculator' ? (
+  <GRMFlagshipLayout data={data} slug={slug} />
+) : slug === 'tds-calculator' ? (
+  <TdsFlagshipLayout data={data} slug={slug} />
+) : slug === 'gst-calculator' ? (
+  <GstFlagshipLayout data={data} slug={slug} />
+) : slug === 'lumpsum-calculator' ? (
+  <LumpsumFlagshipLayout data={data} slug={slug} />
+) : slug === 'vat-calculator' ? (
+  <VatFlagshipLayout data={data} slug={slug} />
+) : slug === 'stamp-duty-calculator' ? (
+  <StampDutyFlagshipLayout data={data} slug={slug} />
+) : slug === 'depreciation-calculator' ? (
+  <DepreciationFlagshipLayout data={data} slug={slug} />
+) : slug === 'working-capital-calculator' ? (
+  <WorkingCapitalFlagshipLayout data={data} slug={slug} />
+) : slug === 'term-life-insurance-calculator' ? (
+  <TermLifeInsuranceFlagshipLayout data={data} slug={slug} />
+) : slug === 'irr-calculator' ? (
+  <IrrFlagshipLayout data={data} slug={slug} />
+) : slug === '50-30-20-budget-calculator' ? (
+  <Budget503020FlagshipLayout data={data} slug={slug} />
+) : slug === 'burn-rate-runway-calculator' ? (
+  <BurnRateRunwayFlagshipLayout data={data} slug={slug} />
+) : slug === 'customer-lifetime-value-calculator' ? (
+  <CustomerLifetimeValueFlagshipLayout data={data} slug={slug} />
+) : slug === 'customer-acquisition-cost-calculator' ? (
+  <CustomerAcquisitionCostFlagshipLayout data={data} slug={slug} />
+) : slug === 'mrr-arr-calculator' ? (
+  <MrrArrFlagshipLayout data={data} slug={slug} />
+) : slug === 'equity-dilution-calculator' ? (
+  <EquityDilutionFlagshipLayout data={data} slug={slug} />
+) : slug === 'startup-valuation-calculator' ? (
+  <StartupValuationFlagshipLayout data={data} slug={slug} />
+) : slug === 'debt-service-coverage-ratio-calculator' ? (
+  <DscrFlagshipLayout data={data} slug={slug} />
+) : slug === 'quick-ratio-calculator' ? (
+  <QuickRatioFlagshipLayout data={data} slug={slug} />
+) : slug === 'current-ratio-calculator' ? (
+  <CurrentRatioFlagshipLayout data={data} slug={slug} />
+) : slug === 'return-on-equity-calculator' ? (
+  <RoeFlagshipLayout data={data} slug={slug} />
+) : slug === 'return-on-assets-calculator' ? (
+  <RoaFlagshipLayout data={data} slug={slug} />
+) : slug === 'currency-converter' ? (
+  <CurrencyConverterFlagshipLayout data={data} slug={slug} />
+) : slug === 'purchasing-power-calculator' ? (
+  <PurchasingPowerFlagshipLayout data={data} slug={slug} />
+) : slug === 'cost-of-living-calculator' ? (
+  <CostOfLivingFlagshipLayout data={data} slug={slug} />
+) : slug === 'import-duty-calculator' ? (
+  <ImportDutyFlagshipLayout data={data} slug={slug} />
+) : slug === 'remittance-fee-calculator' ? (
+  <RemittanceFeeFlagshipLayout data={data} slug={slug} />
+) : slug === 'crypto-profit-loss-calculator' ? (
+  <CryptoProfitLossFlagshipLayout data={data} slug={slug} />
+) : slug === 'mining-profitability-calculator' ? (
+  <MiningProfitabilityFlagshipLayout data={data} slug={slug} />
+) : slug === 'staking-rewards-calculator' ? (
+  <StakingRewardsFlagshipLayout data={data} slug={slug} />
 ) : (
   <ToolLayout
     title={data.title}

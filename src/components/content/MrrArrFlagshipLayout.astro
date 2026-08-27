@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import MrrArrCalculatorWidget from '../calculators/MrrArrCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Audit Starting Monthly Recurring Revenue (MRR)',
+    description: 'Establish your baseline monthly recurring revenue at the beginning of the reporting period across all active subscription contracts.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Itemize Gross Additions (New, Expansion, Reactivation)',
+    description: 'Input new customer acquisitions, account tier upgrades, cross-sells, seat expansion, and reactivations of previously canceled subscribers.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Deduct Gross Losses (Contraction & Churn)',
+    description: 'Subtract revenue losses resulting from plan downgrades, seat reductions (Contraction), and total subscription cancellations (Churn).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Analyze Net New MRR, ARR Run-Rate & SaaS NRR',
+    description: 'Evaluate your ending MRR, annualized Run-Rate ARR (MRR x 12), Net Revenue Retention percentage, and SaaS Quick Ratio health.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'SaaS Founders & Executive Leadership',
+    description: 'Software CEOs tracking monthly revenue compounding, ARR milestones, venture valuation multiples, and net new additions.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Chief Revenue Officers & VPs of Sales',
+    description: 'Go-to-market executives monitoring pipeline velocity, new bookings vs expansion upsells, and quota attainment.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Customer Success & Retention Leads',
+    description: 'Account managers driving expansion revenue, eliminating account downgrades, and protecting Net Revenue Retention (NRR).',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Venture Capital & Private Equity Associates',
+    description: 'Investment analysts benchmarking SaaS Quick Ratios, revenue churn drag, and portfolio valuation capitalizations.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'MRR Waterfall, ARR Run-Rate, NRR & Quick Ratio Mathematical Formulas',
+  formula: '\\text{Net New MRR} = \\text{New} + \\text{Exp} + \\text{React} - \\text{Contr} - \\text{Churn}, \\quad \\text{ARR} = \\text{Ending MRR} \\times 12, \\quad \\text{NRR \\%} = \\frac{M_0 + \\text{Exp} - \\text{Contr} - \\text{Churn}}{M_0}',
+  parameters: [
+    {
+      symbol: '\\text{New / Exp / React}',
+      title: 'Gross Revenue Additions',
+      description: 'New customer bookings + existing account expansion + reactivated churn accounts.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Contr / Churn}',
+      title: 'Gross Revenue Losses',
+      description: 'Plan downgrades (Contraction) + full customer cancellations (Churn).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Run-Rate ARR}',
+      title: 'Annualized Recurring Revenue',
+      description: 'Ending Monthly Recurring Revenue multiplied by 12 months.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{NRR \\%}',
+      title: 'Net Revenue Retention',
+      description: 'Percentage of recurring revenue retained from existing customers (>100% = net expansion).',
+      colorClass: 'text-ink',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Series A SaaS Scaleup Expanding ARR (₹25L Starting MRR)',
+    tag: 'Series A Scaleup',
+    subtitle: 'Driving Expansion Flywheels',
+    metrics: [
+      { label: 'Starting MRR', value: '₹25.00 Lakhs / Month' },
+      { label: 'Gross Additions (New + Exp)', value: '+₹7.00 Lakhs (₹4.0L New, ₹2.5L Exp, ₹50K React)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Gross Losses (Contr + Churn)', value: '-₹2.50 Lakhs (₹1.0L Contr, ₹1.5L Churn)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Ending MRR & Run-Rate ARR', value: '₹29.50 Lakhs MRR / ₹3.54 Crores ARR', colorClass: 'text-primary font-black' },
+      { label: 'SaaS Health Metrics', value: '104.0% NRR · 2.6x Quick Ratio', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'With positive net expansion (104% NRR) and strong acquisition velocity, the scaleup grows annualized run-rate revenue from ₹3.00 Cr to ₹3.54 Cr in a single month.',
+  },
+  {
+    title: 'Case Study 2: Enterprise SaaS Platform Unlocking 118% NRR',
+    tag: 'Enterprise NRR',
+    subtitle: 'Compound Account Expansion',
+    metrics: [
+      { label: 'Starting MRR', value: '₹50.00 Lakhs / Month' },
+      { label: 'Expansion MRR', value: '+₹12.00 Lakhs / Month (Usage & Seats)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Total Losses', value: '-₹3.00 Lakhs / Month' },
+      { label: 'Net Revenue Retention', value: '118.0% NRR (Elite Benchmark)', colorClass: 'text-semantic-success font-black' },
+      { label: 'Ending Run-Rate ARR', value: '₹7.92 Crores ARR (₹11.08 Cr Valuation @ 14x)', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Achieving 118% NRR creates negative net churn, where existing customer revenue expands by ₹9 Lakhs net per month even before adding a single new customer.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Target Net Revenue Retention Above 110%',
+    description: 'Top-tier enterprise SaaS companies achieve negative net churn (NRR > 110%), meaning expansion from retained customers outweighs all churn losses combined.',
+  },
+  {
+    number: '02',
+    title: 'Maintain a SaaS Quick Ratio Above 4.0',
+    description: 'A Quick Ratio ((New + Expansion) / (Contraction + Churn)) above 4.0 indicates hyper-efficient growth with minimal churn leakage dampening top-line expansion.',
+  },
+  {
+    number: '03',
+    title: 'Differentiate Contraction from Full Churn',
+    description: 'Contraction (downgrades) signals pricing tier friction or reduced seat utilization, whereas full churn reflects complete product abandonment or vendor displacement.',
+  },
+  {
+    number: '04',
+    title: 'Leverage ARR Valuation Multiples for Capital Planning',
+    description: 'Understand how incremental Net New MRR drives enterprise valuation. Adding ₹1 Lakh of Net New MRR at a 10x ARR multiple creates ₹1.20 Crores in enterprise shareholder value.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <MrrArrCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

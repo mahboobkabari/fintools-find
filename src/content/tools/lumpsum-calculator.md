@@ -29,6 +29,12 @@ faqs:
 calculatorModule: "investment/lumpsum-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
+relatedTools:
+  - "sip-calculator"
+  - "step-up-sip-calculator"
+  - "swp-calculator"
+  - "cagr-calculator"
+  - "compound-interest-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly utilize standard compound interest formulations (Time Value of Money)."

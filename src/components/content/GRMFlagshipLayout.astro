@@ -1,0 +1,177 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import GRMCalculatorWidget from '../calculators/GRMCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Calculate Annual Gross Rental Income',
+    description: 'Determine total annual gross rental revenue from monthly rent and any additional gross income sources (parking, laundry, storage).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Compute Gross Rent Multiplier',
+    description: 'Divide the property price by annual gross rental income to calculate GRM — a quick screening ratio for comparing properties.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Estimate Implied Property Value',
+    description: 'Multiply annual gross rent by your target GRM to estimate the property value implied by gross rental income.',
+  },
+];
+
+const benchmarkCaseStudies = [
+  {
+    persona: 'Single-Family Rental Home',
+    scenario: 'Rent = ₹35,000 / mo | Other Income = ₹12,000 / yr | Property Value = ₹50 Lakhs',
+    recommendation: 'Annual Gross Rent = ₹4,32,000 / yr | GRM = 11.57× | Gross Rent Yield = 8.64%',
+  },
+  {
+    persona: 'Multi-Unit Apartment Building',
+    scenario: 'Rent = ₹2,00,000 / mo | Other Income = ₹1,20,000 / yr | Property Value = ₹2.5 Crores',
+    recommendation: 'Annual Gross Rent = ₹25,20,000 / yr | GRM = 9.92× | Gross Rent Yield = 10.08%',
+  },
+  {
+    persona: 'Small Commercial Retail Space',
+    scenario: 'Rent = ₹1,20,000 / mo | Other Income = ₹50,000 / yr | Property Value = ₹1.2 Crores',
+    recommendation: 'Annual Gross Rent = ₹14,90,000 / yr | GRM = 8.05× | Gross Rent Yield = 12.42%',
+  },
+];
+---
+
+<FlagshipLayout data={data} slug={slug}>
+  <GRMCalculatorWidget client:load />
+
+  <section class="mt-12 space-y-8">
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        How Gross Rent Multiplier Works
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+        The Gross Rent Multiplier (GRM) is a property screening metric that compares a property's price to its annual gross rental income. A lower GRM indicates a higher gross rental return relative to price. Unlike Cap Rate, GRM uses gross income before any expense deductions, making it a quick but incomplete valuation tool.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {timelineSteps.map((step) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">{step.stepNumber}</span>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base">{step.title}</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Formula Explanation -->
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        GRM Formula & Gross Rent Yield
+      </h2>
+      <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-mono text-xs">
+          <p class="font-bold text-slate-900 dark:text-white mb-1">Gross Rent Multiplier:</p>
+          <p>GRM = Property Price ÷ Annual Gross Rental Income</p>
+        </div>
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-mono text-xs">
+          <p class="font-bold text-slate-900 dark:text-white mb-1">Implied Property Value:</p>
+          <p>Implied Value = Annual Gross Rental Income × Target GRM</p>
+        </div>
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl font-mono text-xs">
+          <p class="font-bold text-slate-900 dark:text-white mb-1">Gross Rent Yield (Reciprocal of GRM):</p>
+          <p>Gross Rent Yield % = (Annual Gross Rental Income ÷ Property Price) × 100 = 100 ÷ GRM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRM vs Cap Rate -->
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        GRM vs Cap Rate: Key Differences
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 font-semibold">
+              <th class="py-3 px-4">Aspect</th>
+              <th class="py-3 px-4">Gross Rent Multiplier (GRM)</th>
+              <th class="py-3 px-4">Capitalization Rate (Cap Rate)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+            <tr>
+              <td class="py-3 px-4 font-medium">Income Basis</td>
+              <td class="py-3 px-4">Gross Rental Income</td>
+              <td class="py-3 px-4">Net Operating Income (NOI)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium">Expenses Included</td>
+              <td class="py-3 px-4">None — uses gross income before expenses</td>
+              <td class="py-3 px-4">Operating expenses deducted from income</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium">Use Case</td>
+              <td class="py-3 px-4">Quick property screening</td>
+              <td class="py-3 px-4">Detailed asset-level analysis</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium">Vacancy Deduction</td>
+              <td class="py-3 px-4">Not included</td>
+              <td class="py-3 px-4">Typically included</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Why Expenses Are Excluded -->
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        Why Are Expenses Excluded from GRM?
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+        GRM intentionally excludes operating expenses, vacancy losses, and financing costs. This makes GRM a simple, quick-to-calculate screening ratio that can be applied uniformly across properties even when detailed expense data is unavailable. However, this also means GRM should never be used as the sole valuation metric — properties with similar GRM may have vastly different operating expense profiles.
+      </p>
+      <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+        For a complete investment analysis, use GRM for initial screening and then perform a detailed Cap Rate, Net Rental Yield, or Cash-on-Cash Return analysis with full operating expense, vacancy, and financing data.
+      </p>
+    </div>
+
+    <!-- Worked Example -->
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+        GRM Screening Case Studies
+      </h2>
+      <div class="space-y-4">
+        {benchmarkCaseStudies.map((item) => (
+          <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 space-y-2">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm">{item.persona}</h3>
+            <p class="text-xs font-mono text-slate-500 dark:text-slate-400">{item.scenario}</p>
+            <p class="text-xs text-slate-700 dark:text-slate-300 font-medium">{item.recommendation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Assumptions & Limitations -->
+    <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        Assumptions & Limitations
+      </h2>
+      <ul class="list-disc list-inside space-y-2 text-sm text-slate-600 dark:text-slate-300">
+        <li>GRM uses gross rental income only and excludes all operating expenses, vacancy, financing, and taxes.</li>
+        <li>GRM-implied property values are illustrative screening estimates, not certified appraisals.</li>
+        <li>Properties with identical GRM may have very different expense profiles and net returns.</li>
+        <li>GRM does not account for property condition, location quality, tenant credit, or market appreciation.</li>
+        <li>A lower GRM does not automatically indicate a better investment — investor objectives and risk tolerance vary.</li>
+        <li>GRM is most useful for comparing similar property types in the same market.</li>
+      </ul>
+    </div>
+  </section>
+</FlagshipLayout>

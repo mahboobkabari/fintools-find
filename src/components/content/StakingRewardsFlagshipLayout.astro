@@ -1,0 +1,158 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import StakingRewardsCalculatorWidget from '../calculators/StakingRewardsCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Enter Staked Tokens & Asset Price',
+    description: 'Specify the quantity of tokens to be staked and current market valuation in your preferred fiat currency.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Select APR / APY & Compounding Frequency',
+    description: 'Configure nominal APR or effective APY alongside compounding schedules (Daily, Weekly, Monthly, or Non-compounding).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Deduct Validator Commission & Staking Fees',
+    description: 'Factor in node operator commissions (e.g. 3-8%), fixed on-chain delegation gas, and maintenance charges.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Net Yield & Downside Price Buffer',
+    description: 'Evaluate net token growth, fiat return on investment (ROI %), break-even token price, and unbonding lock-up liquidity.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Individual Proof-of-Stake Delegators',
+    description: 'Staking native tokens (ETH, SOL, ADA, DOT, ATOM) to earn passive on-chain yield while evaluating validator fees and compounding schedules.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Liquid Staking & DeFi Yield Farmers',
+    description: 'Modeling yield differentials between vanilla solo staking, pooled liquid staking tokens (LSTs), and lending vault protocols.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Validator & Node Operators',
+    description: 'Calculating gross protocol staking emissions, delegator payout obligations, and commission revenue margins.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Crypto Wealth & Portfolio Managers',
+    description: 'Assessing net annual staking cashflow, downside token price protection buffers, and tax liabilities across multi-asset crypto holdings.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Proof-of-Stake (PoS) Yield & Discrete Compounding Mathematics',
+  formula: '\\text{Net Rewards} = \\left[ P \\times \\left(1 + \\frac{\\text{APR}}{m}\\right)^{m \\times t} - P \\right] \\times \\left(1 - \\frac{\\text{Commission \\%}}{100}\\right) - \\text{Fees}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Initial Principal Staked',
+      description: 'The starting quantity of cryptocurrency tokens committed to a staking contract or validator node.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'm',
+      title: 'Compounding Frequency',
+      description: 'Number of reward compounding periods per year (e.g. 365 for daily, 52 for weekly, 12 for monthly, 0 for simple non-compounding).',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Commission \\%}',
+      title: 'Validator / Pool Margin',
+      description: 'Percentage fee retained by the validator or staking pool from gross protocol staking emissions prior to delegator payout.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'P_{\\text{token, break-even}}',
+      title: 'Downside Buffer & Break-Even',
+      description: 'Minimum token market price required at unstaking for total ending fiat value to equal initial fiat principal.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Long-Term 32 ETH Staking with Daily Compounding',
+    tag: 'Ethereum Liquid Staking',
+    subtitle: '12-month staking horizon at 3.8% APR with 5% pool commission and $3,000 ETH',
+    metrics: [
+      { label: 'Initial Staked Principal', value: '32.0 ETH ($96,000 USD)' },
+      { label: 'Gross Staking Emission', value: '+1.239 ETH ($3,717 USD gross)' },
+      { label: 'Validator Commission (5%)', value: '-0.062 ETH (-$186 USD)' },
+      { label: 'Net Annual Ending Balance', value: '33.177 ETH ($99,531 USD)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Downside Price Buffer', value: '3.67% ($2,893 break-even price)', colorClass: 'text-emerald-600 font-black' },
+    ],
+    takeaway: 'Daily reward compounding generates 33.177 net ETH at maturity. Staking rewards provide a 3.67% cushion, meaning ETH could fall from $3,000 to $2,893 before the investor incurs any nominal fiat principal loss.',
+  },
+  {
+    title: 'Case Study 2: High Inflation 14.0% APR Protocol with 21-Day Lockup',
+    tag: 'High-Yield Cosmos Staking',
+    subtitle: '300 ATOM staked at 14.0% APR ($8.00 spot price) evaluated against token volatility',
+    metrics: [
+      { label: 'Initial Staked Principal', value: '300 ATOM ($2,400 USD)' },
+      { label: 'Net Token Yield (1 Year)', value: '+42.75 ATOM (+14.25% Net Token Growth)' },
+      { label: 'Ending Balance', value: '342.75 ATOM ($2,742 USD @ constant price)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Bear Market (-30% price)', value: '$1,919 USD (-$481 net loss despite +42 tokens)', colorClass: 'text-rose-600 font-black' },
+    ],
+    takeaway: 'While high APR generates substantial nominal token yield (+14.25%), token price drawdowns can easily overpower staking gains. High-yield staking must always be evaluated alongside protocol token emission and inflation dynamics.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Differentiate Nominal APR from Real Net Yield (After Inflation)',
+    description: 'High nominal APR (e.g. 15-20%) often accompanies high annual token inflation. Real net yield equals nominal staking rate minus protocol supply inflation rate.',
+  },
+  {
+    number: '02',
+    title: 'Factor in Unbonding Periods and Illiquidity Risks',
+    description: 'Networks like Polkadot (28 days) and Cosmos (21 days) enforce mandatory unbonding cool-downs during which tokens do not earn yield and cannot be sold during market crashes.',
+  },
+  {
+    number: '03',
+    title: 'Audit Validator Slashing History & Infrastructure Redundancy',
+    description: 'Avoid 0% commission fly-by-night validators with poor uptime. A 1% slashing penalty due to double-signing can wipe out months of accumulated staking rewards.',
+  },
+  {
+    number: '04',
+    title: 'Model Token Price Sensitivity Before Committing Capital',
+    description: 'Staking does not eliminate market risk. Always calculate your break-even exit price to understand how much the underlying asset can drop before net fiat returns turn negative.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <StakingRewardsCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

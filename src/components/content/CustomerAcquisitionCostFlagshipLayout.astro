@@ -1,0 +1,160 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CustomerAcquisitionCostCalculatorWidget from '../calculators/CustomerAcquisitionCostCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Itemize Fully Loaded Acquisition Spend',
+    description: 'Sum all sales and marketing costs including digital ad budgets (Google, Meta), sales team salaries, commissions, SDR payroll, software tools, and creative agencies.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Audit Paid vs Organic Customer Inflows',
+    description: 'Separate new customers acquired directly through paid campaigns from those entering via organic search (SEO), direct word-of-mouth, and referral loops.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Calculate Paid CAC vs Blended CAC',
+    description: 'Compare Paid CAC (Ad Spend / Paid Customers) against Blended CAC (Total Spend / All Customers) to understand your true organic marketing leverage.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Determine CAC Payback Horizon & Unit Ratios',
+    description: 'Calculate the exact number of months required for gross margin contributions to pay back CAC, ensuring working capital is recycled sustainably.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Growth Marketers & Performance Leads',
+    description: 'Marketing leaders monitoring blended CAC against paid channel ROAS, ad creative fatigue, and funnel drop-off rates.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'B2B Sales Directors & CROs',
+    description: 'Sales executives evaluating SDR quota efficiency, outbound sales compensation structures, and enterprise pipeline acquisition velocity.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Startup Founders & CFOs',
+    description: 'Corporate leaders maintaining sustainable CAC payback horizons (<12 months) and capital efficiency for venture scale.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Venture Capital & Private Equity Investors',
+    description: 'Investment professionals assessing SaaS Magic Numbers, go-to-market unit efficiency, and scalability of portfolio companies.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Customer Acquisition Cost (CAC), Blended CAC & Payback Mathematical Formulas',
+  formula: '\\text{Paid CAC} = \\frac{\\text{Ad Spend}}{N_{\\text{paid}}}, \\quad \\text{Blended CAC} = \\frac{\\sum \\text{Acquisition OpEx}}{N_{\\text{total}}}, \\quad \\text{Payback (Mo)} = \\frac{\\text{CAC}}{\\text{ARPU} \\times \\text{GM}}',
+  parameters: [
+    {
+      symbol: '\\text{Paid Ad Spend}',
+      title: 'Direct Media & Campaign Outflow',
+      description: 'Total expenditure on paid search, paid social, programmatic, and sponsored ads.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\sum \\text{Acquisition OpEx}',
+      title: 'Fully Loaded Sales & Marketing Budget',
+      description: 'Ad spend + Sales salaries + Marketing salaries + Software tools + Agency fees.',
+      colorClass: 'text-ink',
+    },
+    {
+      symbol: 'N_{\\text{total}}',
+      title: 'Total New Customers Acquired',
+      description: 'Sum of paid customer conversions and organic/referral acquisitions.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Payback Horizon}',
+      title: 'Capital Recovery Period (Months)',
+      description: 'Months needed for customer gross profit to fully amortize the initial CAC.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: B2B Enterprise SaaS Platform (₹15 Lakhs Budget)',
+    tag: 'Enterprise SaaS CAC',
+    subtitle: 'Optimizing Blended Unit Economics',
+    metrics: [
+      { label: 'Total Acquisition Spend', value: '₹15,00,000 / Month' },
+      { label: 'Customers Acquired', value: '15 Customers (10 Paid, 5 Org)' },
+      { label: 'Paid CAC vs Blended CAC', value: '₹50,000 Paid / ₹1,00,000 Blended', colorClass: 'text-primary font-bold' },
+      { label: 'Monthly ARPU & Gross Margin', value: '₹50,000 / Mo @ 80.0% Margin' },
+      { label: 'CAC Payback Period', value: '2.5 Months (Rapid Recovery)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'With a 2.5-month payback horizon and high 80% gross margins, the SaaS platform recoups its ₹1,00,000 blended CAC almost immediately, allowing rapid reinvestment of cash into expansion.',
+  },
+  {
+    title: 'Case Study 2: D2C E-Commerce Brand Harnessing Organic SEO',
+    tag: 'E-Commerce CAC',
+    subtitle: 'Lowering CAC with Organic Referrals',
+    metrics: [
+      { label: 'Paid Ad Spend', value: '₹4,00,000 (Meta / Google Ads)' },
+      { label: 'Total Fully Loaded Spend', value: '₹6,00,000' },
+      { label: 'Total Orders Acquired', value: '800 Orders (600 Paid, 200 Organic)' },
+      { label: 'Paid CAC', value: '₹667 / Order' },
+      { label: 'Blended CAC', value: '₹750 / Order', colorClass: 'text-semantic-success font-bold' },
+      { label: 'CAC Payback', value: '6.0 Months', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'By driving 25% of purchases through organic content and email referral loops, the D2C brand successfully insulates its unit economics against rising ad CPMs.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Always Track Fully Loaded Blended CAC',
+    description: 'Never evaluate marketing solely on Ad Spend / Paid Conversions. Real CAC must include sales salaries, SDR commissions, Hubspot/CRM software licenses, and agency retainers.',
+  },
+  {
+    number: '02',
+    title: 'Maintain CAC Payback Under 12 Months',
+    description: 'If it takes more than 12 months for gross profit to repay CAC, growth will consume excessive cash reserves and strain operational working capital.',
+  },
+  {
+    number: '03',
+    title: 'Build Organic Multipliers & Viral Referral Loops',
+    description: 'An organic share above 30% acts as a dampener on rising paid ad costs, multiplying the effective return on every ad dollar spent.',
+  },
+  {
+    number: '04',
+    title: 'Incentivize Annual Upfront Contract Payments',
+    description: 'Offering a 10% to 15% discount for annual upfront billing allows you to collect 12 months of revenue on Day 1, shrinking your cash payback period to zero.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CustomerAcquisitionCostCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

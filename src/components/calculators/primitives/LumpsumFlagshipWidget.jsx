@@ -14,7 +14,6 @@ import InsightCard from '../../ui/InsightCard';
 import ShareActions from '../../ui/ShareActions';
 import FormInputNumber from './FormInputNumber';
 import FormSelect from './FormSelect';
-import AmortizationTable from './AmortizationTable';
 
 const DEFAULT_LUMPSUM_STATE = {
   initialInvestment: 100000,
@@ -333,8 +332,47 @@ export default function LumpsumFlagshipWidget() {
         </div>
       </div>
 
-      {/* 11. YEARLY GROWTH SCHEDULE TABLE */}
-      <AmortizationTable schedule={results.yearlyBreakdown} />
+      {/* 11. YEARLY WEALTH GROWTH SCHEDULE TABLE */}
+      {results.yearlyBreakdown && results.yearlyBreakdown.length > 0 && (
+        <div class="bg-canvas border border-hairline rounded-3xl p-6 sm:p-8 space-y-4 shadow-soft">
+          <div class="flex items-center justify-between border-b border-hairline pb-4 flex-wrap gap-2">
+            <div>
+              <h4 class="text-lg font-bold font-heading text-ink">Yearly Wealth Growth Schedule</h4>
+              <p class="text-xs text-muted mt-0.5">Year-by-year compounding asset progression</p>
+            </div>
+            <span class="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-pill">
+              {tenureYears} Years @ {expectedReturnRate}% p.a.
+            </span>
+          </div>
+
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table class="w-full text-left border-collapse text-xs font-mono">
+              <thead class="sticky top-0 bg-surface-soft text-ink font-semibold border-b border-hairline">
+                <tr>
+                  <th class="p-3">Year</th>
+                  <th class="p-3 text-right">Capital Invested</th>
+                  <th class="p-3 text-right">Wealth Gain</th>
+                  <th class="p-3 text-right">Total Portfolio Value</th>
+                  <th class="p-3 text-right">Multiplier</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-hairline">
+                {results.yearlyBreakdown.map((row) => (
+                  <tr key={row.year} class="hover:bg-surface-soft/50 transition-colors">
+                    <td class="p-3 font-bold text-ink">Year {row.year}</td>
+                    <td class="p-3 text-right text-muted">{formatCurrency(row.invested)}</td>
+                    <td class="p-3 text-right text-semantic-success font-bold">+{formatCurrency(row.returns)}</td>
+                    <td class="p-3 text-right text-ink font-bold">{formatCurrency(row.totalValue)}</td>
+                    <td class="p-3 text-right text-primary font-bold">
+                      {(row.invested > 0 ? (row.totalValue / row.invested).toFixed(2) : '1.00')}x
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import WorkingCapitalCalculatorWidget from '../calculators/WorkingCapitalCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Short-Term Asset & Liability Mapping',
+    description: 'Aggregate liquid current assets (cash, receivables, inventory, prepayments) and short-term obligations (trade payables, overdrafts, accrued liabilities).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Calculate Liquidity & Solvency Ratios',
+    description: 'Compute Current Ratio (Current Assets / Current Liabilities), Quick Acid-Test Ratio, and Cash Ratio against institutional safety thresholds (1.5x–2.0x).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Measure Operating & Cash Conversion Cycles',
+    description: 'Quantify Days Sales Outstanding (DSO), Days Inventory Outstanding (DIO), and Days Payable Outstanding (DPO) to determine net days cash is tied up.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Working Capital Optimization & Cash Unlock',
+    description: 'Identify trapped liquidity across customer invoice collections and inventory holding periods to reduce expensive working capital bank interest lines.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Chief Financial Officers & Treasurers',
+    description: 'Corporate finance leaders optimizing balance sheet liquidity, working capital lines, bank credit facilities, and daily cash sweeps.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Manufacturing & Distribution Executives',
+    description: 'Operations leaders balancing raw material stocking, supplier credit terms, and finished goods inventory holding costs.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'D2C E-Commerce & Retail Founders',
+    description: 'Digital brand owners tracking cash conversion velocity, vendor payment cycles, and seasonal holiday inventory financing.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Commercial Bankers & Credit Underwriters',
+    description: 'Lending officers evaluating borrower liquidity ratios, short-term debt servicing capacity, and working capital term loans.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Institutional Formulas for Working Capital & Liquidity Ratios',
+  formula: '\\text{NWC} = \\text{CA} - \\text{CL}, \\quad \\text{CR} = \\frac{\\text{CA}}{\\text{CL}}, \\quad \\text{QR} = \\frac{\\text{Cash} + \\text{AR}}{\\text{CL}}, \\quad \\text{CCC} = \\text{DIO} + \\text{DSO} - \\text{DPO}',
+  parameters: [
+    {
+      symbol: '\\text{CA}',
+      title: 'Total Current Assets',
+      description: 'Cash & bank equivalents + Accounts Receivable + Inventory stock + Prepaid expenses.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{CL}',
+      title: 'Total Current Liabilities',
+      description: 'Accounts Payable + Short-Term Bank Debt / Overdrafts + Accrued operational expenses.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{DSO}',
+      title: 'Days Sales Outstanding',
+      description: 'Average collection period for customer invoices: (Accounts Receivable / Annual Revenue) × 365.',
+      colorClass: 'text-indigo-600',
+    },
+    {
+      symbol: '\\text{CCC}',
+      title: 'Cash Conversion Cycle',
+      description: 'Net duration in days from cash outlay for inventory to cash receipt from customer sales: DIO + DSO - DPO.',
+      colorClass: 'text-emerald-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Industrial Equipment Manufacturer (₹50 Cr Revenue @ 12% Cost of Capital)',
+    tag: 'Working Capital Optimization',
+    subtitle: 'Compressing Receivable & Inventory Holding Days',
+    metrics: [
+      { label: 'Annual Revenue', value: '₹50,00,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Initial Net Working Capital', value: '₹47,00,000', colorClass: 'text-slate-900 dark:text-white font-bold' },
+      { label: 'Initial Cash Conversion Cycle', value: '72 Days', colorClass: 'text-rose-600 font-bold' },
+      { label: '15% Cycle Compression Cash Unlock', value: '₹15,75,000 Freed', colorClass: 'text-semantic-success font-black' },
+      { label: 'Annual Overdraft Interest Saved', value: '₹1,89,000 / Year', colorClass: 'text-emerald-600 font-bold' },
+    ],
+    takeaway: 'By reducing DSO from 45 days to 38 days and tightening inventory restocking, the manufacturer unlocked ₹15.75 Lakhs in liquid cash and eliminated ₹1.89 Lakhs in bank interest charges.',
+  },
+  {
+    title: 'Case Study 2: D2C E-Commerce Retailer (Negative Working Capital Engine)',
+    tag: 'Negative Working Capital',
+    subtitle: 'Zero Inventory Lag & 45-Day Supplier Payables',
+    metrics: [
+      { label: 'Annual Sales Outflow', value: '₹20,00,00,000', colorClass: 'text-primary font-bold' },
+      { label: 'Days Sales Outstanding (DSO)', value: '3 Days (Instant UPI / Cards)' },
+      { label: 'Days Payable Outstanding (DPO)', value: '45 Days Vendor Terms' },
+      { label: 'Days Inventory Outstanding (DIO)', value: '25 Days JIT Warehousing' },
+      { label: 'Net Cash Conversion Cycle', value: '-17 Days (Self-Funding)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'With a negative CCC of -17 days, the D2C brand receives cash from customer sales 17 days before paying suppliers, self-funding rapid expansion without external debt.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Implement Automated Invoicing & Milestone Billing',
+    description: 'Shorten Days Sales Outstanding (DSO) by switching from net-60 billing to digital auto-debits, 2/10 net-30 early payment discounts, and automated reminder sequences.',
+  },
+  {
+    number: '02',
+    title: 'Adopt Just-in-Time (JIT) Inventory & ABC Stock Categorization',
+    description: 'Reduce Days Inventory Outstanding (DIO) by prioritizing high-turnover Category A items and negotiating vendor-managed inventory (VMI) arrangements.',
+  },
+  {
+    number: '03',
+    title: 'Negotiate Strategic Supplier Credit Terms (Extend DPO)',
+    description: 'Harmonize payment schedules with suppliers to match sales velocity, extending Days Payable Outstanding without damaging supplier trust or incurring late fees.',
+  },
+  {
+    number: '04',
+    title: 'Maintain a 1.5x–2.0x Current Ratio Liquidity Buffer',
+    description: 'Ensure short-term liquid assets provide at least 1.5 times coverage over current liabilities to weather economic downturns, supply disruptions, or seasonal revenue drops.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <WorkingCapitalCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>
