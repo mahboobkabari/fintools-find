@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import NftRoyaltyCalculatorWidget from '../calculators/NftRoyaltyCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Primary Mint & Royalty Standard Specification',
+    description: 'Creator issues the NFT collection, configuring on-chain metadata and EIP-2981 royalty percentage in the smart contract.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Secondary Marketplace Listing',
+    description: 'Collector lists the token for secondary sale; the marketplace queries the contract to identify creator royalty settings.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Trade Settlement & Split Execution',
+    description: 'Buyer fulfills the order; the exchange deducts platform fees and transfers expected royalties directly to the creator wallet.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Multi-Resale Compounding Horizon',
+    description: 'As the token continues to trade across market cycles, cumulative creator royalties accrue over the lifetime of the asset.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Digital Artists & NFT Creators',
+    description: 'Forecasting primary drop revenue and ongoing secondary royalty income streams across multi-year collection lifecycles.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Secondary Collectors & Traders',
+    description: 'Calculating exact net seller proceeds after deducting creator royalties, marketplace cuts, and transaction gas fees.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'NFT Marketplace Operators',
+    description: 'Modeling marketplace commission revenue, transaction friction elasticity, and creator retention economics.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Web3 Financial Analysts & Treasuries',
+    description: 'Analyzing lifetime creator royalty revenues, secondary resale velocity, and marketplace enforcement risks.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'NFT Royalty, Marketplace Fee & Net Proceeds Formulations',
+  formula: 'R_{\\text{expected}} = \\left(P \\times \\frac{R_{\\%}}{100}\\right) \\times \\left(\\frac{E_{\\%}}{100}\\right), \\quad S_{\\text{net}} = P - R_{\\text{expected}} - \\left(P \\times \\frac{M_{\\%}}{100}\\right) - F_{\\text{other}}',
+  parameters: [
+    {
+      symbol: 'P',
+      title: 'Gross NFT Sale Price',
+      description: 'The total transaction clearing price in cryptocurrency (ETH, SOL, etc.) or fiat.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'R_{\\%}',
+      title: 'Creator Royalty Rate',
+      description: 'The percentage allocated to the original artist/creator on secondary trades.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 'E_{\\%}',
+      title: 'Enforcement Probability',
+      description: 'The rate at which the secondary marketplace honors and collects creator royalties.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'M_{\\%}',
+      title: 'Marketplace Fee %',
+      description: 'The platform commission percentage charged by the NFT exchange.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Standard 5% Creator Royalty on Ethereum',
+    tag: 'Institutional Secondary Trade',
+    subtitle: '2.0 ETH secondary sale at $2,500/ETH spot with 2.5% marketplace commission and 100% enforcement',
+    metrics: [
+      { label: 'Gross Sale Value', value: '2.000 ETH ($5,000.00 USD)' },
+      { label: 'Expected Creator Royalty (5%)', value: '+0.100 ETH ($250.00 USD)', colorClass: 'text-primary font-bold' },
+      { label: 'Marketplace Commission (2.5%)', value: '0.050 ETH ($125.00 USD)', colorClass: 'text-amber-600 font-semibold' },
+      { label: 'Seller Net Proceeds', value: '1.845 ETH ($4,612.50 USD)', colorClass: 'text-semantic-success font-bold' },
+    ],
+    takeaway: 'Under standard 5% creator royalty and 2.5% marketplace fees, total transaction friction is 7.75% (0.155 ETH including gas), leaving the seller with 92.25% net proceeds while securing $250.00 in passive royalty income for the creator.',
+  },
+  {
+    title: 'Case Study 2: Lifetime Resale Trajectory across 5 Consecutive Sales',
+    tag: 'Multi-Generation Resale Model',
+    subtitle: 'Collection item appreciating from 1.0 ETH mint to 2.5 ETH across 5 secondary transfers',
+    metrics: [
+      { label: 'Cumulative Gross Volume', value: '8.250 ETH ($20,625.00 USD)' },
+      { label: 'Cumulative Creator Royalties', value: '+0.413 ETH ($1,031.25 USD)', colorClass: 'text-semantic-success font-black' },
+      { label: 'Average Royalty per Resale', value: '0.083 ETH ($206.25 USD/trade)', colorClass: 'text-primary font-bold' },
+      { label: 'Effective Lifetime Royalty', value: '5.00% of Cumulative Gross Volume' },
+    ],
+    takeaway: 'Multi-generation secondary trading significantly multiplies creator earnings beyond the initial mint. As the asset appreciates across 5 resales, the creator earns over $1,000 in incremental royalty cashflow.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Understand Marketplace Royalty Optionality',
+    description: 'Creator royalties are not universally enforced by every exchange. EIP-2981 provides a standardized royalty metadata interface, but off-chain marketplace implementations can bypass or discount royalties. Always model enforcement probability.',
+  },
+  {
+    number: '02',
+    title: 'Optimize Royalty Rates to Prevent Liquidity Flight',
+    description: 'Setting creator royalties too high (e.g. >10%) creates severe friction for traders, incentivizing them to route transactions through zero-royalty DEXs or private OTC escrow. Industry benchmarks typically range from 2.5% to 7.5%.',
+  },
+  {
+    number: '03',
+    title: 'Model Compounding Multi-Sale Schedules',
+    description: 'For popular collections, secondary sales volume often exceeds primary mint volume by 10x to 50x. Use our multi-sale schedule simulator to forecast cumulative lifetime royalty revenues across appreciating floor price tiers.',
+  },
+  {
+    number: '04',
+    title: 'Account for Gas & Network Settlement Friction',
+    description: 'High-frequency secondary trading requires evaluating on-chain gas costs alongside marketplace fees. On Layer-1 chains, fixed gas fees can represent a significant percentage of lower-priced NFT sales.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <NftRoyaltyCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

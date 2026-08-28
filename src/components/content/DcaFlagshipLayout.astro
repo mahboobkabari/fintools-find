@@ -1,0 +1,159 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import DcaCalculatorWidget from '../calculators/DcaCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Establish Capital Outlay & Frequency',
+    description: 'Define your starting initial investment, recurring contribution amount, and distribution frequency (Daily, Weekly, Bi-Weekly, Monthly, Quarterly).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Configure Price Scenario & Volatility Trajectory',
+    description: 'Model simulated asset price paths across steady flat, bull expansion, bear drawdown, or cyclical mid-term dip & recovery scenarios.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Account for Trading Fees & Exchange Drag',
+    description: 'Incorporate fixed and percentage brokerage or crypto exchange fees to evaluate net unit purchasing power and fee drag over time.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Audit Effective Cost Basis & Lump-Sum Benchmark',
+    description: 'Analyze your cumulative units acquired, average cost basis, break-even exit price, and head-to-head performance against Day-1 lump-sum deployment.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Systematic Cryptocurrency Accumulators',
+    description: 'Automating recurring purchases of Bitcoin, Ethereum, and digital assets to build long-term holdings without the emotional strain of daily market timing.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Disciplined Long-Term Wealth Builders',
+    description: 'Deploying steady monthly salary allocations into index funds, broad-market ETFs, and high-conviction equities through market cycles.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Volatility & Correction Hedgers',
+    description: 'Structuring phased entries during uncertain macroeconomic conditions to capture advantageous lower purchase prices during deep drawdowns.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Fee-Conscious Micro-Investors',
+    description: 'Optimizing small daily and weekly recurring contributions by monitoring fixed and percentage fee drag on net asset accumulation.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Dollar Cost Averaging (DCA) Mathematical Formulation',
+  formula: '\\text{Units}_{\\text{total}} = \\sum_{i=1}^N \\frac{\\text{Net Capital}_i}{P_i}, \\quad \\text{Average Cost} = \\frac{\\sum_{i=1}^N \\text{Cash Invested}_i}{\\text{Units}_{\\text{total}}}',
+  parameters: [
+    {
+      symbol: 'P_i',
+      title: 'Spot Asset Price at Period i',
+      description: 'The market execution price of the underlying asset at the exact moment contribution i is deployed.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Net Capital}_i',
+      title: 'Net Invested Capital',
+      description: 'Gross cash contribution adjusted for transaction fees and exchange commission deductions.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Units}_{\\text{total}}',
+      title: 'Cumulative Acquired Units',
+      description: 'The aggregate sum of all fractional or whole asset units acquired across all contribution windows.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Average Cost}',
+      title: 'Break-Even Unit Acquisition Price',
+      description: 'Effective break-even price per unit, calculated as total out-of-pocket cash divided by cumulative units.',
+      colorClass: 'text-rose-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: $500/Month DCA in a Volatile Crypto Dip & Recovery',
+    tag: 'Market Volatility & Dip Averaging',
+    subtitle: '12-month simulation with Bitcoin starting at $60,000, dipping to $36,000 mid-year, and recovering back to $60,000',
+    metrics: [
+      { label: 'Total Cash Invested', value: '$6,000 USD (12 × $500/mo)' },
+      { label: 'Total Units Acquired', value: '0.1348 BTC (vs 0.1000 BTC Lump-Sum)' },
+      { label: 'Average Acquisition Cost', value: '$44,510 USD / BTC', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Ending Portfolio Value', value: '$8,088 USD (+34.8% ROI)', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Lump-Sum Comparison', value: '$6,000 USD (+0.0% ROI on Day 1 @ $60k)', colorClass: 'text-indigo-600 font-bold' },
+    ],
+    takeaway: 'Because DCA automatically buys more units when prices fall, the investor acquired 0.1348 BTC at an average cost of $44,510. Even though Bitcoin ended at the exact same $60,000 price it started, DCA generated a +34.8% gain ($2,088 profit), whereas a Day-1 lump sum made 0%.',
+  },
+  {
+    title: 'Case Study 2: Strong Bull Market Comparison (DCA vs Lump-Sum)',
+    tag: 'One-Way Bull Market Dynamics',
+    subtitle: '$12,000 total capital deployed into an asset steadily rising from $100 to $250 over 12 months',
+    metrics: [
+      { label: 'Total Capital Deployed', value: '$12,000 USD' },
+      { label: 'DCA Average Cost', value: '$161.40 / unit (74.3 units acquired)' },
+      { label: 'DCA Ending Value', value: '$18,575 USD (+54.8% ROI)' },
+      { label: 'Lump-Sum Ending Value', value: '$30,000 USD (+150.0% ROI @ $100 entry)', colorClass: 'text-indigo-600 font-black' },
+      { label: 'Trade-Off Rationale', value: 'DCA trades maximum bull upside for drawdown protection and automated peace of mind.' },
+    ],
+    takeaway: 'In a persistent bull market where prices never revisit starting levels, lump-sum investing outperforms DCA because all capital is deployed at the lowest historical price. DCA is a risk-mitigation strategy designed to smooth volatility, not maximize peak bull-run returns.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Harness the Mathematical Power of Volatility Dips',
+    description: 'When asset prices plunge, fixed-dollar contributions automatically purchase a greater quantity of units. This lowers your cumulative average cost basis and accelerates recovery when prices rebound.',
+  },
+  {
+    number: '02',
+    title: 'Audit Trading Fee Drag on High-Frequency Micro-Buys',
+    description: 'Fixed per-transaction fees (e.g. $1.50 per trade) can represent a punishing 15% drag on a $10 daily buy. Align your contribution frequency with your brokerage or exchange fee schedule to minimize friction.',
+  },
+  {
+    number: '03',
+    title: 'Automate Execution to Eliminate Behavioral Biases',
+    description: 'Investors naturally hesitate to buy during deep panics and feel compelled to buy near euphoric tops. Automated DCA enforces systematic, emotionless execution at every market phase.',
+  },
+  {
+    number: '04',
+    title: 'Recognize the Clear Trade-Off Between DCA and Lump-Sum',
+    description: 'DCA is not a guarantee of superior returns. In prolonged uptrends, lump-sum capital deployment will outperform DCA. Choose DCA when managing cash flow, limiting regret, or navigating turbulent volatility.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <DcaCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

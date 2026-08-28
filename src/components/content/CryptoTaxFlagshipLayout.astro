@@ -1,0 +1,158 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import CryptoTaxCalculatorWidget from '../calculators/CryptoTaxCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Select Jurisdiction & Tax Classification',
+    description: 'Choose your tax residency (United States, India, United Kingdom, Germany, Australia, or Generic Global) to load verified statutory rules, brackets, and exemption limits.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Audit Cost Basis & Transaction Fees',
+    description: 'Determine your adjusted cost basis including eligible acquisition fees, accounting for local fee deductibility rules (such as India Sec 115BBH disallowance).',
+  },
+  {
+    stepNumber: '03',
+    title: 'Classify Holding Period & Reward Income',
+    description: 'Calculate holding duration to distinguish Short-Term vs Long-Term capital gains, while isolating ordinary income recognition for staking, mining, or airdrops.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Compute Net Tax Liability & After-Tax Take-Home',
+    description: 'Evaluate your estimated capital gains tax, ordinary income tax, statutory exemptions, withholding TDS, and final take-home fiat proceeds.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Active Crypto Traders & Scalpers',
+    description: 'Calculating short-term capital gains, tracking multi-lot FIFO/HIFO cost basis, and factoring in high-frequency exchange trading fees across crypto-to-crypto swaps.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Long-Term HODLers & Wealth Builders',
+    description: 'Optimizing asset holding periods past 365 days to unlock preferential long-term capital gains tax rates, 50% CGT discounts, or 100% tax-free German private sales.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Stakers, Validators & Yield Farmers',
+    description: 'Accurately separating ordinary income tax liabilities recognized upon staking reward receipt from subsequent capital gains realized upon final token liquidation.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Cross-Border & Expat Crypto Investors',
+    description: 'Comparing statutory crypto tax regimes, withholding taxes (e.g. 1% Indian TDS), and reporting requirements across multiple global tax jurisdictions.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Cryptocurrency Capital Gains & Ordinary Income Formulations',
+  formula: '\\text{Realized Gain} = (\\text{Gross Proceeds} - \\text{Eligible Sell Fees}) - (\\text{Cost Basis} + \\text{Eligible Buy Fees})',
+  parameters: [
+    {
+      symbol: '\\text{Cost Basis}',
+      title: 'Adjusted Acquisition Basis',
+      description: 'The fair market value purchase consideration plus allowable acquisition trading fees and brokerage expenses.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Net Proceeds}',
+      title: 'Disposal Proceeds',
+      description: 'Gross fiat consideration realized upon sale or swap minus allowable disposal and transfer commissions.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: '\\text{Holding Period}',
+      title: 'Duration (Days / Years)',
+      description: 'Elapsed calendar time between acquisition and disposal date, determining Short-Term vs Long-Term tax brackets.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Income}_{\text{reward}}',
+      title: 'Ordinary Reward Income',
+      description: 'Fair Market Value (FMV) of staking rewards, mining yield, or airdrops recognized as ordinary income at the time of receipt.',
+      colorClass: 'text-rose-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: US Long-Term vs Short-Term Bitcoin Tax Optimization',
+    tag: 'United States (IRS Form 8949)',
+    subtitle: '0.5 BTC acquired at $35,000 and sold at $68,000 ($16,500 Gross Gain)',
+    metrics: [
+      { label: 'Short-Term Holding (<1 Yr @ 24% Ordinary Rate)', value: '$3,960 USD Estimated Tax' },
+      { label: 'Long-Term Holding (>1 Yr @ 15% LTCG Rate)', value: '$2,475 USD Estimated Tax', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Tax Savings by Holding >365 Days', value: '$1,485 USD (+37.5% Tax Reduction)', colorClass: 'text-emerald-600 font-black' },
+      { label: 'Take-Home After-Tax Gain', value: '$13,975 USD (vs $12,490 short-term)', colorClass: 'text-primary font-bold' },
+    ],
+    takeaway: 'Holding Bitcoin for more than 365 days in the US shifts taxation from ordinary income brackets (e.g. 24%) to preferential long-term capital gains rates (15%), preserving $1,485 in additional net wealth on a 0.5 BTC position.',
+  },
+  {
+    title: 'Case Study 2: India Section 115BBH 31.2% Flat Tax & Loss Disallowance',
+    tag: 'India (Income Tax Act Sec 115BBH)',
+    subtitle: '₹5,75,000 Gross Gain on Bitcoin transfer under strict 2024-2026 VDA rules',
+    metrics: [
+      { label: 'Gross Sale Consideration', value: '₹14,50,000 INR' },
+      { label: 'Flat Tax (30% + 4% Cess)', value: '₹1,79,400 INR (31.2% effective tax)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Section 194S TDS Deducted (1%)', value: '₹14,500 INR (Adjustable against final tax)' },
+      { label: 'Fee Deductions Allowed', value: '₹0 (Strict statutory disallowance of exchange fees)' },
+      { label: 'Net After-Tax Profit', value: '₹3,95,600 INR', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Under Indian Section 115BBH, VDA transfers incur a flat 30% tax (+4% cess = 31.2%) with zero deduction for exchange fees and zero set-off against losses from other crypto trades. Buyers and exchanges deduct 1% TDS under Section 194S.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Separate Staking/Mining Income from Future Capital Gains',
+    description: 'In most jurisdictions (US, UK, Germany, Australia), staking and mining rewards trigger ordinary income tax upon receipt at Fair Market Value. When sold later, only the gain or loss above that initial recognized value is subject to capital gains tax.',
+  },
+  {
+    number: '02',
+    title: 'Leverage Statutory Long-Term Holding Exemptions',
+    description: 'In Germany (EStG § 23), holding cryptocurrency for more than 1 year renders all private disposal gains 100% tax-free. In Australia, holding for 12+ months provides a 50% CGT discount. In the US, it unlocks preferential 0%/15%/20% rates.',
+  },
+  {
+    number: '03',
+    title: 'Audit Multi-Lot Cost Basis Accounting (FIFO vs HIFO)',
+    description: 'Using Highest-In, First-Out (HIFO) lot identification where legally permissible allows traders to match highest-cost acquisition lots against current sales, minimizing immediate taxable capital gains.',
+  },
+  {
+    number: '04',
+    title: 'Beware of Crypto-to-Crypto Swaps as Taxable Realizations',
+    description: 'Swapping Bitcoin for Ethereum or trading into stablecoins (USDT/USDC) is classified as a taxable disposal in virtually all major tax jurisdictions, triggering capital gains liabilities even without fiat off-ramping.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <CryptoTaxCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

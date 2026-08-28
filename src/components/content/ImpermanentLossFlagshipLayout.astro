@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import ImpermanentLossCalculatorWidget from '../calculators/ImpermanentLossCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Deposit Assets into 50/50 AMM Pool',
+    description: 'Equal fiat value of Token A and Token B is locked into the automated market maker smart contract, establishing the initial pool invariant k = x · y.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Market Prices Diverge & Arbitrageurs Rebalance',
+    description: 'When external spot prices move, arbitrage traders swap with the pool to align its internal price ratio with broader market rates.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Pool Quantity Inventory Shifts',
+    description: 'The AMM automatically sells portions of the appreciating token and buys more of the depreciating token to maintain 50/50 value equilibrium.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Evaluate Fee-Adjusted Net LP Performance vs HODL',
+    description: 'Compare your final pool position value plus accumulated swap fees against the benchmark value of simply holding the initial tokens in a wallet.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'DeFi Yield Farmers & Liquidity Providers',
+    description: 'Evaluating whether decentralized exchange swap fee yields adequately compensate for expected directional volatility and impermanent loss drag.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Long-Term Crypto Investors & HODLers',
+    description: 'Benchmarking passive wallet holding returns against active AMM liquidity provision across volatile market cycles.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Stablecoin & Pegged-Asset Poolers',
+    description: 'Providing liquidity to low-divergence pairs (e.g. USDC/USDT or ETH/stETH) to capture steady trading fee APR with negligible impermanent loss.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'DeFi Quantitative Researchers & DEX Analysts',
+    description: 'Modeling constant-product invariant mechanics, pool depth dynamics, and required break-even fee yield thresholds.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Constant-Product AMM & Impermanent Loss Formulations',
+  formula: '\\text{IL Factor} = \\frac{2\\sqrt{r}}{1+r}, \\quad \\text{Impermanent Loss } \\% = \\left(\\frac{2\\sqrt{r}}{1+r} - 1\\right) \\times 100',
+  parameters: [
+    {
+      symbol: 'r',
+      title: 'Relative Price Ratio',
+      description: 'The ratio of new relative prices to initial relative prices: r = (P_A1 / P_B1) / (P_A0 / P_B0).',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'V_{\\text{HODL}}',
+      title: 'HODL Portfolio Benchmark',
+      description: 'Total value if original tokens were held: A_0 \\cdot P_{A1} + B_0 \\cdot P_{B1}.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'V_{\\text{LP}}',
+      title: 'LP Position Valuation',
+      description: 'Total value in the pool: A_1 \\cdot P_{A1} + B_1 \\cdot P_{B1} = V_{\\text{HODL}} \\cdot \\text{IL Factor}.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Net Advantage}',
+      title: 'Fee-Adjusted Net Alpha',
+      description: 'Total LP value including accumulated trading fee revenue minus the HODL benchmark: V_{\\text{LP}} + \\text{Fees} - V_{\\text{HODL}}.',
+      colorClass: 'text-rose-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: 2x Ethereum Bull Market Divergence (ETH / USDC)',
+    tag: 'Uniswap v2 50/50 Standard Pool',
+    subtitle: '$10,000 initial deposit with ETH surging from $2,000 to $4,000 over 90 days',
+    metrics: [
+      { label: 'HODL Portfolio Value (2.5 ETH + $5k USDC)', value: '$15,000 USD (+50% ROI)' },
+      { label: 'LP Position Value without Fees', value: '$14,142.14 USD (-5.72% Pure IL / -$857.86 drag)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Swap Fees Earned (15% Fee APR over 90 Days)', value: '+$369.86 USD' },
+      { label: 'Net LP Advantage vs HODL', value: '-$488.00 USD (HODL Outperformed LP)', colorClass: 'text-amber-600 font-bold' },
+    ],
+    takeaway: 'When ETH doubles in price against a stablecoin, the constant-product AMM continuously sells ETH into USDC. Pure impermanent loss is exactly -5.72% ($857.86). Because the 15% fee APR only produced $370 over 90 days, holding in a private wallet yielded $488 more than liquidity provision.',
+  },
+  {
+    title: 'Case Study 2: High-Volume Trading Pool Overcoming 2.5x Price Divergence',
+    tag: 'High Fee APR Liquidity Mining Pool',
+    subtitle: '$10,000 initial deposit with Token surging 2.5x ($10 to $25) in a 60% fee APR pool over 120 days',
+    metrics: [
+      { label: 'HODL Portfolio Value', value: '$17,500 USD (+75% ROI)' },
+      { label: 'LP Position Value without Fees', value: '$15,811.39 USD (-9.65% Pure IL / -$1,688.61 drag)' },
+      { label: 'Accumulated Swap Fees (60% APR over 120 Days)', value: '+$1,972.60 USD', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Fee-Adjusted Net LP Advantage over HODL', value: '+$283.99 USD (LP Outperformed HODL!)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Even with a substantial -9.65% impermanent loss drag from a 2.5x price surge, high trading volume generating a 60% annualized fee yield earned $1,972.60 in fees, completely offsetting the $1,688.61 IL and generating an additional $284 in net alpha over pure holding.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Target Correlated or Pegged Asset Pairs',
+    description: 'Providing liquidity to pairs that move together (e.g. ETH/BTC or SOL/ETH) or pegged stablecoin pairs (USDC/USDT) keeps the relative price ratio near 1.0, virtually eliminating impermanent loss while capturing 100% of trading fee yields.',
+  },
+  {
+    number: '02',
+    title: 'Evaluate Pool Volume-to-Liquidity (V/L) Ratio',
+    description: 'Impermanent loss is a fixed mathematical function of price divergence. High trading volume relative to pool size generates the fee revenue required to exceed the IL hurdle rate.',
+  },
+  {
+    number: '03',
+    title: 'Monitor Break-Even Annualized APR Thresholds',
+    description: 'Before committing liquidity, calculate the minimum fee APR required to offset expected volatility over your intended holding timeframe using our built-in break-even solver.',
+  },
+  {
+    number: '04',
+    title: 'Remember: Impermanent Loss is Only Realized on Withdrawal',
+    description: 'If price divergence is cyclical and the relative price ratio returns to its starting level (r = 1.0) before you remove liquidity, your impermanent loss drops back to 0.00%, locking in accumulated fee revenue as pure profit.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <ImpermanentLossCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

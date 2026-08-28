@@ -43,6 +43,10 @@ calculatorModule: "crypto/staking-rewards-calculator.js"
 publishDate: 2026-08-27
 priority: "P0"
 relatedTools:
+  - "crypto/yield-farming-apy-calculator"
+  - "crypto/impermanent-loss-calculator"
+  - "crypto/crypto-tax-calculator"
+  - "crypto/dca-calculator"
   - "crypto/crypto-profit-loss-calculator"
   - "crypto/mining-profitability-calculator"
   - "investment/compound-interest-calculator"

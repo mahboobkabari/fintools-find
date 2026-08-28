@@ -36,6 +36,11 @@ faqs:
 calculatorModule: "investment/sip.js"
 publishDate: 2026-08-06
 priority: "P0"
+relatedTools:
+  - "crypto/dca-calculator"
+  - "investment/step-up-sip-calculator"
+  - "investment/lumpsum-calculator"
+  - "investment/goal-sip-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations strictly execute standard Future Value of Annuity Certain formulations."

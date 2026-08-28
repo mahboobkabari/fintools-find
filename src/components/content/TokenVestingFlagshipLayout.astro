@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import TokenVestingCalculatorWidget from '../calculators/TokenVestingCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Token Grant & TGE Allocation',
+    description: 'Grant agreement is executed establishing total token allocation, initial TGE unlock percentage, and grant price basis.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Mandatory Cliff Lockup Period',
+    description: 'Tokens remain securely unvested during the cliff horizon, aligning long-term incentives and preventing early liquidations.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Cliff Release & Linear Vesting',
+    description: 'At cliff maturity, accrued cliff tokens unlock simultaneously, initiating recurring monthly or quarterly linear tranches.',
+  },
+  {
+    stepNumber: '04',
+    title: '100% Full Vesting Completion',
+    description: 'All allocated tokens transition to fully vested status, completing the smart contract schedule with complete liquidity.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Web3 Founders & Core Team',
+    description: 'Tracking employee token equity grants, 1-year cliff milestones, and dollar-denominated compensation valuations.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Early Stage & SAFT Investors',
+    description: 'Monitoring private round unlock schedules, lockup expiration dates, and portfolio price sensitivity.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Tokenomics Architects',
+    description: 'Modeling protocol emission curves, circulating supply expansion, and secondary market sell-pressure dynamics.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'DAO Advisors & Contributors',
+    description: 'Planning recurring monthly/quarterly token unlocks and governance voting weight accrual schedules.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Token Vesting & Unlock Formulations',
+  formula: 'N_{\\text{vested}} = N_{\\text{init}} + \\left(N - N_{\\text{init}}\\right) \\times \\min\\left(1, \\frac{t_{\\text{elapsed}}}{t_{\\text{vesting}}}\\right), \\quad V_{\\text{vested}} = N_{\\text{vested}} \\times P',
+  parameters: [
+    {
+      symbol: 'N',
+      title: 'Total Token Allocation',
+      description: 'The aggregate number of tokens granted under the vesting agreement.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'N_{\\text{init}}',
+      title: 'Initial TGE Unlock',
+      description: 'Tokens released immediately on the grant/TGE start date before vesting commences.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: 't_{\\text{elapsed}} / t_{\\text{vesting}}',
+      title: 'Vesting Time Ratio',
+      description: 'Proportion of the total vesting duration that has elapsed past the cliff milestone.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'P',
+      title: 'Token Spot Price',
+      description: 'Current market or simulated valuation per token in the quoted fiat currency.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Standard 4-Year Employee Grant with 1-Year Cliff',
+    tag: 'Silicon Valley Standard',
+    subtitle: '100,000 token grant at $1.50 spot price with 12-month cliff and 48-month total vest',
+    metrics: [
+      { label: 'Total Grant Value', value: '100,000 Tokens ($150,000 USD)' },
+      { label: 'Months 0 – 11 (During Cliff)', value: '0 Tokens Vested ($0.00 Vested)', colorClass: 'text-muted font-bold' },
+      { label: 'Month 12 (Cliff Release)', value: '25,000 Tokens Vested ($37,500 USD)', colorClass: 'text-primary font-bold' },
+      { label: 'Months 13 – 48 (Monthly Vesting)', value: '+2,083.33 Tokens/mo (+$3,125/mo)', colorClass: 'text-semantic-success font-semibold' },
+    ],
+    takeaway: 'Under standard 4-year vesting with a 1-year cliff, the employee holds 0 vested tokens for the first 12 months. Upon reaching the 1-year anniversary, 25% ($37,500) unlocks immediately in a lump sum, followed by linear monthly releases of 2,083.33 tokens ($3,125) for 36 months.',
+  },
+  {
+    title: 'Case Study 2: Seed Investor 10% TGE Unlock with 6-Month Cliff',
+    tag: 'Tokenomics Launch Schedule',
+    subtitle: '250,000 token seed allocation at $2.00 spot price ($0.50 grant basis) with 24-month schedule',
+    metrics: [
+      { label: 'Day 0 TGE Unlock (10%)', value: '25,000 Tokens ($50,000 USD Available)' },
+      { label: 'Months 1 – 5 (Cliff Lockup)', value: 'No Additional Unlocks (90% Locked)' },
+      { label: 'Month 6 (Cliff Tranche)', value: '56,250 Tokens Unlocked ($112,500 USD)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Unrealized Gain on Grant', value: '+$375,000 USD (+300% Gain vs Basis)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Initial unlocks provide early liquidity to cover operational expenses or seed costs, while the remaining 90% is protected by a 6-month cliff. When token prices appreciate from $0.50 to $2.00, the vested value expands fourfold while still respecting the unlock curve.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Distinguish Vesting from Staking & Yield',
+    description: 'Token vesting is an ownership distribution schedule of authorized equity, not an inflationary yield, APY, or guaranteed investment return. Vested tokens simply transition from locked to unlocked status.',
+  },
+  {
+    number: '02',
+    title: 'Stress-Test Token Price Volatility Across Horizons',
+    description: 'A 4-year vesting schedule spans entire market cycles. Use our price sensitivity matrix to model downside scenarios (-50% to -75%) as well as bull expansion, ensuring financial stability regardless of market fluctuations.',
+  },
+  {
+    number: '03',
+    title: 'Align Cliff Milestones to Product Roadmaps',
+    description: 'Founders and core teams should structure cliff periods to mature only after major protocol releases (mainnet launch, audited smart contract deployments) to ensure unified long-term commitment.',
+  },
+  {
+    number: '04',
+    title: 'Prepare for Jurisdictional Tax Timing',
+    description: 'In many jurisdictions, token vesting events trigger income tax on the fair market value at the time of unlock, while subsequent sales trigger capital gains tax. Evaluate local rules to plan liquidity buffers.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <TokenVestingCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

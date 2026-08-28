@@ -13,22 +13,22 @@ const timelineSteps = [
   {
     stepNumber: '01',
     title: 'Input Liquid & Fixed Assets',
-    description: 'List your cash, bank balances, mutual funds, EPF/PPF retirement balances, real estate, and vehicle values.',
+    description: 'Itemize cash, checking accounts, emergency funds, brokerage equities, retirement savings (401k/EPF/Super), real estate, and personal property.',
   },
   {
     stepNumber: '02',
-    title: 'Enter All Outstanding Liabilities',
-    description: 'Itemize short-term credit cards, personal loans, auto loans, and long-term home mortgages.',
+    title: 'Enter All Outstanding Debt Liabilities',
+    description: 'Record credit card balances, personal loans, auto loans, student debt, and long-term residential mortgage principal balances.',
   },
   {
     stepNumber: '03',
-    title: 'Review Financial & Liquidity Ratios',
-    description: 'Analyze your Net Worth / Assets Ratio, Debt-to-Asset Ratio, and Emergency Liquidity Coverage.',
+    title: 'Review Liquidity & Balance Sheet Ratios',
+    description: 'Analyze your Debt-to-Asset ratio, Liquid Net Worth, Investable Assets, Home Equity, and emergency runway coverage months.',
   },
   {
     stepNumber: '04',
-    title: 'Simulate Multi-Year Wealth Trajectory',
-    description: 'Project your future net worth across 5, 10, and 20-year horizons based on asset compounding and annual savings.',
+    title: 'Simulate Wealth Compounding & Horizon Trajectories',
+    description: 'Model future net worth across 1, 3, 5, 10, and 20-year horizons based on asset compounding, savings rates, and debt payoff acceleration.',
     colorClass: 'text-semantic-success',
   },
 ];
@@ -36,85 +36,108 @@ const timelineSteps = [
 const targetPersonas = [
   {
     title: 'Young Professionals & Early Savers',
-    description: 'Individuals building initial liquid savings and tracking wealth growth away from early consumer debts.',
+    description: 'Tracking wealth growth away from early consumer debts and student loans toward a secure positive net worth foundation.',
     bgClass: 'bg-blue-50',
     textClass: 'text-primary',
   },
   {
-    title: 'Mid-Career Families',
-    description: 'Households juggling home mortgages, EPF retirement funds, children education savings, and equity investments.',
+    title: 'Homeowners & Real Estate Investors',
+    description: 'Analyzing home equity progression, mortgage amortization, and real estate concentration across primary and rental properties.',
     bgClass: 'bg-emerald-50',
     textClass: 'text-semantic-success',
   },
   {
-    title: 'Real Estate & Business Investors',
-    description: 'Property owners tracking illiquid asset appreciation vs leveraged commercial/mortgage debt obligations.',
+    title: 'Financial Independence & FIRE Planners',
+    description: 'Measuring investable net worth and safe withdrawal eligibility against annual lifestyle living expenses.',
     bgClass: 'bg-purple-50',
     textClass: 'text-purple-600',
   },
   {
-    title: 'Debt Elimination Seekers',
-    description: 'Borrowers working aggressively to achieve positive net worth by systematically reducing high-interest debt.',
-    bgClass: 'bg-rose-50',
-    textClass: 'text-rose-600',
+    title: 'Pre-Retirees & Wealth Builders',
+    description: 'Optimizing balance sheet liquidity, eliminating debt leverage, and preventing single-asset portfolio concentration risks.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
   },
 ];
 
 const formulaDetails = {
-  title: 'Net Worth & Financial Position Formulas',
-  formula: '\\text{Net Worth} = \\sum \\text{Assets} - \\sum \\text{Liabilities}, \\quad \\text{Net Worth / Assets} = \\frac{\\text{Net Worth}}{\\text{Total Assets}} \\times 100',
+  title: 'Net Worth, Liquidity & Balance Sheet Formulations',
+  formula: '\\text{Net Worth} = \\sum \\text{Assets} - \\sum \\text{Liabilities}, \\quad \\text{Liquid Net Worth} = \\text{Liquid Assets} - \\text{Short-Term Debt}',
   parameters: [
     {
       symbol: '\\text{Net Worth}',
-      title: 'Total Equity Value',
-      description: 'Difference between total owned assets and total owed debt liabilities.',
+      title: 'Personal Equity Value',
+      description: 'The net mathematical difference between all owned assets and all owed debt liabilities.',
       colorClass: 'text-primary',
     },
     {
-      symbol: '\\text{Total Assets}',
-      title: 'Gross Assets',
-      description: 'Sum of liquid cash, stock portfolios, retirement accounts, property, and vehicles.',
+      symbol: '\\text{Gross Assets}',
+      title: 'Total Owned Assets',
+      description: 'Sum of liquid cash, investment portfolios, retirement accounts, real estate, and physical property.',
       colorClass: 'text-emerald-600',
     },
     {
-      symbol: '\\text{Total Liabilities}',
-      title: 'Gross Debt Owed',
-      description: 'Sum of credit card balances, personal loans, auto loans, and mortgages.',
+      symbol: '\\text{Gross Debt}',
+      title: 'Total Debt Liabilities',
+      description: 'Sum of credit card balances, personal loans, student debt, auto financing, and mortgages.',
       colorClass: 'text-rose-600',
     },
     {
-      symbol: '\\text{Liquidity Months}',
-      title: 'Emergency Reserve',
-      description: 'Liquid cash and stocks divided by monthly essential living expenses.',
-      colorClass: 'text-indigo-600',
+      symbol: '\\text{Debt / Asset \\%}',
+      title: 'Leverage Ratio',
+      description: 'Percentage of gross assets financed through debt (Total Liabilities ÷ Total Assets × 100).',
+      colorClass: 'text-amber-600',
     },
   ],
 };
 
 const caseStudies = [
   {
-    title: 'Benchmark Case Study: Mid-Career Family Balance Sheet (₹72 Lakhs Gross Assets)',
-    tag: 'Wealth Analysis Benchmark',
-    subtitle: 'Net Worth vs Debt-to-Asset Ratio Evaluation',
+    title: 'Case Study 1: Mid-Career Homeowner Balance Sheet ($850k Gross Assets)',
+    tag: 'Institutional Balance Sheet Model',
+    subtitle: '$850,000 total assets vs $345,000 debt liabilities with strong liquid reserve',
     metrics: [
-      { label: 'Total Gross Assets', value: '₹72,000,000 (Home, EPF, SIP)', colorClass: 'text-primary font-bold' },
-      { label: 'Total Liabilities', value: '₹24,500,000 (Home & Auto Loan)', colorClass: 'text-rose-600 font-bold' },
-      { label: 'Net Worth Equity', value: '₹47,500,000 (66.0% Net Worth / Assets)', colorClass: 'text-emerald-600 font-bold' },
-      { label: 'Emergency Liquidity', value: '7.2 Months Expenses Covered', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Total Gross Assets', value: '$850,000.00 (Home, 401k, Stocks)' },
+      { label: 'Total Liabilities', value: '$345,000.00 (Mortgage & Auto)', colorClass: 'text-rose-600 font-semibold' },
+      { label: 'Total Net Worth', value: '$505,000.00 (59.4% Equity Retention)', colorClass: 'text-semantic-success font-black' },
+      { label: 'Liquid Net Worth', value: '$135,000.00 (18.2 Mos Runway)', colorClass: 'text-primary font-bold' },
     ],
-    takeaway: 'Even with ₹24.5 Lakhs in home loan debt, the family maintains a healthy 66.0% Net Worth / Assets ratio and 7.2 months of liquid emergency coverage.',
+    takeaway: 'Even while carrying a $320,000 residential mortgage, substantial retirement assets and liquid equities generate a $505,000 net worth with over 18 months of emergency expense coverage.',
   },
   {
-    title: 'Benchmark Case Study: Young Professional Debt Reduction Trajectory',
-    tag: 'Early Career Path',
-    subtitle: 'Transitioning from Negative to Positive Net Worth',
+    title: 'Case Study 2: Debt Elimination Trajectory from Negative to Positive Equity',
+    tag: 'Debt Payoff Journey',
+    subtitle: 'Transitioning from -$25k initial negative net worth to +$95k within 4 years',
     metrics: [
-      { label: 'Initial Assets', value: '₹350,000 (Bank & SIP)', colorClass: 'text-primary font-bold' },
-      { label: 'Initial Student & Credit Debt', value: '₹500,000', colorClass: 'text-rose-600 font-bold' },
-      { label: 'Initial Net Worth', value: '-₹150,000 (Negative NW)', colorClass: 'text-rose-600 font-bold' },
-      { label: 'Projected 5-Yr Net Worth', value: '+₹850,000 (Positive NW)', colorClass: 'text-emerald-600 font-extrabold' },
+      { label: 'Initial Assets', value: '$22,000.00 (Checking & Starter 401k)' },
+      { label: 'Initial Debt', value: '$47,000.00 (Credit Cards & Loans)', colorClass: 'text-rose-600 font-bold' },
+      { label: 'Initial Net Worth', value: '-$25,000.00 (Negative NW)', colorClass: 'text-rose-600 font-black' },
+      { label: 'Year 4 Projected NW', value: '+$95,000.00 (Positive NW)', colorClass: 'text-semantic-success font-black' },
     ],
-    takeaway: 'Systematic debt reduction of ₹1 Lakh/year alongside ₹1.2 Lakhs/year in SIP savings transitions net worth from -₹1.5 Lakhs to +₹8.5 Lakhs in 5 years.',
+    takeaway: 'Aggressive debt payoff ($10k/yr) combined with $8k/yr in automated equity index investing rapidly reverses negative net worth, building a six-figure wealth base.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Prioritize Liquid Net Worth Over Illiquid Paper Wealth',
+    description: 'A high total net worth tied up entirely in illiquid primary real estate or private business equity can still leave you cash-poor during emergencies. Maintain 3 to 6 months of living expenses in accessible liquid cash.',
+  },
+  {
+    number: '02',
+    title: 'Eliminate High-Interest Toxic Liabilities First',
+    description: 'Credit card debt and high-APR personal loans erode personal net worth at an accelerating compounding pace. Paying off a 20% APR card yields a guaranteed, risk-free 20% return on your balance sheet.',
+  },
+  {
+    number: '03',
+    title: 'Monitor Asset Class Concentration Risks',
+    description: 'If real estate represents over 60% of your total balance sheet, or single volatile assets (like cryptocurrency or employer stock) exceed 15%, consider rebalancing new cash flow into broad index funds.',
+  },
+  {
+    number: '04',
+    title: 'Track Net Worth Velocity with Regular Snapshots',
+    description: 'Log your assets and liabilities quarterly or semi-annually. Tracking your annualized compound growth rate (CAGR) provides clear feedback on the effectiveness of your savings and investment strategy.',
   },
 ];
 ---
@@ -126,6 +149,9 @@ const caseStudies = [
   targetPersonas={targetPersonas}
   formulaDetails={formulaDetails}
   caseStudies={caseStudies}
+  strategies={strategies}
 >
-  <NetWorthCalculatorWidget slot="calculator" client:visible />
+  <div slot="calculator">
+    <NetWorthCalculatorWidget client:visible />
+  </div>
 </FlagshipLayout>

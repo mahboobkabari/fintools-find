@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import GasFeeCalculatorWidget from '../calculators/GasFeeCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Establish Gas Limit Ceiling',
+    description: 'Authorize the maximum units of computational work the EVM can consume for execution (standard 21,000 minimum for simple transfers).',
+  },
+  {
+    stepNumber: '02',
+    title: 'Configure EIP-1559 Base & Priority Fees',
+    description: 'Set the protocol base fee (burned by the network) and discretionary priority tip (incentive paid directly to the validating block builder).',
+  },
+  {
+    stepNumber: '03',
+    title: 'EVM Execution & Gas Metering',
+    description: 'The smart contract executes bytecode instructions; the network charges strictly for actual gas units consumed, refunding the unspent balance.',
+  },
+  {
+    stepNumber: '04',
+    title: 'Settlement & Realized Fiat Cost',
+    description: 'Native token gas fee is settled on-chain and evaluated against the fiat value of the underlying assets transferred or traded.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'DeFi Traders & DEX Users',
+    description: 'Evaluating gas fee drag relative to trade size, slippage tolerances, and routing hops across decentralized exchanges.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Smart Contract Developers & Web3 Builders',
+    description: 'Benchmarking Solidity bytecode optimization, storage slot read/write costs, and multicall batch efficiency.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'NFT Collectors & Mint Participants',
+    description: 'Modeling max fee ceilings and competitive priority tips to ensure successful transaction inclusion during volatile mints.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Crypto Treasuries & Asset Managers',
+    description: 'Planning multi-transaction batch payroll, token distribution schedules, and gas budget capacities.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'EVM Gas Fee & EIP-1559 Formulations',
+  formula: '\\text{Effective Gas Price} = \\min(\\text{Max Fee}, \\text{Base Fee} + \\text{Priority Tip}), \\quad \\text{Total Cost} = \\text{Gas Used} \\times \\frac{\\text{Effective Gas Price}}{10^9}',
+  parameters: [
+    {
+      symbol: '\\text{Gas Used}',
+      title: 'Actual Gas Consumed',
+      description: 'The precise number of EVM computational units consumed during smart contract opcode execution.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: '\\text{Base Fee}',
+      title: 'Protocol Base Fee (Gwei)',
+      description: 'The mandatory algorithmic fee burned permanently on-chain by the network protocol.',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: '\\text{Priority Tip}',
+      title: 'Validator Tip (Gwei)',
+      description: 'Discretionary incentive paid directly to validators/block builders for rapid transaction inclusion.',
+      colorClass: 'text-emerald-600',
+    },
+    {
+      symbol: '\\text{Max Fee}',
+      title: 'Max Fee per Gas (Gwei)',
+      description: 'The maximum total fee per gas unit authorized by the sender, protecting against unexpected base fee spikes.',
+      colorClass: 'text-amber-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: Simple ETH Transfer vs Uniswap v3 Swap at 25 Gwei',
+    tag: 'EVM Complexity Multiple',
+    subtitle: 'Comparing simple P2P transfers against complex decentralized exchange routing at $2,500/ETH',
+    metrics: [
+      { label: 'Simple ETH Transfer (21,000 Gas)', value: '0.000525 ETH ($1.31 USD)' },
+      { label: 'Uniswap v3 Multi-Hop Swap (130,000 Gas)', value: '0.003250 ETH ($8.13 USD)', colorClass: 'text-primary font-bold' },
+      { label: 'Complexity Multiple', value: '6.19x Higher Gas Cost', colorClass: 'text-amber-600 font-bold' },
+      { label: 'Gas Drag on $500 Trade', value: '1.63% of Trade Value', colorClass: 'text-semantic-success font-semibold' },
+    ],
+    takeaway: 'While a standard ETH transfer requires only 21,000 fixed gas units ($1.31), interacting with Uniswap smart contracts executes multiple pool state updates and balance verifications, consuming 130,000 gas ($8.13). Understanding the gas footprint of smart contracts is critical before executing smaller trades.',
+  },
+  {
+    title: 'Case Study 2: Gas Limit Ceiling vs Actual Execution & Refund',
+    tag: 'EIP-1559 Unused Gas Refund',
+    subtitle: 'ERC-20 token transfer with 65,000 Gas Limit and 45,000 actual consumption at 35 Gwei Max Fee',
+    metrics: [
+      { label: 'Max Potential Cost (65,000 Limit @ 35 Gwei)', value: '0.002275 ETH ($5.69 USD)' },
+      { label: 'Actual Consumed Cost (45,000 Used @ 22 Gwei)', value: '0.000990 ETH ($2.48 USD)', colorClass: 'text-emerald-600 font-bold' },
+      { label: 'Unused Gas Units Refunded', value: '20,000 Gas Units (30.8% Unused)' },
+      { label: 'Realized Gas Savings / Refund', value: '+$3.21 USD (+56.4% Savings vs Ceiling)', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'The EVM locks the gas limit ceiling upfront but charges only for actual gas consumed. Setting a generous gas limit (65k) with a max fee (35 Gwei) ensures the transaction never fails out-of-gas, while the sender is charged only $2.48, receiving an effective $3.21 refund.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Distinguish Gas Limit from Gas Price',
+    description: 'Gas limit measures the maximum computational operations your transaction requires (determined by smart contract complexity), while gas price (Gwei) represents the market cost per unit of computation.',
+  },
+  {
+    number: '02',
+    title: 'Consolidate Transactions via Multicall & Batching',
+    description: 'Executing token approvals and swaps in separate transactions incurs duplicate base transaction overhead (21k gas per tx). Using multicall contracts combines actions into a single block, saving 20% to 40% in total gas.',
+  },
+  {
+    number: '03',
+    title: 'Target Off-Peak Network Hours for Non-Urgent Tasks',
+    description: 'EIP-1559 base fees adjust dynamically based on block utilization. Scheduling token transfers, claims, and staking actions during low-activity weekend or night hours can reduce costs by over 50%.',
+  },
+  {
+    number: '04',
+    title: 'Maintain Gas Cost Below 1% to 2% of Transaction Size',
+    description: 'Paying $15 in gas on a $100 swap creates a massive 15% instant loss hurdle. Utilize our break-even solver to ensure your transaction volume justifies the on-chain execution cost.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <GasFeeCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

@@ -92,6 +92,14 @@ import RemittanceFeeFlagshipLayout from '@components/content/RemittanceFeeFlagsh
 import CryptoProfitLossFlagshipLayout from '@components/content/CryptoProfitLossFlagshipLayout.astro';
 import MiningProfitabilityFlagshipLayout from '@components/content/MiningProfitabilityFlagshipLayout.astro';
 import StakingRewardsFlagshipLayout from '@components/content/StakingRewardsFlagshipLayout.astro';
+import DcaFlagshipLayout from '@components/content/DcaFlagshipLayout.astro';
+import CryptoTaxFlagshipLayout from '@components/content/CryptoTaxFlagshipLayout.astro';
+import ImpermanentLossFlagshipLayout from '@components/content/ImpermanentLossFlagshipLayout.astro';
+import YieldFarmingApyFlagshipLayout from '@components/content/YieldFarmingApyFlagshipLayout.astro';
+import GasFeeFlagshipLayout from '@components/content/GasFeeFlagshipLayout.astro';
+import TokenVestingFlagshipLayout from '@components/content/TokenVestingFlagshipLayout.astro';
+import NftRoyaltyFlagshipLayout from '@components/content/NftRoyaltyFlagshipLayout.astro';
+import SalaryFlagshipLayout from '@components/content/SalaryFlagshipLayout.astro';
 import HomeLoanCalculatorWidget from '@components/calculators/HomeLoanCalculatorWidget';
 import PersonalLoanCalculatorWidget from '@components/calculators/PersonalLoanCalculatorWidget';
 import LoanAmortizationCalculatorWidget from '@components/calculators/LoanAmortizationCalculatorWidget';
@@ -321,6 +329,24 @@ const data = entry.data;
   <MiningProfitabilityFlagshipLayout data={data} slug={slug} />
 ) : slug === 'staking-rewards-calculator' ? (
   <StakingRewardsFlagshipLayout data={data} slug={slug} />
+) : slug === 'dca-calculator' ? (
+  <DcaFlagshipLayout data={data} slug={slug} />
+) : slug === 'crypto-tax-calculator' ? (
+  <CryptoTaxFlagshipLayout data={data} slug={slug} />
+) : slug === 'impermanent-loss-calculator' ? (
+  <ImpermanentLossFlagshipLayout data={data} slug={slug} />
+) : slug === 'yield-farming-apy-calculator' ? (
+  <YieldFarmingApyFlagshipLayout data={data} slug={slug} />
+) : slug === 'gas-fee-calculator' ? (
+  <GasFeeFlagshipLayout data={data} slug={slug} />
+) : slug === 'token-vesting-calculator' ? (
+  <TokenVestingFlagshipLayout data={data} slug={slug} />
+) : slug === 'nft-royalty-calculator' ? (
+  <NftRoyaltyFlagshipLayout data={data} slug={slug} />
+) : slug === 'salary-calculator' ? (
+  <SalaryFlagshipLayout data={data} slug={slug} />
+) : slug === 'net-worth-calculator' ? (
+  <NetWorthFlagshipLayout data={data} slug={slug} />
 ) : (
   <ToolLayout
     title={data.title}

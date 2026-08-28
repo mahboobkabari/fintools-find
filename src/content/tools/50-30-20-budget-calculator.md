@@ -39,11 +39,11 @@ calculatorModule: "salary/50-30-20-budget-calculator.js"
 publishDate: 2026-08-26
 priority: "P0"
 relatedTools:
-  - "net-worth-calculator"
-  - "emergency-fund-calculator"
-  - "step-up-sip-calculator"
-  - "sip-calculator"
-  - "fire-calculator"
+  - "salary/net-worth-calculator"
+  - "salary/salary-calculator"
+  - "savings/emergency-fund-calculator"
+  - "investment/step-up-sip-calculator"
+  - "retirement/fire-calculator"
 eeat:
   reviewedBy: "Fintools Find Wealth Planning & Personal Finance Advisory Board"
   methodology: "Calculations follow the Elizabeth Warren 50/30/20 framework, certified financial planner (CFP) budgeting standards, and compound interest future value formulas."

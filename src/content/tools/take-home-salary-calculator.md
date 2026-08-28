@@ -36,6 +36,11 @@ faqs:
 calculatorModule: "tax/take-home-salary-calculator.js"
 publishDate: 2026-08-06
 priority: "P0"
+relatedTools:
+  - "salary/salary-calculator"
+  - "salary/ctc-calculator"
+  - "tax/income-tax-calculator"
+  - "salary/50-30-20-budget-calculator"
 eeat:
   reviewedBy: "Fintools Find Engineering & Quant Team"
   methodology: "Calculations model official CBDT tax slabs, standard deduction rules (Budget 2024), and EPFO statutory deduction guidelines for FY 2025-26."

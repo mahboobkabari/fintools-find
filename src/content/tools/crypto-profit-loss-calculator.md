@@ -42,6 +42,9 @@ calculatorModule: "crypto/crypto-profit-loss-calculator.js"
 publishDate: 2026-08-27
 priority: "P0"
 relatedTools:
+  - "impermanent-loss-calculator"
+  - "crypto-tax-calculator"
+  - "dca-calculator"
   - "mining-profitability-calculator"
   - "staking-rewards-calculator"
   - "cagr-calculator"

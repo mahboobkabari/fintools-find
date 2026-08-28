@@ -1,0 +1,157 @@
+---
+import FlagshipLayout from './FlagshipLayout.astro';
+import SalaryCalculatorWidget from '../calculators/SalaryCalculatorWidget';
+
+export interface Props {
+  data: any;
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+
+const timelineSteps = [
+  {
+    stepNumber: '01',
+    title: 'Gross Compensation & Frequency Normalization',
+    description: 'Establish annual base salary, hourly wage equivalents, working schedules (hours/week, weeks/year), bonuses, commissions, and total gross earnings.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Pre-Tax Deductions & Taxable Base Calculation',
+    description: 'Subtract qualified pre-tax contributions (such as 401(k), EPF, superannuation, pre-tax health premiums, and HSA/FSA) from gross earnings to arrive at adjusted taxable income.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Statutory Progressive Tax & Payroll Levies',
+    description: 'Apply multi-tiered progressive income tax brackets (federal, state/provincial) alongside statutory social insurance contributions (FICA Social Security & Medicare, National Insurance, CPP/EI).',
+  },
+  {
+    stepNumber: '04',
+    title: 'Net In-Hand Take-Home Distribution & Period Breakdown',
+    description: 'Deduct post-tax obligations to derive definitive net take-home pay, mapped across annual, monthly, semi-monthly, bi-weekly, weekly, daily, and hourly periods.',
+    colorClass: 'text-semantic-success',
+  },
+];
+
+const targetPersonas = [
+  {
+    title: 'Salaried Employees & Job Seekers',
+    description: 'Translating gross salary offers into exact monthly in-hand take-home pay to evaluate compensation packages realistically before accepting job offers.',
+    bgClass: 'bg-emerald-50',
+    textClass: 'text-semantic-success',
+  },
+  {
+    title: 'Hourly Workers & Contractors',
+    description: 'Converting hourly wages into reliable annual, monthly, and weekly gross and net earnings across variable working schedules and overtime.',
+    bgClass: 'bg-blue-50',
+    textClass: 'text-primary',
+  },
+  {
+    title: 'Hiring Managers & HR Executives',
+    description: 'Designing competitive compensation packages, structuring bonus incentives, and calculating gross-up figures for relocation or signing bonuses.',
+    bgClass: 'bg-indigo-50',
+    textClass: 'text-indigo-600',
+  },
+  {
+    title: 'Financial Planners & Budgeters',
+    description: 'Calculating exact post-tax cash flows for 50/30/20 budgeting, mortgage pre-approvals, retirement contributions, and personal debt payoff schedules.',
+    bgClass: 'bg-amber-50',
+    textClass: 'text-amber-600',
+  },
+];
+
+const formulaDetails = {
+  title: 'Gross-to-Net Salary & Take-Home Pay Formulations',
+  formula: 'N_{\\text{annual}} = G_{\\text{total}} - T_{\\text{income}} - S_{\\text{social}} - D_{\\text{pre}} - D_{\\text{post}}, \\quad N_{\\text{monthly}} = \\frac{N_{\\text{annual}}}{12}',
+  parameters: [
+    {
+      symbol: 'G_{\\text{total}}',
+      title: 'Total Gross Compensation',
+      description: 'The sum of base salary, annual performance bonuses, commissions, and taxable stipends.',
+      colorClass: 'text-primary',
+    },
+    {
+      symbol: 'T_{\\text{income}}',
+      title: 'Income Tax Liability',
+      description: 'Progressive tax computed on taxable income (Gross minus Pre-Tax Deductions and Standard Allowances).',
+      colorClass: 'text-rose-600',
+    },
+    {
+      symbol: 'S_{\\text{social}}',
+      title: 'Social & Payroll Contributions',
+      description: 'Mandatory social security, Medicare, National Insurance, CPP/EI, or EPF contributions.',
+      colorClass: 'text-amber-600',
+    },
+    {
+      symbol: 'D_{\\text{pre}} / D_{\\text{post}}',
+      title: 'Pre- & Post-Tax Deductions',
+      description: 'Retirement savings (401k/Super/EPF), health coverage premiums, union dues, and wage garnishments.',
+      colorClass: 'text-indigo-600',
+    },
+  ],
+};
+
+const caseStudies = [
+  {
+    title: 'Case Study 1: US Tech Professional Salary ($120k Base + $15k Bonus)',
+    tag: 'Institutional Compensation Model',
+    subtitle: 'US single filer with $135k total gross compensation, $6,000 401(k) pre-tax contribution, and 4.5% state tax',
+    metrics: [
+      { label: 'Total Gross Compensation', value: '$135,000.00 / year' },
+      { label: 'Federal & State Income Tax', value: '-$24,013.00 / year', colorClass: 'text-rose-600 font-semibold' },
+      { label: 'FICA Payroll Taxes (SS + Med)', value: '-$10,327.50 / year', colorClass: 'text-amber-600 font-semibold' },
+      { label: 'Net Monthly Take-Home', value: '$7,888.29 / month', colorClass: 'text-semantic-success font-black' },
+    ],
+    takeaway: 'Even though total gross earnings equal $135,000, statutory taxes, FICA, and pre-tax retirement savings reduce in-hand take-home pay to approximately $7,888 per month (70.1% retention rate), providing a realistic cashflow baseline for household budgeting.',
+  },
+  {
+    title: 'Case Study 2: Dual Job Offer Comparison (Base Heavy vs Bonus Heavy)',
+    tag: 'Strategic Offer Decision',
+    subtitle: 'Offer A ($110k Base, 0 Bonus) vs Offer B ($90k Base + $25k Variable Bonus with identical 401k match)',
+    metrics: [
+      { label: 'Offer A Net Annual', value: '$79,850.00 ($6,654.17/mo)' },
+      { label: 'Offer B Net Annual', value: '$83,120.00 ($6,926.67/mo)', colorClass: 'text-semantic-success font-bold' },
+      { label: 'Net Annual Advantage (B - A)', value: '+$3,270.00 / year', colorClass: 'text-primary font-black' },
+      { label: 'Effective Tax Rate Delta', value: '+1.4% on marginal bonus tier' },
+    ],
+    takeaway: 'Offer B delivers $3,270 more annual net take-home cash flow despite variable bonus taxation. However, if bonus attainment is volatile, Offer A guarantees predictable monthly baseline cashflow.',
+  },
+];
+
+const strategies = [
+  {
+    number: '01',
+    title: 'Maximize Pre-Tax Retirement & Health Deductions',
+    description: 'Contributing to qualified pre-tax retirement accounts (401(k), 403(b), Traditional IRA, NPS, Superannuation) and Health Savings Accounts (HSA) lowers your adjusted taxable income, decreasing your effective marginal tax rate.',
+  },
+  {
+    number: '02',
+    title: 'Understand Marginal vs Effective Tax Rates',
+    description: 'A higher tax bracket applies only to income within that specific slab, not your entire gross compensation. Never decline a pay raise out of fear of "falling into a higher bracket"—every additional dollar earned always increases net in-hand cash.',
+  },
+  {
+    number: '03',
+    title: 'Evaluate Total Compensation Beyond Base Salary',
+    description: 'When comparing employment offers, analyze the full financial bundle: employer 401(k) matching, health insurance subsidies, stock equity vesting (RSUs/options), bonuses, and commuting or remote work expense differentials.',
+  },
+  {
+    number: '04',
+    title: 'Use Target Take-Home Reverse Gross-Up in Negotiations',
+    description: 'When negotiating salary for relocation or career progression, determine your required monthly net budget first, then use our Reverse Gross-Up solver to request the exact gross compensation necessary to cover your living costs.',
+  },
+];
+---
+
+<FlagshipLayout
+  data={data}
+  slug={slug}
+  timelineSteps={timelineSteps}
+  targetPersonas={targetPersonas}
+  formulaDetails={formulaDetails}
+  caseStudies={caseStudies}
+  strategies={strategies}
+>
+  <div slot="calculator">
+    <SalaryCalculatorWidget client:visible />
+  </div>
+</FlagshipLayout>

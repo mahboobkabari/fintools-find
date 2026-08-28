@@ -35,12 +35,11 @@ faqs:
   - question: "What is the formula for HRA tax exemption under the Old Tax Regime?"
     answer: "HRA exemption is the minimum of three statutory limits: (1) Actual HRA received, (2) Rent paid minus 10% of Basic Salary, and (3) 50% of Basic Salary for metro cities (Delhi, Mumbai, Kolkata, Chennai) or 40% of Basic Salary for non-metro cities."
 relatedTools:
-  - "take-home-salary-calculator"
-  - "income-tax-calculator"
-  - "hra-calculator"
-  - "provident-fund-calculator"
-  - "gratuity-calculator"
-  - "net-worth-calculator"
+  - "salary/salary-calculator"
+  - "tax/take-home-salary-calculator"
+  - "tax/income-tax-calculator"
+  - "tax/hra-calculator"
+  - "salary/net-worth-calculator"
 eeat:
   reviewedBy: "Fintools Find Payroll & Compensation Advisory Team"
   reviewedDate: 2026-08-09
